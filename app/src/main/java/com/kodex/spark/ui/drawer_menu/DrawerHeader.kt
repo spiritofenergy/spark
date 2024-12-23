@@ -21,11 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kodex.spark.ui.theme.DarkBlue
 import com.kodex.spark.R
+import com.kodex.spark.ui.data.MainScreenDataObject
+import com.kodex.spark.ui.theme.ButtonColorDark
 
 
 @Composable
-fun DrawerHeader() {
-    Box (modifier = Modifier.fillMaxWidth()){
+fun DrawerHeader(email: String) {
+    Box (modifier = Modifier.fillMaxWidth()
+        .background(ButtonColorDark)
+        ){
         Column (
             Modifier.height(170.dp)
                 .fillMaxWidth(),
@@ -43,6 +47,12 @@ fun DrawerHeader() {
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp
+
+            )
+            Text(
+                email,
+                color = Color.Green,
+                fontSize = 16.sp
 
             )
         }

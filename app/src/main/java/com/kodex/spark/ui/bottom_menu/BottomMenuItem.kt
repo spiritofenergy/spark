@@ -11,7 +11,7 @@ sealed class BottomMenuItem (
         title = "Home",
         iconId = R.drawable.ic_home
     )
-    object Favorite : BottomMenuItem(
+    object Faves : BottomMenuItem(
         route = "favorite",
         title = "Favorite",
         iconId = R.drawable.ic_favorite

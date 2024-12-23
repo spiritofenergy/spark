@@ -3,7 +3,9 @@ package com.kodex.spark.ui.logon
 import android.R.attr.contentDescription
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +31,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.kodex.spark.R
 import com.kodex.spark.ui.data.MainScreenDataObject
+import com.kodex.spark.ui.theme.BoxFilter
 import kotlin.math.sign
 
 @Composable
@@ -45,10 +48,10 @@ fun LoginScreen(
         Firebase.auth
     }
     val emailState = remember {
-        mutableStateOf("")
+        mutableStateOf("test01@mail.ru")
     }
     val passwordState = remember {
-        mutableStateOf("")
+        mutableStateOf("test01")
     }
 
     //фон
@@ -61,6 +64,9 @@ fun LoginScreen(
         contentScale = ContentScale.Crop,
 
         )
+  /*  Box(modifier = Modifier.fillMaxSize()
+        .background(BoxFilter)
+    )*/
         // Основной лист
     Column(
         modifier = Modifier
@@ -69,14 +75,13 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+//logo
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
-            modifier = Modifier.height(250.dp).padding(bottom = 50.dp)
+            modifier = Modifier.height(250.dp).padding(bottom = 30.dp)
 
         )
-        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = "ИСКРА",
             color = Color.White,
@@ -85,10 +90,11 @@ fun LoginScreen(
             fontFamily = FontFamily.Serif
         )
         Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         RoundedCornerTextField(
             text = emailState.value,
-            label = "Email:"
+            label = "Логин:"
         ) {
             emailState.value = it
         }
@@ -96,12 +102,13 @@ fun LoginScreen(
 
         RoundedCornerTextField(
             text = passwordState.value,
-            label = "Password:"
+            label = "Пароль:"
         ) {
             passwordState.value = it
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
             if (errorState.value.isNotEmpty()){
                 Text(
                     text = errorState.value,
@@ -109,8 +116,10 @@ fun LoginScreen(
                     textAlign = TextAlign.Center
                 )
             }
+        Spacer(modifier = Modifier.height(16.dp))
+
         LoginButton(
-            text = "Sign in "
+            text = "Вход"
         ) {
             signIn(
                 auth,
@@ -127,7 +136,7 @@ fun LoginScreen(
             Log.d("MyTeg", "Press Sign In Button")
         }
         LoginButton(
-            text = "Sign up "
+            text = "Регистраия "
         ) {
             signUp(
                 auth,

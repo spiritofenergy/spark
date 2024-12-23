@@ -14,6 +14,8 @@ import com.kodex.spark.ui.theme.ButtonColor
 
 @Composable
 fun RoundedCornerTextField(
+    maxLines: Int = 1,
+    singleLine : Boolean = true,
     text: String,
     label: String,
     onValueChange: (String) -> Unit
@@ -29,10 +31,13 @@ fun RoundedCornerTextField(
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent
         ),
-        modifier = Modifier.fillMaxWidth().border(2.dp, ButtonColor, RoundedCornerShape(20.dp)),
+        modifier = Modifier.fillMaxWidth().
+        border(2.dp, ButtonColor,
+            RoundedCornerShape(20.dp)),
         label = {
             Text(text = label, color =  Color.Gray)
         },
-        singleLine = true
+        singleLine = singleLine,
+        maxLines = maxLines
     )
 }

@@ -5,22 +5,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.kodex.spark.ui.addScreen.AddBookScreen
+import com.kodex.spark.ui.addScreen.data.AddScreenObject
 import com.kodex.spark.ui.data.LoginScreenObject
 import com.kodex.spark.ui.data.MainScreenDataObject
+import com.kodex.spark.ui.detailScreen.DetailScreen
+import com.kodex.spark.ui.detailScreen.DetailsNavObject
 import com.kodex.spark.ui.logon.LoginScreen
-import com.kodex.spark.ui.theme.SparkTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,14 +30,51 @@ class MainActivity : ComponentActivity() {
             ) {
 
                 composable<LoginScreenObject> {
-                    LoginScreen { navData ->
+                    LoginScreen() { navData ->
                         navController.navigate(navData)
                     }
                 }
                 composable<MainScreenDataObject> { navEntry ->
                     val navData = navEntry.toRoute<MainScreenDataObject>()
-                    MenuScreen()
+                    MenuScreen(
+                        navData,
+                        onBookClick = {bk ->
+                            navController.navigate(DetailsNavObject(
+                                title = bk.title,
+                                description = bk.description,
+                                price = bk.prise,
+                                imageUrl = bk.imageUrl,
+                                category = bk.category
 
+                            ))
+
+                        },
+                        onBookEditClick = { book->
+                            navController.navigate(AddScreenObject(
+                                key = book.key,
+                                title = book.title,
+                                description = book.description,
+                                prise = book.prise,
+                                category = book.category,
+                                imageUrl = book.imageUrl,
+                                isFaves = book.isFaves
+
+                            ))
+                        }){
+                        navController.navigate(AddScreenObject())
+                    }
+                }
+                composable<AddScreenObject>{ navEntry ->
+                    val navData = navEntry.toRoute<AddScreenObject>()
+                    AddBookScreen(navData){
+                        navController.popBackStack()
+                    }
+                }
+                composable<DetailsNavObject>{ navEntry ->
+                    val navData = navEntry.toRoute<DetailsNavObject>()
+                    DetailScreen(navData){
+                        navController.popBackStack()
+                    }
 
                 }
             }
@@ -50,18 +82,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SparkTheme {
-        Greeting("Android")
-    }
-}
