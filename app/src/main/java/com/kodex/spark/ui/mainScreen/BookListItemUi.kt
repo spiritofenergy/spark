@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -34,15 +35,16 @@ import com.kodex.spark.ui.addScreen.data.Book
 @Composable
 fun BookListItemUi(
     showEditButton: Boolean = false,
-    book: Book,
+    book: Book = Book(),
     onEditClick: (Book) -> Unit ={},
     onFavClick: () -> Unit = {},
-    onBookClick: (Book) -> Unit = {}
+    onBookClick: (Book) -> Unit = {},
+    onDeleteClick: (Book) -> Unit = {}
 ) {
     Column (
         modifier = Modifier
         .fillMaxWidth()
-        .padding(16.dp)
+        .padding(10.dp)
             .clickable{
                 onBookClick(book)
             }
@@ -58,11 +60,11 @@ fun BookListItemUi(
 
         }
         AsyncImage(
-            model = bitmap ?: book.imageUrl,
+            model = bitmap,
             contentDescription = "",
             modifier = Modifier.fillMaxWidth()
                 .height(250.dp)
-                .clip(RoundedCornerShape(15.dp)),
+                .clip(RoundedCornerShape(10.dp)),
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -70,12 +72,12 @@ fun BookListItemUi(
             text = book.title,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            modifier = Modifier.padding(start = 10.dp)
         )
-        Spacer(modifier = Modifier.height(5.dp))
 
         Text(
-            text = "Категория: ${book.category}",
+            text = "Категория: ${book.categoryIndex}",
             color = Color.Black,
             fontWeight = FontWeight.Medium,
             fontSize = 15.sp
@@ -83,7 +85,8 @@ fun BookListItemUi(
         Text(
             text = book.description,
             color = Color.Gray,
-            fontSize = 16.sp
+            fontSize = 16.sp,
+            modifier = Modifier.padding(start = 10.dp)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -92,13 +95,15 @@ fun BookListItemUi(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth().weight(1F),
+                modifier = Modifier.fillMaxWidth().weight(1F).padding(start =  10.dp),
                 text = book.prise,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 18.sp,
+
             )
-            if (showEditButton)IconButton(onClick = {
+            if (showEditButton)IconButton(
+                onClick = {
                     onEditClick(book)
             }) {
                 Icon(
@@ -109,7 +114,7 @@ fun BookListItemUi(
 
 
              if (showEditButton)IconButton(onClick = {
-              onEditClick(book)
+              onDeleteClick(book)
             }) {
                 Icon(
                     Icons.Default.Delete,

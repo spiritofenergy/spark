@@ -1,12 +1,15 @@
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -20,57 +23,68 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.kodex.spark.ui.addScreen.data.Book
-import com.kodex.spark.ui.addScreen.data.Favorite
 import com.kodex.spark.ui.bottom_menu.BottomMenu
 import com.kodex.spark.ui.bottom_menu.BottomMenuItem
 import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.drawer_menu.DrawerBody
 import com.kodex.spark.ui.drawer_menu.DrawerHeader
 import com.kodex.spark.ui.mainScreen.BookListItemUi
+import com.kodex.spark.ui.mainScreen.MSViewModel
+import com.kodex.spark.R
 import kotlinx.coroutines.launch
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.kodex.spark.ui.custom.MyDialog
+import com.kodex.spark.ui.top_app_bar.MainTopBar
+
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun MenuScreen(
+    viewModel: MSViewModel = hiltViewModel(),
     navData: MainScreenDataObject,
-    onBookEditClick: (Book)-> Unit,
-    onBookClick: (Book)-> Unit,
-    onAdminClick: ()-> Unit
-
-){
+    onBookEditClick: (Book) -> Unit,
+    onBookClick: (Book) -> Unit,
+    onAdminClick: () -> Unit,
+) {
+    val context = LocalContext.current
+    val showLoadIndicator = remember {
+        mutableStateOf(false)
+    }
     val drawerState = rememberDrawerState(DrawerValue.Open)
     val coroutineScope = rememberCoroutineScope()
-    val bookListState = remember {
-        mutableStateOf(emptyList <Book>())
-    }
-    val selectedBottomItemState = remember {
-        mutableStateOf(BottomMenuItem.Home.title)
+    val showDeleteDialog = remember {
+        mutableStateOf(false)
     }
     val isAdminState = remember {
         mutableStateOf(false)
     }
-    val isFavesListEmptyState = remember {
-        mutableStateOf(false)
-    }
-    val categoryState = remember {
-        mutableStateOf("Fantasy")
-    }
-    val db = remember {
-        Firebase.firestore
-    }
     LaunchedEffect(Unit) {
-        getAllFavesIds(db, navData.uid) {faves ->
-            getAllBooks(db, faves) { books ->
-                isFavesListEmptyState.value = books.isEmpty()
-                bookListState.value = books
+        if (viewModel.booksListState.value.isEmpty()) {
+            viewModel.getAllBooks()
+        }
+        viewModel.uiState.collect { state ->
+            when (state) {
+                is MSViewModel.MainUiState.Loading -> {
+                    showLoadIndicator.value = true
+                }
+
+                is MSViewModel.MainUiState.Success -> {
+                    showLoadIndicator.value = false
+                }
+
+                is MSViewModel.MainUiState.Error -> {
+                    showLoadIndicator.value = false
+                    Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         modifier = Modifier.fillMaxWidth(),
@@ -82,118 +96,111 @@ fun MenuScreen(
                         isAdminState.value = isAdmin
                     },
                     onFavesClick = {
-                        selectedBottomItemState.value = BottomMenuItem.Faves.title
-                            getAllFavesIds(db, navData.uid) { faves ->
-                                getAllFavesBooks(db, faves) { books ->
-                                    isFavesListEmptyState.value = books.isEmpty()
-                                    bookListState.value = books
-                                }
-                            }
-                            coroutineScope.launch {
-                                drawerState.close()
-                            }
+                        viewModel.selectedBottomItemState.value = BottomMenuItem.Faves.titleId
+                        viewModel.getAllFavesBooks()
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
 
-                        },
+                    },
                     onAdminClick = {
-                        coroutineScope.launch{
+                        coroutineScope.launch {
                             drawerState.close()
                         }
                         onAdminClick()
                     },
-                    onCategoryClick = { category ->
-                        getAllFavesIds(db, navData.uid) { faves ->
-                            if (category =="All"){
-                                getAllBooks(db,faves){ books ->
-                                    bookListState.value = books
-                                }
-                            }else
-                                getAllBooksFromCategory(db, faves, category) { books ->
-                                    bookListState.value = books
-                                }
-                        }
-                        coroutineScope.launch{
+                    onCategoryClick = { categoryIndex ->
+                        viewModel.getBooksFromCategory(categoryIndex)
+                        viewModel.selectedBottomItemState.value = BottomMenuItem.Faves.titleId
+                        coroutineScope.launch {
                             drawerState.close()
                         }
+                    },
+                    onAllClick = {
+                        viewModel.getAllBooks()
                     }
                 )
             }
         }
     ) {
-
-
-        Scaffold (
+        Scaffold(
+            topBar = {
+                MainTopBar(viewModel.categoryState.intValue)
+            },
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
                 BottomMenu(
-                    selectedBottomItemState.value,
+                    viewModel.selectedBottomItemState.value,
                     onFavesClick = {
-                        selectedBottomItemState.value = BottomMenuItem.Faves.title
-
-                        getAllFavesIds(db, navData.uid) {faves ->
-                            getAllFavesBooks(db, faves) { books ->
-                                isFavesListEmptyState.value = books.isEmpty()
-                                bookListState.value = books
-                            }
-                        }
+                        viewModel.selectedBottomItemState.value = BottomMenuItem.Faves.titleId
+                        viewModel.getAllFavesBooks()
                     },
                     onHomeClick = {
                         // получаем список с иыентификатором и
-                        selectedBottomItemState.value = BottomMenuItem.Home.title
-                        getAllFavesIds(db, navData.uid) {faves ->
-                            getAllBooks(db, faves) { books ->
-                                isFavesListEmptyState.value = books.isEmpty()
-                                bookListState.value = books
-                            }
-                        }
+                        viewModel.selectedBottomItemState.value = BottomMenuItem.Home.titleId
+                        viewModel.getAllBooks()
                     }
                 )
             }
-        ){ paddingValues ->
+        ) { paddingValues ->
 
-            if (isFavesListEmptyState.value){
+            if (viewModel.isFavesListEmptyState.value) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
                     Text(
-                        text = "Лист пустой",
+                        text = stringResource(id = R.string.app_name),
                         color = Color.LightGray
                     )
                 }
             }
+            MyDialog(
+                showDialog = showDeleteDialog.value,
+                onDismiss = {
+                    showDeleteDialog.value = false
+                },
+                title = "Внимание!",
+                massage = "Вы действительно хотите удалить это сообщение?",
+                onConfirm = {
+                    showDeleteDialog.value = false
+                    viewModel.deleteBook()
+                }
+            )
+            if (showLoadIndicator.value) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(100.dp)
+                    )
+                }
 
-            LazyVerticalGrid(columns = GridCells.Fixed(1),
-            modifier = Modifier.fillMaxWidth()
-                .padding(paddingValues)
+
+            }
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(1),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues)
             ) {
-                items(bookListState.value){book ->
+                items(viewModel.booksListState.value) { book ->
                     BookListItemUi(
                         isAdminState.value,
                         book,
-                        onBookClick = {bk->
+                        onBookClick = { bk ->
                             onBookClick(bk)
                         },
                         onEditClick = {
-                        onBookEditClick(it)
+                            onBookEditClick(it)
+                        },
+                        onDeleteClick = { bookToDelete ->
+                            showDeleteDialog.value = true
+                            viewModel.bookToDelete = bookToDelete
                         },
                         onFavClick = {
-                            bookListState.value = bookListState.value.map { bk ->
-                                if (bk.key == book.key){
-                                    onFaves(
-                                        db,
-                                        navData.uid,
-                                        Favorite(bk.key),
-                                        !bk.isFaves
-                                    )
-                                    bk.copy(isFaves = !bk.isFaves)
-                                }else{
-                                    bk
-                                }
-                            }
-                            if (selectedBottomItemState.value == BottomMenuItem.Faves.title)
-                            bookListState.value = bookListState.value.filter {it.isFaves
-
-                            }
+                            viewModel.onFavClick(book, viewModel.selectedBottomItemState.value)
                         }
                     )
                 }
@@ -202,119 +209,8 @@ fun MenuScreen(
     }
 }
 
-private fun getAllBooks(
-    db: FirebaseFirestore,
-    idsList: List<String>,
-     onBooks: (List<Book>)-> Unit
-){
-    db.collection("spark_posts")
-
-        .get()
-        .addOnSuccessListener{ task ->
-            val bookList = task.toObjects(Book::class.java).map {
-                if (idsList.contains(it.key)){
-                    it.copy(isFaves = true)
-                }else{
-                    it
-                }
-            }
-            onBooks(bookList)
-        }
-        .addOnFailureListener{
-
-        }
-}
 
 
-private fun getAllFavesBooks(
-    db: FirebaseFirestore,
-    idsList: List<String>,
-    onBooks: (List<Book>)-> Unit
-){// проверяем, что список не пустрой
-    if(idsList.isNotEmpty()) {
-        db.collection("spark_posts")
-            .whereIn(FieldPath.documentId(), idsList)
-            .get()
-            .addOnSuccessListener { task ->
-                val bookList = task.toObjects(Book::class.java).map {
-                    if (idsList.contains(it.key)) {
-                        it.copy(isFaves = true)
-                    } else {
-                        it
-                    }
-                }
-                onBooks(bookList)
-            }
-            .addOnFailureListener {
 
-            }
-    }else{
-        onBooks(emptyList())
-    }
-}
 
-private fun getAllBooksFromCategory(
-    db: FirebaseFirestore,
-    idsList: List<String>,
-    category: String,
-    onBooks: (List<Book>)-> Unit
-){
-    db.collection("spark_posts")
-        .whereEqualTo("category", category)
-        .get()
-        .addOnSuccessListener{task ->
-            val bookList = task.toObjects(Book::class.java).map {
-                if (idsList.contains(it.key)){
-                    it.copy(isFaves = true)
-                }else{
-                    it
-                }
-            }
-            onBooks(bookList)
-        }
-        .addOnFailureListener{
 
-        }
-}
-private fun getAllFavesIds(
-    db: FirebaseFirestore,
-    uid: String,
-    onFaves:(List<String>)-> Unit
-){
-    db.collection("spark_users")
-        .document(uid)
-        .collection("spark_faves")
-        .get()
-        .addOnSuccessListener{ task ->
-            val idsList = task.toObjects(Favorite::class.java)
-            val keysList = arrayListOf<String>()
-            idsList.forEach{
-                keysList.add(it. key)
-            }
-            onFaves(keysList)
-        }
-        .addOnFailureListener{
-
-        }
-}
-
-private fun onFaves(
-    db: FirebaseFirestore,
-    uid: String,
-    favorite: Favorite,
-    isFav: Boolean,
-){
-    if(isFav){
-        db.collection("spark_users")
-            .document(uid)
-            .collection("spark_faves")
-            .document(favorite.key)
-            .set(favorite)
-    }else{
-        db.collection("spark_users")
-            .document(uid)
-            .collection("spark_faves")
-            .document(favorite.key)
-            .delete()
-    }
-}

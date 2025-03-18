@@ -1,11 +1,8 @@
 package com.kodex.spark.ui.logon
 
-import android.R.attr.contentDescription
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,47 +10,40 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.firebase.auth.auth
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kodex.spark.R
+import com.kodex.spark.ui.custom.MyDialog
 import com.kodex.spark.ui.data.MainScreenDataObject
-import com.kodex.spark.ui.theme.BoxFilter
-import kotlin.math.sign
 
 @Composable
 fun LoginScreen(
+    viewModel: LViewModel = hiltViewModel(),
     onNavigationToMainScreen: (MainScreenDataObject) ->Unit
 ) {
-    val successState = remember {
-        mutableStateOf("Welcome")
-    }
-    val errorState = remember {
-        mutableStateOf("")
-    }
-    val auth = remember {
-        Firebase.auth
-    }
-    val emailState = remember {
-        mutableStateOf("test01@mail.ru")
-    }
-    val passwordState = remember {
-        mutableStateOf("test01")
-    }
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getAccountState()
+        viewModel.getEmail()
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.safeLastEmail()
+            viewModel.passwordState.value = ""
+        }
+    }
     //фон
     Image(
         painter = painterResource(
@@ -64,10 +54,10 @@ fun LoginScreen(
         contentScale = ContentScale.Crop,
 
         )
-  /*  Box(modifier = Modifier.fillMaxSize()
+    /*  Box(modifier = Modifier.fillMaxSize()
         .background(BoxFilter)
     )*/
-        // Основной лист
+    // Основной лист
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -92,123 +82,96 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(40.dp))
         Spacer(modifier = Modifier.height(40.dp))
 
-        RoundedCornerTextField(
-            text = emailState.value,
-            label = "Логин:"
-        ) {
-            emailState.value = it
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+        if (viewModel.currentUser.value == null ) {
+            RoundedCornerTextField(
+                text = viewModel.emailState.value,
+                label = "Логин:",
+                isPassword = false
+            ) {
+                viewModel.emailState.value = it
+            }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        RoundedCornerTextField(
-            text = passwordState.value,
-            label = "Пароль:"
-        ) {
-            passwordState.value = it
-        }
+            if (!viewModel.resetPasswordState.value) {
+                RoundedCornerTextField(
+                    text = viewModel.passwordState.value,
+                    label = "Пароль:",
+                    isPassword = true
+                ) {
+                    viewModel.passwordState.value = it
+                }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-            if (errorState.value.isNotEmpty()){
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+            if (viewModel.errorState.value.isNotEmpty()) {
                 Text(
-                    text = errorState.value,
+                    text = viewModel.errorState.value,
                     color = Color.Red,
                     textAlign = TextAlign.Center
                 )
             }
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        LoginButton(
-            text = "Вход"
-        ) {
-            signIn(
-                auth,
-                emailState.value,
-                passwordState.value,
-                onSignInSuccess = { navData ->
-                    onNavigationToMainScreen(navData)
-                },
-                onSignInFailure = { error ->
-                    errorState.value = error
-                    Log.d("MyTeg", "Sign Up Failure: $error")
+            if(!viewModel.resetPasswordState.value) {
+                LoginButton(text = "Вход") {
+                    viewModel.signIn(
+                        onSignInSuccess = { navData ->
+                            onNavigationToMainScreen(navData)
+                        }
+                    )
                 }
-            )
-            Log.d("MyTeg", "Press Sign In Button")
-        }
-        LoginButton(
-            text = "Регистраия "
-        ) {
-            signUp(
-                auth,
-                emailState.value,
-                passwordState.value,
-                onSignUpSuccess = {navData ->
-                    onNavigationToMainScreen(navData)
+            }
+            LoginButton(text = if(viewModel.resetPasswordState.value) {
+                "Вернуть пароль "
+            }else {
+                "Авторизация"
+            }
+            ) {
+                viewModel.signUp(
+                    onSignUpSuccess = { navData ->
+                        onNavigationToMainScreen(navData)
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            if(!viewModel.resetPasswordState.value){
+                Text(
+                    modifier = Modifier.clickable{
+                    viewModel.errorState.value = ""
+                    viewModel.resetPasswordState.value = true
                 },
-                onSignUpFailure = { error ->
-                    Log.d("MyTeg", "Sign Up Failure: $error")
+                    text = "Напомнить пароль",
+                    color = Color.White
+                )
+            }
+        } else {
+            Spacer(modifier = Modifier.height(16.dp))
+                LoginButton(text = "Вход") {
+                    onNavigationToMainScreen(
+                        MainScreenDataObject(
+                            viewModel.currentUser.value!!.uid,
+                            viewModel.currentUser.value!!.email!!
+                        )
+                    )
                 }
-            )
+                LoginButton(text = "Выход") {
+                    viewModel.signOut()
+            }
         }
+          MyDialog(
+            showDialog = viewModel.showResetPasswordDialog.value,
+            onDismiss = {
+                viewModel.showResetPasswordDialog.value = false
+            },
+            onConfirm = {
+                viewModel.showResetPasswordDialog.value = false
+            },
+            massage = stringResource(R.string.reset_password_massage)
+        )
     }
 }
 
-        //Connect
-        fun signUp(
-            auth: FirebaseAuth,
-            email: String,
-            password: String,
-            onSignUpSuccess: (MainScreenDataObject) -> Unit,
-            onSignUpFailure: (String) -> Unit
-        ) {
-            if (email.isBlank() || password.isBlank()) {
-                onSignUpFailure("Email and Password be empty")
-                return
-            }
-
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) onSignUpSuccess
-                }
-                .addOnFailureListener() {
-                    onSignUpFailure(it.message ?: "Sign Up Error")
-            }
-        }
-
-        fun signIn(
-            auth: FirebaseAuth,
-            email: String,
-            password: String,
-            onSignInSuccess: (MainScreenDataObject) -> Unit,
-            onSignInFailure: (String) -> Unit
-        ) {
-            if (email.isBlank() || password.isBlank()) {
-                onSignInFailure("Email and Password be empty")
-                return
-            }
-
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful)
-                        onSignInSuccess(MainScreenDataObject(
-                            task.result.user?.uid!!,
-                            task.result.user?.email!!
-                    ))
-                }
-                .addOnFailureListener() {
-                    onSignInFailure(it.message ?: "Sign Up Error")
-            }
-        }
 
 
 
 
-/*
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewLoginScreen() {
-    LoginScreen()
-}
-
-*/

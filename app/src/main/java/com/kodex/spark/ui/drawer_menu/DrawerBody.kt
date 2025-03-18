@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -26,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +37,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.kodex.spark.R
+import com.kodex.spark.ui.mainScreen.DrawerListItem
 import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.DarkTransparentBlue
 import com.kodex.spark.ui.theme.GrayLite
@@ -44,17 +48,10 @@ fun DrawerBody(
     onAdmin: (Boolean) -> Unit,
     onAdminClick: ()-> Unit = {},
     onFavesClick: ()-> Unit,
-    onCategoryClick: (String)-> Unit = {}
+    onCategoryClick: (Int)-> Unit = {},
+    onAllClick: () -> Unit = {}
 ) {
-    val categoryList = listOf(
-        "Favorites",
-        "All",
-        "Корпуса",
-        "Питание",
-        "Отдых",
-        "Развлечения",
-        "Бронирование"
-    )
+    val categoryList = stringArrayResource(id = R.array.category_arrays)
     val isAdminState = remember {
         mutableStateOf(false)
     }
@@ -81,41 +78,22 @@ fun DrawerBody(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Box(modifier = Modifier.fillMaxWidth()
-                .height(1.dp).background(GrayLite)
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(GrayLite)
             )
+            DrawerListItem(title = stringResource(id = R.string.faves)) {
+                onFavesClick()
+            }
+            DrawerListItem(title = stringResource(id = R.string.all)) {
+                onAllClick()
+            }
             LazyColumn(Modifier.fillMaxWidth()) {
-                items(categoryList){item->
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onFavesClick()
-                                if (categoryList[0] == item) {
-                                    onFavesClick()
-                                }else {
-                                    onCategoryClick(item)
-                                }
-                            }
-                    ) {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(
-                            text = item,
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentWidth()
-                        )
-
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .background(GrayLite)
-                        )
+                itemsIndexed(categoryList){index, title->
+                    DrawerListItem(
+                        title) {
+                            onCategoryClick(index)
                     }
                 }
             }

@@ -3,22 +3,22 @@ import com.kodex.spark.R
 
 sealed class BottomMenuItem (
     val route: String,
-    val title: String,
+    val titleId: Int,
     val iconId: Int
 ){
     object Home : BottomMenuItem(
-        route = "home",
-        title = "Home",
+        route = "",
+        titleId = R.string.home,
         iconId = R.drawable.ic_home
     )
     object Faves : BottomMenuItem(
-        route = "favorite",
-        title = "Favorite",
+        route = "",
+        titleId = R.string.faves,
         iconId = R.drawable.ic_favorite
     )
     object Setting : BottomMenuItem(
-        route = "setting",
-        title = "Setting",
+        route = "",
+        titleId = R.string.settings,
         iconId = R.drawable.ic_settings
     )
 }

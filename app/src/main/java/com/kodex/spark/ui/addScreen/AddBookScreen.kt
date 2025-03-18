@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -19,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,8 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kodex.spark.R
@@ -40,8 +38,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
 import com.kodex.spark.ui.addScreen.data.AddScreenObject
 import com.kodex.spark.ui.addScreen.data.Book
 import com.kodex.spark.ui.theme.BoxFilter
@@ -55,7 +51,7 @@ fun AddBookScreen(
     val cv = LocalContext.current.contentResolver
 
     var selectedCategory = remember {
-        mutableStateOf(navData.category)
+        mutableIntStateOf(navData.categoryIndex)
     }
     val navImageUrl = remember {
         mutableStateOf(navData.imageUrl)
@@ -133,13 +129,13 @@ fun AddBookScreen(
         )
         Spacer(modifier = Modifier.height(40.dp))
 
-if (selectedCategory.value.isEmpty()){
+/*if (false){
     selectedCategory.value = "Выберете категорию"
 }
         RoundedCornerDropDownMenu (selectedCategory.value){ selectedItem ->
             imageLauncher
-            selectedCategory.value = selectedItem
-        }
+            selectedCategory.value = selectedItem.
+        }*/
         Spacer(modifier = Modifier.height(10.dp))
 
         RoundedCornerTextField(
@@ -190,8 +186,8 @@ if (selectedCategory.value.isEmpty()){
                 title = title.value,
                 description = description.value,
                 prise = prise.value,
-                category = selectedCategory.value,
-                isFaves = navData.isFaves,
+                categoryIndex = selectedCategory.value,
+                //isFaves = navData.isFaves,
                 imageUrl = if (selectedImageUri.value != null)
                  imageToBase64(
                      selectedImageUri.value!!,

@@ -16,19 +16,19 @@ import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.detailScreen.DetailScreen
 import com.kodex.spark.ui.detailScreen.DetailsNavObject
 import com.kodex.spark.ui.logon.LoginScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
            val navController = rememberNavController()
-
             NavHost(
                 navController = navController,
                 startDestination = LoginScreenObject
             ) {
-
                 composable<LoginScreenObject> {
                     LoginScreen() { navData ->
                         navController.navigate(navData)
@@ -37,30 +37,33 @@ class MainActivity : ComponentActivity() {
                 composable<MainScreenDataObject> { navEntry ->
                     val navData = navEntry.toRoute<MainScreenDataObject>()
                     MenuScreen(
-                        navData,
+                        navData = navData,
                         onBookClick = {bk ->
                             navController.navigate(DetailsNavObject(
                                 title = bk.title,
                                 description = bk.description,
                                 price = bk.prise,
+                                categoryIndex = bk.categoryIndex,
                                 imageUrl = bk.imageUrl,
-                                category = bk.category
-
+                                isFaves = bk.isFaves
                             ))
-
                         },
+
                         onBookEditClick = { book->
                             navController.navigate(AddScreenObject(
                                 key = book.key,
                                 title = book.title,
                                 description = book.description,
                                 prise = book.prise,
-                                category = book.category,
+                                categoryIndex = book.categoryIndex,
                                 imageUrl = book.imageUrl,
                                 isFaves = book.isFaves
 
-                            ))
-                        }){
+                                )
+                            )
+                        }
+                    )
+                    {
                         navController.navigate(AddScreenObject())
                     }
                 }
@@ -72,9 +75,7 @@ class MainActivity : ComponentActivity() {
                 }
                 composable<DetailsNavObject>{ navEntry ->
                     val navData = navEntry.toRoute<DetailsNavObject>()
-                    DetailScreen(navData){
-                        navController.popBackStack()
-                    }
+                    DetailScreen(navData)
 
                 }
             }

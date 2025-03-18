@@ -20,16 +20,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.kodex.spark.R
+
 
 @Composable
 fun DetailScreen(
-    navObject: DetailsNavObject = DetailsNavObject(),
-    function: () -> Boolean
+    navObject: DetailsNavObject = DetailsNavObject()
 ) {
 
     var bitmap: Bitmap? = null
@@ -68,7 +71,7 @@ fun DetailScreen(
                     horizontalAlignment = Alignment.CenterHorizontally){
                     Text(text = "Категория",
                         color = Color.Gray)
-                    Text(text = navObject.category,
+                    Text(text = stringArrayResource(id = R.array.category_arrays)[ navObject.categoryIndex],
                         fontWeight = FontWeight.Bold)
                     Text(text = "Автор",
                         color = Color.Gray)
