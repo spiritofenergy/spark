@@ -7,7 +7,7 @@ data class Book(
     val title: String = "",
     val description: String = "",
     val prise: String = "",
-    val categoryIndex: Int = Categories.FANTASY,
+    val categoryIndex: Int = Categories.DRAMA,
     val imageUrl: String = "",
     val isFaves: Boolean = false
 )

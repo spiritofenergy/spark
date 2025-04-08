@@ -37,7 +37,7 @@ fun MyDialog(
                 Button(onClick = {
                     onDismiss()
                 }) {
-                    Text(text = "Нет")
+                    Text(text = "Cansel")
                 }
             },
             title= {

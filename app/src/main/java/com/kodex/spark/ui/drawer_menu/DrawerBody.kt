@@ -3,7 +3,6 @@ package com.kodex.spark.ui.drawer_menu
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,9 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -24,15 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
@@ -41,15 +36,15 @@ import com.kodex.spark.ui.mainScreen.DrawerListItem
 import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.DarkTransparentBlue
 import com.kodex.spark.ui.theme.GrayLite
+import com.kodex.spark.ui.utils.Categories
 
 
 @Composable
 fun DrawerBody(
     onAdmin: (Boolean) -> Unit,
-    onAdminClick: ()-> Unit = {},
-    onFavesClick: ()-> Unit,
-    onCategoryClick: (Int)-> Unit = {},
-    onAllClick: () -> Unit = {}
+    onAdminClick: () -> Unit = {},
+    onCategoryClick: (Int) -> Unit = {}
+
 ) {
     val categoryList = stringArrayResource(id = R.array.category_arrays)
     val isAdminState = remember {
@@ -84,10 +79,10 @@ fun DrawerBody(
                 .background(GrayLite)
             )
             DrawerListItem(title = stringResource(id = R.string.faves)) {
-                onFavesClick()
-            }
+                onCategoryClick(Categories.FAVORITES)
+             }
             DrawerListItem(title = stringResource(id = R.string.all)) {
-                onAllClick()
+                onCategoryClick(Categories.ALL)
             }
             LazyColumn(Modifier.fillMaxWidth()) {
                 itemsIndexed(categoryList){index, title->

@@ -45,10 +45,9 @@ class MainActivity : ComponentActivity() {
                                 price = bk.prise,
                                 categoryIndex = bk.categoryIndex,
                                 imageUrl = bk.imageUrl,
-                                isFaves = bk.isFaves
-                            ))
+                            )
+                            )
                         },
-
                         onBookEditClick = { book->
                             navController.navigate(AddScreenObject(
                                 key = book.key,
@@ -57,21 +56,21 @@ class MainActivity : ComponentActivity() {
                                 prise = book.prise,
                                 categoryIndex = book.categoryIndex,
                                 imageUrl = book.imageUrl,
-                                isFaves = book.isFaves
-
-                                )
+                            )
                             )
                         }
-                    )
-                    {
+                    ){
                         navController.navigate(AddScreenObject())
                     }
                 }
                 composable<AddScreenObject>{ navEntry ->
                     val navData = navEntry.toRoute<AddScreenObject>()
-                    AddBookScreen(navData){
-                        navController.popBackStack()
-                    }
+                    AddBookScreen(
+                        navData,
+                        onSaved = {
+                            navController.popBackStack()
+                        }
+                    )
                 }
                 composable<DetailsNavObject>{ navEntry ->
                     val navData = navEntry.toRoute<DetailsNavObject>()

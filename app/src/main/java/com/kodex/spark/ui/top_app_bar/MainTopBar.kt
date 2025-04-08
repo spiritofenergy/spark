@@ -1,6 +1,8 @@
 package com.kodex.spark.ui.top_app_bar
 
+import android.util.Log
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,6 +36,7 @@ import com.kodex.spark.R
 @Composable
 fun MainTopBar(
     titleIndex: Int,
+    onSearch: (String)-> Unit
 ) {
     var targetState by remember {
         mutableStateOf(false)
@@ -61,13 +64,16 @@ fun MainTopBar(
                         },
                         onQueryChange = { text ->
                             queryText = text
+
                         },
-                        onSearch = {
+                        onSearch = { text->
+                           onSearch (text)
+
 
                         },
                         expanded = expandedState,
-                        onExpandedChange = { exp ->
-                            expandedState = exp
+                        onExpandedChange = {exp ->
+                                expandedState = exp
                         },
                         trailingIcon = {
                             IconButton(
@@ -90,7 +96,7 @@ fun MainTopBar(
                     expandedState = expo
                 },
                 content = {
-                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
                         items(5) {
                             Text(
                                 text = "Item $it",
@@ -126,7 +132,6 @@ fun MainTopBar(
                     actionIconContentColor = DarkBlue
                 )
             )
-
         }
     }
 }

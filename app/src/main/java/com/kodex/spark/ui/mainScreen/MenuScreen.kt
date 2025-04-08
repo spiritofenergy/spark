@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
@@ -24,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kodex.spark.ui.addScreen.data.Book
@@ -34,55 +32,51 @@ import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.drawer_menu.DrawerBody
 import com.kodex.spark.ui.drawer_menu.DrawerHeader
 import com.kodex.spark.ui.mainScreen.BookListItemUi
-import com.kodex.spark.ui.mainScreen.MSViewModel
 import com.kodex.spark.R
 import kotlinx.coroutines.launch
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.kodex.spark.ui.custom.MyDialog
+import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.top_app_bar.MainTopBar
+import com.kodex.spark.ui.utils.Categories
 
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun MenuScreen(
-    viewModel: MSViewModel = hiltViewModel(),
+    viewModel: MainScreenViewModel = hiltViewModel(),
     navData: MainScreenDataObject,
     onBookEditClick: (Book) -> Unit,
     onBookClick: (Book) -> Unit,
     onAdminClick: () -> Unit,
 ) {
     val context = LocalContext.current
-    val showLoadIndicator = remember {
-        mutableStateOf(false)
-    }
+
     val drawerState = rememberDrawerState(DrawerValue.Open)
     val coroutineScope = rememberCoroutineScope()
     val showDeleteDialog = remember {
         mutableStateOf(false)
     }
+    val books = viewModel.books.collectAsLazyPagingItems()
+
     val isAdminState = remember {
         mutableStateOf(false)
     }
     LaunchedEffect(Unit) {
-        if (viewModel.booksListState.value.isEmpty()) {
-            viewModel.getAllBooks()
-        }
-        viewModel.uiState.collect { state ->
-            when (state) {
-                is MSViewModel.MainUiState.Loading -> {
-                    showLoadIndicator.value = true
-                }
-
-                is MSViewModel.MainUiState.Success -> {
-                    showLoadIndicator.value = false
-                }
-
-                is MSViewModel.MainUiState.Error -> {
-                    showLoadIndicator.value = false
-                    Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
-                }
+        viewModel.uiState.collect{uiState->
+            if (uiState is MainScreenViewModel.MainUiState.Error){
+                Toast.makeText(context, uiState.message, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    LaunchedEffect(books.loadState.refresh) {
+        if (books.loadState.refresh is LoadState.Error){
+            val errorMassage = (books.loadState.refresh as LoadState.Error).error.message
+            Toast.makeText(context, errorMassage, Toast.LENGTH_SHORT).show()
+    }
+
     }
 
     ModalNavigationDrawer(
@@ -95,29 +89,26 @@ fun MenuScreen(
                     onAdmin = { isAdmin ->
                         isAdminState.value = isAdmin
                     },
-                    onFavesClick = {
-                        viewModel.selectedBottomItemState.value = BottomMenuItem.Faves.titleId
-                        viewModel.getAllFavesBooks()
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-
-                    },
                     onAdminClick = {
                         coroutineScope.launch {
                             drawerState.close()
                         }
                         onAdminClick()
+                      //  viewModel.getBooksFromCategory(Categories.FAVORITES)
                     },
                     onCategoryClick = { categoryIndex ->
+                        if (categoryIndex == Categories.FAVORITES) {
+                            viewModel.selectedBottomItemState.intValue =
+                                BottomMenuItem.Faves.titleId
+                        } else {
+                            viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
+                        }
                         viewModel.getBooksFromCategory(categoryIndex)
-                        viewModel.selectedBottomItemState.value = BottomMenuItem.Faves.titleId
+                        books.refresh()
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Faves.titleId
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                    },
-                    onAllClick = {
-                        viewModel.getAllBooks()
                     }
                 )
             }
@@ -125,32 +116,38 @@ fun MenuScreen(
     ) {
         Scaffold(
             topBar = {
-                MainTopBar(viewModel.categoryState.intValue)
+                MainTopBar(viewModel.categoryState.intValue,
+                    onSearch = { searchText->
+                        viewModel.searchBook(searchText)
+                        books.refresh()
+                    })
             },
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
                 BottomMenu(
-                    viewModel.selectedBottomItemState.value,
+                    viewModel.selectedBottomItemState.intValue,
                     onFavesClick = {
-                        viewModel.selectedBottomItemState.value = BottomMenuItem.Faves.titleId
-                        viewModel.getAllFavesBooks()
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Faves.titleId
+                        viewModel.getBooksFromCategory(Categories.FAVORITES)
+                        books.refresh()
                     },
                     onHomeClick = {
                         // получаем список с иыентификатором и
-                        viewModel.selectedBottomItemState.value = BottomMenuItem.Home.titleId
-                        viewModel.getAllBooks()
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
+                        viewModel.getBooksFromCategory(Categories.ALL)
+                        books.refresh()
                     }
                 )
             }
         ) { paddingValues ->
 
-            if (viewModel.isFavesListEmptyState.value) {
+            if (books.itemCount == 0) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = stringResource(id = R.string.app_name),
+                        text = stringResource(id = R.string.empty_list),
                         color = Color.LightGray
                     )
                 }
@@ -164,20 +161,18 @@ fun MenuScreen(
                 massage = "Вы действительно хотите удалить это сообщение?",
                 onConfirm = {
                     showDeleteDialog.value = false
-                    viewModel.deleteBook()
+                     viewModel.deleteBook(books.itemSnapshotList.items)
                 }
             )
-            if (showLoadIndicator.value) {
+            if (books.loadState.refresh is LoadState.Loading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(100.dp)
+                        modifier = Modifier.size(30.dp)
                     )
                 }
-
-
             }
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1),
@@ -185,24 +180,31 @@ fun MenuScreen(
                     .fillMaxWidth()
                     .padding(paddingValues)
             ) {
-                items(viewModel.booksListState.value) { book ->
-                    BookListItemUi(
-                        isAdminState.value,
-                        book,
-                        onBookClick = { bk ->
-                            onBookClick(bk)
-                        },
-                        onEditClick = {
-                            onBookEditClick(it)
-                        },
-                        onDeleteClick = { bookToDelete ->
-                            showDeleteDialog.value = true
-                            viewModel.bookToDelete = bookToDelete
-                        },
-                        onFavClick = {
-                            viewModel.onFavClick(book, viewModel.selectedBottomItemState.value)
-                        }
-                    )
+                items(count = books.itemCount) { index ->
+                    val book = books[index]
+                    if (book != null) {
+                        BookListItemUi(
+                            titleIndex = viewModel.categoryState.intValue,
+                            isAdminState.value,
+                            book,
+                            onBookClick = { bk ->
+                                onBookClick(bk)
+                            },
+                            onEditClick = {
+                                onBookEditClick(it)
+                            },
+                            onDeleteClick = { bookToDelete ->
+                                showDeleteDialog.value = true
+                                viewModel.bookToDelete = bookToDelete
+                            },
+                            onFavClick = {
+                                  viewModel.onFavClick(book,
+                                      viewModel.selectedBottomItemState.intValue,
+                                      books.itemSnapshotList.items)
+
+                            }
+                        )
+                    }
                 }
             }
         }

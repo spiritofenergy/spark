@@ -25,21 +25,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.kodex.spark.R
 import com.kodex.spark.ui.addScreen.data.Book
+import com.kodex.spark.ui.utils.Categories
+import com.kodex.spark.ui.utils.toBitmap
 
 @Composable
 fun BookListItemUi(
+    titleIndex: Int,
     showEditButton: Boolean = false,
     book: Book = Book(),
     onEditClick: (Book) -> Unit ={},
     onFavClick: () -> Unit = {},
     onBookClick: (Book) -> Unit = {},
-    onDeleteClick: (Book) -> Unit = {}
+    onDeleteClick: ( Book) -> Unit = {}
 ) {
     Column (
         modifier = Modifier
@@ -60,7 +66,7 @@ fun BookListItemUi(
 
         }
         AsyncImage(
-            model = bitmap,
+            model = book.imageUrl.toBitmap(),
             contentDescription = "",
             modifier = Modifier.fillMaxWidth()
                 .height(250.dp)
@@ -76,12 +82,13 @@ fun BookListItemUi(
             modifier = Modifier.padding(start = 10.dp)
         )
 
-        Text(
-            text = "Категория: ${book.categoryIndex}",
+      Text(
+            text = stringArrayResource(id = R.array.category_arrays)[book.categoryIndex],
             color = Color.Black,
             fontWeight = FontWeight.Medium,
             fontSize = 15.sp
         )
+
         Text(
             text = book.description,
             color = Color.Gray,

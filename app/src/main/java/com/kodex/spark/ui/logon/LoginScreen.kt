@@ -122,7 +122,7 @@ fun LoginScreen(
                 }
             }
             LoginButton(text = if(viewModel.resetPasswordState.value) {
-                "Вернуть пароль "
+                "Восстановить пароль "
             }else {
                 "Авторизация"
             }

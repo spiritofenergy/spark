@@ -1,10 +1,7 @@
 package com.kodex.spark.ui.addScreen
 
-import android.content.ContentResolver
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Base64
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -18,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,81 +27,92 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kodex.spark.R
 import com.kodex.spark.ui.logon.LoginButton
 import com.kodex.spark.ui.logon.RoundedCornerTextField
 import coil.compose.rememberAsyncImagePainter
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import com.kodex.spark.ui.addScreen.data.AddScreenObject
-import com.kodex.spark.ui.addScreen.data.Book
+import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.theme.BoxFilter
+import com.kodex.spark.ui.utils.IS_BASE_64
+import com.kodex.spark.ui.utils.ImageUtils
+import com.kodex.spark.ui.utils.toBitmap
 
 
 @Composable
 fun AddBookScreen(
     navData: AddScreenObject = AddScreenObject(),
-    onSaved: ()-> Unit ={}
+    onSaved: () -> Unit = {},
+    viewModel: AddBookViewModel = hiltViewModel(),
 ) {
-    val cv = LocalContext.current.contentResolver
+
+    val context = LocalContext.current
 
     var selectedCategory = remember {
         mutableIntStateOf(navData.categoryIndex)
     }
-    val navImageUrl = remember {
+    var navImageUrl = remember {
         mutableStateOf(navData.imageUrl)
     }
-    val description = remember {
-        mutableStateOf(navData.description)
-    }
-    val prise = remember {
-        mutableStateOf(navData.prise)
+    val imageBase64 =  remember {
+        mutableStateOf("")
     }
 
-    val title = remember {
-        mutableStateOf(navData.title)
-    }
-
-    val selectedImageUri = remember {
-        mutableStateOf<Uri?>(null)
-    }
-    val imageBitMap = remember {
-        var bitmap: Bitmap? = null
-        try {
-            val base64Image = Base64.decode(navData.imageUrl, Base64.DEFAULT)
-            bitmap = BitmapFactory.decodeByteArray(
-                base64Image, 0,
-                base64Image.size
-            )
-        }catch (e: IllegalArgumentException){
-        }
-        mutableStateOf(bitmap)
-    }
-    val firestore = remember {
-        Firebase.firestore
-    }
     val imageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        imageBitMap.value = null
-        selectedImageUri.value = uri
+        var navImageUrl = mutableStateOf(navData.imageUrl)
+
+
+
+        if (IS_BASE_64) {
+             imageBase64.value = uri?.let {
+                ImageUtils.imageToBase64(uri, context.contentResolver)
+            } ?: ""
+        } else {
+            navImageUrl.value = ""
+            viewModel.selectedImageUri.value = uri
+        }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.setDefaultData(navData)
+        viewModel.uiState.collect { state ->
+            when (state) {
+                is MainScreenViewModel.MainUiState.Loading -> {
+                    viewModel.showLoadingIndicator.value = true
+                }
+
+                is MainScreenViewModel.MainUiState.Success -> {
+                    onSaved()
+                }
+
+                is MainScreenViewModel.MainUiState.Error -> {
+                   viewModel.showLoadingIndicator.value = false
+                    Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
     //фон
-    Image(painter = painterResource(id = R.drawable.way),
+    Image(
+        painter = painterResource(id = R.drawable.way),
         contentDescription = "Logo",
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop
 
     )
-    Box(modifier = Modifier.fillMaxSize()
-        .background(BoxFilter)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BoxFilter)
     )
 
-       // Основной лист
+    // Основной лист
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -111,12 +120,20 @@ fun AddBookScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+    // Фото
         Image(
             painter = rememberAsyncImagePainter(
-                model = imageBitMap.value ?: selectedImageUri.value),
+                model = if(imageBase64.value.isNotEmpty()) {
+                    imageBase64.value.toBitmap()
+                } else {
+                    navImageUrl.value.ifEmpty {viewModel.selectedImageUri.value }
+                    viewModel.selectedImageUri.value
+                }
+            ),
             contentDescription = "",
-            modifier = Modifier.height(200.dp).padding(bottom = 50.dp)
+            modifier = Modifier
+                .height(200.dp)
+                .padding(bottom = 50.dp)
 
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -129,106 +146,49 @@ fun AddBookScreen(
         )
         Spacer(modifier = Modifier.height(40.dp))
 
-/*if (false){
-    selectedCategory.value = "Выберете категорию"
-}
-        RoundedCornerDropDownMenu (selectedCategory.value){ selectedItem ->
+        RoundedCornerDropDownMenu(viewModel.selectedCategory.value) { selectedItemIndex ->
             imageLauncher
-            selectedCategory.value = selectedItem.
-        }*/
+            viewModel.selectedCategory.intValue = selectedItemIndex
+        }
+
         Spacer(modifier = Modifier.height(10.dp))
 
         RoundedCornerTextField(
-            text = title.value,
+            text = viewModel.title.value,
             label = "Название:"
         ) {
-            title.value = it
+            viewModel.title.value = it
         }
         Spacer(modifier = Modifier.height(10.dp))
 
         RoundedCornerTextField(
-            text = description.value,
+            text = viewModel.description.value,
             label = "Краткое описание:",
             singleLine = false,
             maxLines = 5
         ) {
-            description.value = it
+            viewModel.description.value = it
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
         RoundedCornerTextField(
-            text = prise.value,
+            text = viewModel.prise.value,
             label = "Цена:"
         ) {
-            prise.value = it
+            viewModel.prise.value = it
         }
 
         Spacer(modifier = Modifier.height(10.dp))
-
-/*
-        if (prise.value.isNotEmpty()){
-            Text(
-                text = prise.value,
-                color = Color.Red,
-                textAlign = TextAlign.Center
-            )
-        }*/
 
         LoginButton(text = "Выбрать фото") {
             imageLauncher.launch("image/*")
         }
         LoginButton(text = "Сохранить ") {
-            saveBookToFireStore(
-                firestore,
-                Book(
-                key = navData.key,
-                title = title.value,
-                description = description.value,
-                prise = prise.value,
-                categoryIndex = selectedCategory.value,
-                //isFaves = navData.isFaves,
-                imageUrl = if (selectedImageUri.value != null)
-                 imageToBase64(
-                     selectedImageUri.value!!,
-                     cv
-                 )   else navData.imageUrl
-            ),
-                    onSaved = {
-                        onSaved()
-                    },
-                    onError = {
-                  }
-             )
+            viewModel.uploadBook(navData.copy(imageUrl = imageBase64.value))
+
         }
     }
 }
 
-fun imageToBase64(uri: Uri, contentResolver: ContentResolver): String{
-    val inputStream = contentResolver.openInputStream(uri)
-    val bytes = inputStream?.readBytes()
-    return bytes?.let {
-        Base64.encodeToString(it, Base64.DEFAULT)
-    } ?: ""
-}
-
-private fun saveBookToFireStore(
-    firestore: FirebaseFirestore,
-    book: Book,
-    onSaved: ()-> Unit,
-    onError: ()-> Unit
-){
-    val db = firestore.collection("spark_posts")
-    //val key = if(book.key.isEmpty()) db.document().id else book.key
-    val key = book.key.ifEmpty{ db.document().id}
-    db.document(key)
-        .set(
-            book.copy(key = key)
-        ).addOnSuccessListener{
-            onSaved()
-        }
-        .addOnFailureListener{
-            onError()
-    }
-}
 
