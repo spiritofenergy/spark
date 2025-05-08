@@ -1,6 +1,5 @@
 package com.kodex.spark.ui.addScreen
 
-import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,17 +58,13 @@ fun AddBookScreen(
         mutableStateOf(navData.imageUrl)
     }
     val imageBase64 =  remember {
-        mutableStateOf("")
+        mutableStateOf(if (IS_BASE_64) navData.imageUrl else "")
     }
 
     val imageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        var navImageUrl = mutableStateOf(navData.imageUrl)
-
-
-
-        if (IS_BASE_64) {
+          if (IS_BASE_64) {
              imageBase64.value = uri?.let {
                 ImageUtils.imageToBase64(uri, context.contentResolver)
             } ?: ""
@@ -93,7 +88,7 @@ fun AddBookScreen(
 
                 is MainScreenViewModel.MainUiState.Error -> {
                    viewModel.showLoadingIndicator.value = false
-                    Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error: ${state.massage}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -127,16 +122,15 @@ fun AddBookScreen(
                     imageBase64.value.toBitmap()
                 } else {
                     navImageUrl.value.ifEmpty {viewModel.selectedImageUri.value }
-                    viewModel.selectedImageUri.value
-                }
+               }
             ),
             contentDescription = "",
             modifier = Modifier
-                .height(200.dp)
-                .padding(bottom = 50.dp)
+                .height(400.dp)
+                .width(600.dp)
+
 
         )
-        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = "ИСКРА",
             color = Color.White,

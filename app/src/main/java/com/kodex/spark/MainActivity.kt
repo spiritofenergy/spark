@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                             navController.navigate(DetailsNavObject(
                                 title = bk.title,
                                 description = bk.description,
-                                price = bk.prise,
+                                price = bk.price.toString(),
                                 categoryIndex = bk.categoryIndex,
                                 imageUrl = bk.imageUrl,
                             )
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                                 key = book.key,
                                 title = book.title,
                                 description = book.description,
-                                prise = book.prise,
+                                price = book.price,
                                 categoryIndex = book.categoryIndex,
                                 imageUrl = book.imageUrl,
                             )

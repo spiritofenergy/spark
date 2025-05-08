@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="category_arrays">
-        <item>Fantasía</item>
-        <item>Drama</item>
-        <item>Bestseller</item>
+        <item>Leisure</item>
+        <item>Nutrition</item>
+        <item>Health</item>
+        <item>Employees</item>
+        <item>Booking</item>
     </string-array>
 </resources>

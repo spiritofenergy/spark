@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kodex.spark.R
 
-
+@Preview(showBackground = true)
 @Composable
 fun DetailScreen(
     navObject: DetailsNavObject = DetailsNavObject()
@@ -42,7 +42,7 @@ fun DetailScreen(
             base64Image, 0,
             base64Image.size
         )
-    }catch (e: IllegalArgumentException){
+    } catch (e: IllegalArgumentException) {
 
     }
 
@@ -52,8 +52,8 @@ fun DetailScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column (modifier = Modifier.fillMaxWidth()){
-            Row(modifier = Modifier.fillMaxWidth()){
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
                     model = bitmap,
                     contentDescription = "",
@@ -65,31 +65,56 @@ fun DetailScreen(
                     contentScale = ContentScale.FillHeight
                 )
                 Spacer(modifier = Modifier.width(5.dp))
-                Column (modifier = Modifier.fillMaxWidth()
-                    .height(190.dp),
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(190.dp),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(text = "Категория",
-                        color = Color.Gray)
-                    Text(text = stringArrayResource(id = R.array.category_arrays)[ navObject.categoryIndex],
-                        fontWeight = FontWeight.Bold)
-                    Text(text = "Автор",
-                        color = Color.Gray)
-                    Text(text = "А С Пушкин",
-                        fontWeight = FontWeight.Bold)
-                    Text(text = "Дата печати",
-                        color = Color.Gray)
-                    Text(text = "12-02- 2025",
-                        fontWeight = FontWeight.Bold)
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Категория",
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = stringArrayResource(id = R.array.category_arrays)[navObject.categoryIndex],
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Автор",
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = "А С Пушкин",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Дата печати",
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = "12-02- 2025",
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
             Spacer(modifier = Modifier.width(26.dp))
             Text(
                 text = navObject.title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 25.sp)
+                fontSize = 25.sp
+            )
             Text(
-              text = navObject.description,  fontSize = 16.sp
+                text = stringArrayResource(id = R.array.category_arrays)[navObject.categoryIndex],
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp))
+
+            Text(
+                text = navObject.description, fontSize = 16.sp
             )
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = {

@@ -1,12 +1,12 @@
 package com.kodex.spark.ui.top_app_bar
 
-import android.util.Log
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +36,8 @@ import com.kodex.spark.R
 @Composable
 fun MainTopBar(
     titleIndex: Int,
-    onSearch: (String)-> Unit
+    onSearch: (String)-> Unit,
+    onFilter: () -> Unit,
 ) {
     var targetState by remember {
         mutableStateOf(false)
@@ -64,23 +65,21 @@ fun MainTopBar(
                         },
                         onQueryChange = { text ->
                             queryText = text
-
                         },
                         onSearch = { text->
                            onSearch (text)
-
-
                         },
                         expanded = expandedState,
-                        onExpandedChange = {exp ->
-                                expandedState = exp
+                        onExpandedChange = {//exp ->
+                               // expandedState = exp
                         },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
                                     expandedState = false
                                     targetState = false
-                                    queryText = " "
+                                    queryText = ""
+                                    onSearch("")
                                 }
                             ) {
                                 Icon(
@@ -122,7 +121,16 @@ fun MainTopBar(
                     }) {
                         Icon(
                             Icons.Default.Search,
-                            contentDescription = ""
+                            contentDescription = "Search"
+                        )
+                    }
+
+                    IconButton(onClick = {
+                            onFilter()
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Default.List,
+                            contentDescription = "Filter"
                         )
                     }
                 },

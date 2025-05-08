@@ -1,4 +1,4 @@
-package com.kodex.spark.ui.utils.store
+package com.kodex.spark.ui.utils.firebase
 
 import android.content.Context
 import jakarta.inject.Singleton

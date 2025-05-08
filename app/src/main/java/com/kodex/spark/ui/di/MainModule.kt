@@ -6,10 +6,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.FirebaseStorage
 import com.kodex.spark.ui.utils.AuthManager
 import com.kodex.spark.ui.utils.FireStoreManagerPaging
-import com.kodex.spark.ui.utils.store.StoreManager
+import com.kodex.spark.ui.utils.firebase.StoreManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

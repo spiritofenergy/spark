@@ -30,6 +30,7 @@ class AddBookViewModel @Inject constructor(
 
     private val _uiState = MutableSharedFlow<MainUiState>()
     val uiState = _uiState.asSharedFlow()
+
     private fun sendUiState(state: MainUiState) = viewModelScope.launch {
         _uiState.emit(state)
     }
@@ -37,7 +38,7 @@ class AddBookViewModel @Inject constructor(
     fun setDefaultData(navData: AddScreenObject) {
         title.value = navData.title
         description.value = navData.description
-        prise.value = navData.prise
+        prise.value = navData.price.toString()
         selectedCategory.intValue = navData.categoryIndex
 
 
@@ -51,7 +52,7 @@ class AddBookViewModel @Inject constructor(
             key = navData.key,
             title = title.value,
             description = description.value,
-            prise = prise.value,
+            price = prise.value.toInt(),
             categoryIndex = selectedCategory.intValue,
             imageUrl = navData.imageUrl
         )

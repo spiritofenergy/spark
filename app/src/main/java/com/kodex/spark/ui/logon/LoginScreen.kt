@@ -40,7 +40,7 @@ fun LoginScreen(
     }
     DisposableEffect(Unit) {
         onDispose {
-            viewModel.safeLastEmail()
+            viewModel.saveLastEmail()
             viewModel.passwordState.value = ""
         }
     }
@@ -69,7 +69,7 @@ fun LoginScreen(
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
-            modifier = Modifier.height(250.dp).padding(bottom = 30.dp)
+            modifier = Modifier.height(250.dp).padding(bottom = 10.dp)
 
         )
         Text(
@@ -79,7 +79,7 @@ fun LoginScreen(
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Serif
         )
-        Spacer(modifier = Modifier.height(40.dp))
+
         Spacer(modifier = Modifier.height(40.dp))
 
         if (viewModel.currentUser.value == null ) {
@@ -90,7 +90,7 @@ fun LoginScreen(
             ) {
                 viewModel.emailState.value = it
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             if (!viewModel.resetPasswordState.value) {
                 RoundedCornerTextField(
@@ -101,7 +101,7 @@ fun LoginScreen(
                     viewModel.passwordState.value = it
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
             if (viewModel.errorState.value.isNotEmpty()) {
                 Text(
@@ -110,7 +110,7 @@ fun LoginScreen(
                     textAlign = TextAlign.Center
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             if(!viewModel.resetPasswordState.value) {
                 LoginButton(text = "Вход") {
@@ -133,7 +133,7 @@ fun LoginScreen(
                     }
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             if(!viewModel.resetPasswordState.value){
                 Text(
                     modifier = Modifier.clickable{
@@ -145,7 +145,7 @@ fun LoginScreen(
                 )
             }
         } else {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
                 LoginButton(text = "Вход") {
                     onNavigationToMainScreen(
                         MainScreenDataObject(

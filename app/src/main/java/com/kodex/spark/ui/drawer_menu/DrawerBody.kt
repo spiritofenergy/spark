@@ -69,7 +69,6 @@ fun DrawerBody(
         Column (modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Spacer(modifier = Modifier.height(16.dp))
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -78,9 +77,9 @@ fun DrawerBody(
                 .height(1.dp)
                 .background(GrayLite)
             )
-            DrawerListItem(title = stringResource(id = R.string.faves)) {
+          /*  DrawerListItem(title = stringResource(id = R.string.faves)) {
                 onCategoryClick(Categories.FAVORITES)
-             }
+             }*/
             DrawerListItem(title = stringResource(id = R.string.all)) {
                 onCategoryClick(Categories.ALL)
             }
@@ -131,10 +130,5 @@ fun isAdmin(onAdmin: (Boolean)-> Unit){
             onAdmin(it.get("isAdmin") as Boolean)
             Log.d("MyLog", "isAdmin: ${it.get("isAdmin")}")
         }
-}
-@Preview(showBackground = true)
-@Composable
-fun Preview(){
-   // DrawerBody()
 }
 

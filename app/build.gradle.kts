@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.ksp.plugin)
+   // alias(libs.plugins.mobileads)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.plugin.serialization)
 }
@@ -47,6 +48,10 @@ android {
 }
 
 dependencies {
+
+
+   // implementation (libs.androidx.mobiles)
+
     implementation(libs.androidx.paging)
     implementation(libs.kotlinx.serialization.json)
 
@@ -83,4 +88,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
 }
