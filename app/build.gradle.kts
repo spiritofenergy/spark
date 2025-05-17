@@ -49,8 +49,7 @@ android {
 
 dependencies {
 
-
-   // implementation (libs.androidx.mobiles)
+    implementation (libs.mobileads)
 
     implementation(libs.androidx.paging)
     implementation(libs.kotlinx.serialization.json)

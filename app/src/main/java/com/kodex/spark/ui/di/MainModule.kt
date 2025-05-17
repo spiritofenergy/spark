@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.kodex.spark.ui.ads.YandexAdsManager
 import com.kodex.spark.ui.utils.AuthManager
 import com.kodex.spark.ui.utils.FireStoreManagerPaging
 import com.kodex.spark.ui.utils.firebase.StoreManager
@@ -21,6 +22,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object MainModule {
 
+    @Provides
+    @Singleton
+    fun provideYandexAdsManager(
+        app: Application
+    ): YandexAdsManager{
+        return YandexAdsManager(app)
+
+    }
     @Provides
     @Singleton
     fun provideFirebasePagingManager(

@@ -17,13 +17,15 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.2.0"
 
 
+mobileads = "7.12.3"
+
 navigationCompose = "2.8.7"
 serializationVersion = "2.0.0"
 serializationKotlin = "1.7.1"
 firebaseFirestore = "25.1.2"
 firebaseStorage = "21.0.1"
 
-hilt = "2.54"
+hilt = "2.55"
 hiltNavigationCompose = "1.2.0"
 kspPlugin = "2.1.10-1.0.30"
 hiltPlugin = "2.55"
@@ -70,6 +72,7 @@ hilt-navigation-compose = {module = "androidx.hilt:hilt-navigation-compose", ver
 hilt-navigation-compose-compiler = {module = "androidx.hilt:hilt-compiler", version.ref = "hiltNavigationCompose"}
 
 androidx-paging = {group = "androidx.paging", name = "paging-compose", version.ref = "pagingVersion"}
+mobileads = { module = "com.yandex.android:mobileads", version.ref = "mobileads" }
 
 
 
