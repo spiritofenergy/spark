@@ -11,15 +11,20 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.kodex.spark.ui.addScreen.AddBookScreen
 import com.kodex.spark.ui.addScreen.data.AddScreenObject
+import com.kodex.spark.ui.ads.YandexAdsManager
 import com.kodex.spark.ui.data.LoginScreenObject
 import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.detailScreen.DetailScreen
 import com.kodex.spark.ui.detailScreen.DetailsNavObject
 import com.kodex.spark.ui.logon.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var yandexAdsManager: YandexAdsManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -39,14 +44,17 @@ class MainActivity : ComponentActivity() {
                     MenuScreen(
                         navData = navData,
                         onBookClick = {bk ->
-                            navController.navigate(DetailsNavObject(
-                                title = bk.title,
-                                description = bk.description,
-                                price = bk.price.toString(),
-                                categoryIndex = bk.categoryIndex,
-                                imageUrl = bk.imageUrl,
-                            )
-                            )
+                            yandexAdsManager.showAd(this@MainActivity){
+                                navController.navigate(DetailsNavObject(
+                                    title = bk.title,
+                                    description = bk.description,
+                                    price = bk.price.toString(),
+                                    categoryIndex = bk.categoryIndex,
+                                    imageUrl = bk.imageUrl,
+                                ))
+                            }
+
+
                         },
                         onBookEditClick = { book->
                             navController.navigate(AddScreenObject(
@@ -74,6 +82,7 @@ class MainActivity : ComponentActivity() {
                 }
                 composable<DetailsNavObject>{ navEntry ->
                     val navData = navEntry.toRoute<DetailsNavObject>()
+
                     DetailScreen(navData)
 
                 }
