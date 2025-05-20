@@ -18,7 +18,7 @@ class LViewModel @Inject constructor(
     private val authManager: AuthManager,
     private val storeManager: StoreManager,
 ) : ViewModel() {
-    val selectedCategory = mutableIntStateOf(Categories.FANTASY)
+    val selectedCategory = mutableIntStateOf(Categories.PARK)
     val currentUser = mutableStateOf<FirebaseUser?>(null)
     val showResetPasswordDialog = mutableStateOf(false)
     val successState = mutableStateOf("Welcome")

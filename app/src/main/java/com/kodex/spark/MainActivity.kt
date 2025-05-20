@@ -1,10 +1,12 @@
 package com.kodex.spark
 
 import MenuScreen
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,8 +16,8 @@ import com.kodex.spark.ui.addScreen.data.AddScreenObject
 import com.kodex.spark.ui.ads.YandexAdsManager
 import com.kodex.spark.ui.data.LoginScreenObject
 import com.kodex.spark.ui.data.MainScreenDataObject
-import com.kodex.spark.ui.detailScreen.DetailScreen
-import com.kodex.spark.ui.detailScreen.DetailsNavObject
+import com.kodex.spark.ui.detailScreen.ui.DetailScreen
+import com.kodex.spark.ui.detailScreen.data.DetailsNavObject
 import com.kodex.spark.ui.logon.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -25,6 +27,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var yandexAdsManager: YandexAdsManager
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -44,15 +47,18 @@ class MainActivity : ComponentActivity() {
                     MenuScreen(
                         navData = navData,
                         onBookClick = {bk ->
-                            yandexAdsManager.showAd(this@MainActivity){
+                          //  yandexAdsManager.showAd(this@MainActivity){
                                 navController.navigate(DetailsNavObject(
+                                    bookId = bk.key,
                                     title = bk.title,
                                     description = bk.description,
                                     price = bk.price.toString(),
                                     categoryIndex = bk.categoryIndex,
                                     imageUrl = bk.imageUrl,
+                                    author = bk.author,
+                                    timestamp = bk.timestamp
                                 ))
-                            }
+                      //      }
 
 
                         },
@@ -64,6 +70,8 @@ class MainActivity : ComponentActivity() {
                                 price = book.price,
                                 categoryIndex = book.categoryIndex,
                                 imageUrl = book.imageUrl,
+                                author = book.author,
+                                timestamp = book.timestamp
                             )
                             )
                         }

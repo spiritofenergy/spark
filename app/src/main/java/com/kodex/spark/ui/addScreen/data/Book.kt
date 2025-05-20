@@ -8,8 +8,9 @@ data class Book(
     val searchTitle: String = title.lowercase(),
     val description: String = "",
     val price: Int = 0,
-    val categoryIndex: Int = Categories.FANTASY,
+    val categoryIndex: Int = Categories.ALL,
     val imageUrl: String = "",
-    val isAuthor: Boolean = false,
+    val author: String = "",
+    val timestamp: Long = System.currentTimeMillis(),
     val isFaves: Boolean = false
 )

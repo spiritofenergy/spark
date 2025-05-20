@@ -125,14 +125,14 @@ fun MainTopBar(
                         )
                     }
 
-                    IconButton(onClick = {
+                   /* IconButton(onClick = {
                             onFilter()
                     }) {
                         Icon(
                             Icons.AutoMirrored.Default.List,
                             contentDescription = "Filter"
                         )
-                    }
+                    }*/
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = TopBatColorWiete,
