@@ -32,7 +32,7 @@ fun FilterDialog(
     onDismiss: ()-> Unit  = {},
     onConfirm: ()-> Unit = {},
     title: String = "Order by",
-     confirmButtonText: String = "Да",
+    confirmButtonText: String = "Да",
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
     val filterByPrice = remember {mutableStateOf(false) }
@@ -46,6 +46,7 @@ fun FilterDialog(
             confirmButton ={
                 Button(onClick = {
                     onConfirm()
+                    viewModel.setFilter()
                 }) {
                     Text(text = confirmButtonText)
                 }

@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.kodex.spark.R
 import com.kodex.spark.ui.addScreen.data.Book
@@ -33,6 +34,7 @@ import com.kodex.spark.ui.utils.toBitmap
 
 @Composable
 fun BookListItemUi(
+    heightValue: (Int) = 0,
     titleIndex: Int,
     showEditButton: Boolean = false,
     book: Book = Book(),
@@ -54,7 +56,8 @@ fun BookListItemUi(
             contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
+                //.height(100.dp)
+                .height(heightValue.dp)
                 .clip(RoundedCornerShape(10.dp)),
             contentScale = ContentScale.Crop
         )
@@ -75,7 +78,7 @@ fun BookListItemUi(
             modifier = Modifier.padding(start = 10.dp)
 
         )
-             Text(
+            Text(
                 text = book.description,
                 color = Color.Gray,
                 fontSize = 16.sp,
@@ -138,7 +141,7 @@ fun BookListItemUi(
             }
 
 
-            IconButton(onClick = {
+         /*   IconButton(onClick = {
                 onFavClick()
             }) {
                 Icon(
@@ -148,7 +151,7 @@ fun BookListItemUi(
                         Icons.Default.FavoriteBorder,
                     contentDescription = ""
                 )
-            }
+            }*/
 
 
             //IconButton { }(painter = painterResource(id = R.drawable))

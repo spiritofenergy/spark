@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="category_arrays">
-
-        <item>Отдых</item>
-        <item>Питание</item>
-        <item>Здоровье</item>
-        <item>Сотрудники</item>
-        <item>Бронирование</item>
+        <item>ПАРК</item>
+        <item>ОТДЫХ</item>
+        <item>ПИТАНИЕ</item>
+        <item>ЗДОРОВЬЕ</item>
+        <item>СОТРУДНИКИ</item>
+        <item>БРОНИРОВАНИЕ</item>
     </string-array>
     <string-array name="order_by">
         <item>Title</item>

@@ -35,6 +35,7 @@ import com.kodex.spark.ui.logon.LoginButton
 import com.kodex.spark.ui.logon.RoundedCornerTextField
 import coil.compose.rememberAsyncImagePainter
 import com.kodex.spark.ui.addScreen.data.AddScreenObject
+import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.theme.BoxFilter
 import com.kodex.spark.ui.utils.IS_BASE_64
@@ -45,6 +46,7 @@ import com.kodex.spark.ui.utils.toBitmap
 @Composable
 fun AddBookScreen(
     navData: AddScreenObject = AddScreenObject(),
+   // navDataMain: MainScreenDataObject = MainScreenDataObject(),
     onSaved: () -> Unit = {},
     viewModel: AddBookViewModel = hiltViewModel(),
 ) {
@@ -111,7 +113,7 @@ fun AddBookScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(46.dp),
+            .padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -126,8 +128,8 @@ fun AddBookScreen(
             ),
             contentDescription = "",
             modifier = Modifier
-                .height(400.dp)
-                .width(600.dp)
+                .height(300.dp)
+                .width(500.dp)
 
 
         )
@@ -138,9 +140,9 @@ fun AddBookScreen(
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Serif
         )
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        RoundedCornerDropDownMenu(viewModel.selectedCategory.value) { selectedItemIndex ->
+        RoundedCornerDropDownMenu(viewModel.selectedCategory.intValue) { selectedItemIndex ->
             imageLauncher
             viewModel.selectedCategory.intValue = selectedItemIndex
         }
