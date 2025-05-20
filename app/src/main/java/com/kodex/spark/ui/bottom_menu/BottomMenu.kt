@@ -1,11 +1,14 @@
 package com.kodex.spark.ui.bottom_menu
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -16,12 +19,20 @@ import com.kodex.spark.ui.theme.PurpleGrey80
 fun BottomMenu(
     selectedItem: Int,
     onFavesClick: ()-> Unit = {},
-    onHomeClick: ()-> Unit = {}
+    onHomeClick: ()-> Unit = {},
+    onParkClick: ()-> Unit = {},
+    onSunnyClick: ()-> Unit = {},
+    onFoodClick: ()-> Unit = {},
+    onHealthClick: ()-> Unit = {},
+    onBookingClick: ()-> Unit = {}
 ) {
     val items = listOf(
         BottomMenuItem.Home,
-        BottomMenuItem.Faves,
-        BottomMenuItem.Setting,
+       // BottomMenuItem.Faves,
+        BottomMenuItem.Park,
+        BottomMenuItem.Sunny,
+        BottomMenuItem.Food,
+        BottomMenuItem.Health,
     )
     NavigationBar (
         containerColor = PurpleGrey80
@@ -34,6 +45,11 @@ fun BottomMenu(
                    when(item.titleId){
                        BottomMenuItem.Home.titleId -> onHomeClick()
                        BottomMenuItem.Faves.titleId -> onFavesClick()
+                       BottomMenuItem.Park.titleId -> onParkClick()
+                       BottomMenuItem.Sunny.titleId -> onSunnyClick()
+                       BottomMenuItem.Food.titleId -> onFoodClick()
+                       BottomMenuItem.Health.titleId -> onHealthClick()
+                       BottomMenuItem.Booking.titleId -> onBookingClick()
                    }
                },
                icon = {

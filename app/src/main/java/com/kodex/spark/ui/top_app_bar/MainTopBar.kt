@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,17 +28,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kodex.spark.ui.theme.DarkBlue
 import com.kodex.spark.ui.theme.TopBatColorWiete
 import com.kodex.spark.ui.utils.Categories
 import com.kodex.spark.R
+import com.kodex.spark.ui.mainScreen.MainScreenViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopBar(
     titleIndex: Int,
     onSearch: (String)-> Unit,
+    onTab: () -> Unit,
     onFilter: () -> Unit,
 ) {
     var targetState by remember {
@@ -54,6 +66,7 @@ fun MainTopBar(
             SearchBar(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
                 inputField = {
+
                     SearchBarDefaults.InputField(
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = DarkBlue,
@@ -95,6 +108,7 @@ fun MainTopBar(
                     expandedState = expo
                 },
                 content = {
+
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         items(5) {
                             Text(
@@ -108,7 +122,11 @@ fun MainTopBar(
         } else {
             TopAppBar(
                 title = {
-                    Text(text = when (titleIndex) {
+
+                    Text(fontSize = 25.sp,
+                        fontStyle = FontStyle.Italic,
+                        fontWeight = FontWeight.Medium,
+                        text = when (titleIndex) {
                             Categories.FAVORITES -> stringResource(id = R.string.faves)
                             Categories.ALL -> stringResource(id = R.string.all)
                             else -> stringArrayResource(id = R.array.category_arrays)[titleIndex]
@@ -126,13 +144,23 @@ fun MainTopBar(
                     }
 
                     IconButton(onClick = {
-                            onFilter()
+                      onTab()
+
+                           // onFilter()
                     }) {
                         Icon(
                             Icons.AutoMirrored.Default.List,
                             contentDescription = "Filter"
                         )
                     }
+                  /*  IconButton(onClick = {
+                            onFilter()
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Default.List,
+                            contentDescription = "Filter"
+                        )
+                    }*/
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = TopBatColorWiete,
