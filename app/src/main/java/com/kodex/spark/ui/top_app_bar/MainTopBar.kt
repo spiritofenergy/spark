@@ -27,16 +27,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kodex.spark.ui.theme.DarkBlue
 import com.kodex.spark.ui.theme.TopBatColorWiete
 import com.kodex.spark.ui.utils.Categories
 import com.kodex.spark.R
+import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopBar(
     titleIndex: Int,
     onSearch: (String)-> Unit,
+    onTab: () -> Unit,
     onFilter: () -> Unit,
 ) {
     var targetState by remember {
@@ -126,13 +130,23 @@ fun MainTopBar(
                     }
 
                     IconButton(onClick = {
-                            onFilter()
+                      onTab()
+
+                           // onFilter()
                     }) {
                         Icon(
                             Icons.AutoMirrored.Default.List,
                             contentDescription = "Filter"
                         )
                     }
+                  /*  IconButton(onClick = {
+                            onFilter()
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Default.List,
+                            contentDescription = "Filter"
+                        )
+                    }*/
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = TopBatColorWiete,

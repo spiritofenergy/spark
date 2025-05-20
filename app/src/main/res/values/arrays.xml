@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="category_arrays">
-
+        <item>Парк</item>
         <item>Отдых</item>
         <item>Питание</item>
         <item>Здоровье</item>

@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import com.kodex.spark.ui.mainScreen.BookListItemUi
 import com.kodex.spark.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -101,7 +103,7 @@ fun MenuScreen(
                       //  viewModel.getBooksFromCategory(Categories.FAVORITES)
                     },
                     onCategoryClick = { categoryIndex ->
-                        if (categoryIndex == Categories.FANTASY) {
+                        if (categoryIndex == Categories.PARK) {
                             viewModel.selectedBottomItemState.intValue =
                                 BottomMenuItem.Faves.titleId
                         } else {
@@ -125,9 +127,14 @@ fun MenuScreen(
                         viewModel.searchBook(searchText)
                         books.refresh()
                     },
+                     onTab = {
+                         viewModel.showTabOneOrTo.value = viewModel.showTabOneOrTo.value != true
+                     },
                      onFilter = {
-                        showFilterDialog = true
-                     })
+                       // showFilterDialog = true
+                     },
+
+                 )
             },
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
@@ -135,13 +142,38 @@ fun MenuScreen(
                     viewModel.selectedBottomItemState.intValue,
                     onFavesClick = {
                         viewModel.selectedBottomItemState.intValue = BottomMenuItem.Faves.titleId
-                        viewModel.getBooksFromCategory(Categories.FANTASY)
+                        viewModel.getBooksFromCategory(Categories.PARK)
                         books.refresh()
                     },
+
                     onHomeClick = {
                         // получаем список с иыентификатором и
                         viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
                         viewModel.getBooksFromCategory(Categories.ALL)
+                        books.refresh()
+                    },
+                    onParkClick = {
+                        // получаем список с иыентификатором и
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Park.titleId
+                        viewModel.getBooksFromCategory(Categories.PARK)
+                        books.refresh()
+                    },
+                    onSunnyClick = {
+                        // получаем список с иыентификатором и
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Sunny.titleId
+                        viewModel.getBooksFromCategory(Categories.SUNNY)
+                        books.refresh()
+                    },
+                    onFoodClick = {
+                        // получаем список с иыентификатором и
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Food.titleId
+                        viewModel.getBooksFromCategory(Categories.FOOD)
+                        books.refresh()
+                    },
+                    onHealthClick = {
+                        // получаем список с иыентификатором и
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Health.titleId
+                        viewModel.getBooksFromCategory(Categories.HEALTH)
                         books.refresh()
                     }
                 )
@@ -189,13 +221,21 @@ fun MenuScreen(
                 modifier = Modifier.padding(paddingValues)
             ) {
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
+                    columns = GridCells.Fixed(if (viewModel.showTabOneOrTo.value == true){
+                        2  } else{
+                            1 }
+                    ),
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(count = books.itemCount) { index ->
                         val book = books[index]
                         if (book != null) {
                             BookListItemUi(
+                                heightValue = if (viewModel.showTabOneOrTo.value == false){
+                                    230
+                                }else{
+                                    110
+                                },
                                 titleIndex = viewModel.categoryState.intValue,
                                 isAdminState.value,
                                 book,
