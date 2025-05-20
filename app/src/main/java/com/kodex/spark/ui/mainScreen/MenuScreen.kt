@@ -101,7 +101,7 @@ fun MenuScreen(
                       //  viewModel.getBooksFromCategory(Categories.FAVORITES)
                     },
                     onCategoryClick = { categoryIndex ->
-                        if (categoryIndex == Categories.FANTASY) {
+                        if (categoryIndex == Categories.PARK) {
                             viewModel.selectedBottomItemState.intValue =
                                 BottomMenuItem.Faves.titleId
                         } else {
@@ -135,13 +135,38 @@ fun MenuScreen(
                     viewModel.selectedBottomItemState.intValue,
                     onFavesClick = {
                         viewModel.selectedBottomItemState.intValue = BottomMenuItem.Faves.titleId
-                        viewModel.getBooksFromCategory(Categories.FANTASY)
+                        viewModel.getBooksFromCategory(Categories.PARK)
                         books.refresh()
                     },
+
                     onHomeClick = {
                         // получаем список с иыентификатором и
                         viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
                         viewModel.getBooksFromCategory(Categories.ALL)
+                        books.refresh()
+                    },
+                    onParkClick = {
+                        // получаем список с иыентификатором и
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Park.titleId
+                        viewModel.getBooksFromCategory(Categories.PARK)
+                        books.refresh()
+                    },
+                    onSunnyClick = {
+                        // получаем список с иыентификатором и
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Sunny.titleId
+                        viewModel.getBooksFromCategory(Categories.SUNNY)
+                        books.refresh()
+                    },
+                    onFoodClick = {
+                        // получаем список с иыентификатором и
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Food.titleId
+                        viewModel.getBooksFromCategory(Categories.FOOD)
+                        books.refresh()
+                    },
+                    onHealthClick = {
+                        // получаем список с иыентификатором и
+                        viewModel.selectedBottomItemState.intValue = BottomMenuItem.Health.titleId
+                        viewModel.getBooksFromCategory(Categories.HEALTH)
                         books.refresh()
                     }
                 )

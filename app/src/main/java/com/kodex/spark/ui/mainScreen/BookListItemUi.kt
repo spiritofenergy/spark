@@ -75,7 +75,7 @@ fun BookListItemUi(
             modifier = Modifier.padding(start = 10.dp)
 
         )
-             Text(
+            Text(
                 text = book.description,
                 color = Color.Gray,
                 fontSize = 16.sp,
@@ -138,7 +138,7 @@ fun BookListItemUi(
             }
 
 
-            IconButton(onClick = {
+         /*   IconButton(onClick = {
                 onFavClick()
             }) {
                 Icon(
@@ -148,7 +148,7 @@ fun BookListItemUi(
                         Icons.Default.FavoriteBorder,
                     contentDescription = ""
                 )
-            }
+            }*/
 
 
             //IconButton { }(painter = painterResource(id = R.drawable))

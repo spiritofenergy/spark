@@ -10,8 +10,10 @@ data class AddScreenObject (
     val searchTitle: String = title.lowercase(),
     val description: String = "",
     val price: Int = 0,
-    val categoryIndex: Int = Categories.FANTASY,
+    val categoryIndex: Int = Categories.PARK,
     val imageUrl: String = "",
+    val author: String = "",
+    val timestamp: Long = System.currentTimeMillis(),
     val isFaves: Boolean = false
 
 )
