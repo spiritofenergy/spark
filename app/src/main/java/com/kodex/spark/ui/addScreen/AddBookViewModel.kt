@@ -24,7 +24,7 @@ class AddBookViewModel @Inject constructor(
     val title = mutableStateOf("")
     val description = mutableStateOf("")
     val prise = mutableStateOf("")
-    val selectedCategory = mutableIntStateOf(Categories.FANTASY)
+    val selectedCategory = mutableIntStateOf(Categories.PARK)
     val selectedImageUri = mutableStateOf<Uri?>(null)
     val showLoadingIndicator =  mutableStateOf(false)
 

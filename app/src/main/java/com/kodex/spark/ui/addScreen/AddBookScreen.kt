@@ -111,7 +111,7 @@ fun AddBookScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(46.dp),
+            .padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -126,8 +126,8 @@ fun AddBookScreen(
             ),
             contentDescription = "",
             modifier = Modifier
-                .height(400.dp)
-                .width(600.dp)
+                .height(300.dp)
+                .width(500.dp)
 
 
         )
@@ -138,9 +138,9 @@ fun AddBookScreen(
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Serif
         )
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        RoundedCornerDropDownMenu(viewModel.selectedCategory.value) { selectedItemIndex ->
+        RoundedCornerDropDownMenu(viewModel.selectedCategory.intValue) { selectedItemIndex ->
             imageLauncher
             viewModel.selectedCategory.intValue = selectedItemIndex
         }

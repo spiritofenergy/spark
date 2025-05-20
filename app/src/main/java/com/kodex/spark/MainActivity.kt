@@ -14,8 +14,8 @@ import com.kodex.spark.ui.addScreen.data.AddScreenObject
 import com.kodex.spark.ui.ads.YandexAdsManager
 import com.kodex.spark.ui.data.LoginScreenObject
 import com.kodex.spark.ui.data.MainScreenDataObject
-import com.kodex.spark.ui.detailScreen.DetailScreen
-import com.kodex.spark.ui.detailScreen.DetailsNavObject
+import com.kodex.spark.ui.detailScreen.ui.DetailScreen
+import com.kodex.spark.ui.detailScreen.data.DetailsNavObject
 import com.kodex.spark.ui.logon.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,15 +44,16 @@ class MainActivity : ComponentActivity() {
                     MenuScreen(
                         navData = navData,
                         onBookClick = {bk ->
-                            yandexAdsManager.showAd(this@MainActivity){
+                           // yandexAdsManager.showAd(this@MainActivity){
                                 navController.navigate(DetailsNavObject(
+                                    bookId = bk.key,
                                     title = bk.title,
                                     description = bk.description,
                                     price = bk.price.toString(),
                                     categoryIndex = bk.categoryIndex,
                                     imageUrl = bk.imageUrl,
                                 ))
-                            }
+                           // }
 
 
                         },

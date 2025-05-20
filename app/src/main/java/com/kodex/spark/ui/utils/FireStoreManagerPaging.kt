@@ -10,9 +10,15 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.kodex.spark.ui.addScreen.data.Book
 import com.kodex.spark.ui.addScreen.data.Favorite
+import com.kodex.spark.ui.detailScreen.data.RatingData
+import com.kodex.spark.ui.utils.firebase.FilterData
 import com.kodex.spark.ui.utils.firebase.FirebaseConst
+import com.kodex.spark.ui.utils.firebase.FirebaseConst.BOOK_RATING
+import com.kodex.spark.ui.utils.firebase.FirebaseConst.RATING
+import com.yandex.mobile.ads.impl.av
 import kotlinx.coroutines.tasks.await
 import javax.inject.Singleton
+import kotlin.text.compareTo
 
 const val IS_BASE_64 = true
 
@@ -25,22 +31,28 @@ class FireStoreManagerPaging(
 ) {
     var categoryIndex = Categories.ALL
     var searchText = ""
+    var filterData = FilterData()
 
+/*
     var minPrice = 0
     var maxPrice = 5000
     var isTitleFilter = false
     var isPriceFilter = false
+*/
 
     suspend fun nextPage(
         pageSize: Long,
         currentKey: DocumentSnapshot?,
     ): Pair<QuerySnapshot, List<Book>> {
-        var query: Query = db.collection(FirebaseConst.POSTS).limit(pageSize).orderBy(FirebaseConst.TITLE)
+        var query: Query = db.collection(FirebaseConst.POSTS)
+            .limit(pageSize)
+            .orderBy(filterData.filterType)
+
         val keysFavesList = getIdsFavesList()
 
         query = when (categoryIndex) {
             Categories.ALL -> query
-            Categories.FANTASY -> query.whereIn(FieldPath.of(FirebaseConst.KEY), keysFavesList)
+            Categories.FAVORITES -> query.whereIn(FieldPath.of(FirebaseConst.KEY), keysFavesList)
             else -> query.whereEqualTo(FirebaseConst.CATEGORY_INDEX, categoryIndex)
         }
 
@@ -49,10 +61,19 @@ class FireStoreManagerPaging(
                 .whereLessThan(FirebaseConst.SEARCH_TITLE,"${searchText.lowercase()}\uF7FF") // "test"
         }
 
-        if (!isPriceFilter) {
+        if (filterData.filterType == FirebaseConst.PRICE
+            && filterData.minPrice != 0
+            && filterData.maxPrice != 0
+            && filterData.minPrice <= filterData.maxPrice
+        ) {
+            query = query.whereGreaterThanOrEqualTo(FirebaseConst.PRICE, filterData.minPrice)
+                .whereLessThanOrEqualTo(FirebaseConst.PRICE, filterData.maxPrice)
+        }
+
+      /*  if (!isPriceFilter) {
             query = query.whereGreaterThanOrEqualTo(FirebaseConst.PRICE, minPrice)
                 .whereLessThanOrEqualTo(FirebaseConst.PRICE, maxPrice)
-        }
+        }*/
         if (currentKey != null) {
             query = query.startAfter(currentKey)
         }
@@ -223,5 +244,23 @@ class FireStoreManagerPaging(
                 }
             )
         }
+    }
+    fun insertRating(ratingData: RatingData, bookId: String){
+        if (auth.uid == null) return
+        db.collection(BOOK_RATING)
+            .document(bookId)
+            .collection(RATING)
+            .document(auth.uid!!)
+            .set(ratingData.copy(name = auth.currentUser?.email ?: "Unknown"))
+    }
+   suspend fun getRating(bookId: String): Pair<Double, List<RatingData>>{
+        val querySnapshot =
+        db.collection(BOOK_RATING)
+            .document(bookId)
+            .collection(RATING)
+            .get().await()
+       val ratingsList = querySnapshot.toObjects(RatingData::class.java)
+       val averageRating = ratingsList.map { it.rating }.average()
+      return Pair(averageRating, ratingsList)
     }
 }
