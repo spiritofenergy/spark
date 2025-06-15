@@ -93,7 +93,8 @@ fun DetailScreen(
             val ratingData = RatingData(
                 name = "",
                 rating = rating,
-                message = message
+                message = message,
+                lastRating = viewModel.ratingDataState.value?.rating ?: 0
             )
             viewModel.insertRating(ratingData, navObject.bookId)
             showReteDialog = false

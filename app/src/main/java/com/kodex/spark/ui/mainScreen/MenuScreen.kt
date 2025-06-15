@@ -80,7 +80,6 @@ fun MenuScreen(
     val showDeleteDialog = remember { mutableStateOf(false) }
     val isAuthorState = remember { mutableStateOf(false) }
     var showFilterDialog by remember { mutableStateOf(false) }
-    var showTopMenu by remember { mutableStateOf(true) }
 
     val books = viewModel.books.collectAsLazyPagingItems()
 
@@ -140,8 +139,8 @@ fun MenuScreen(
             topBar = {
                 Row (modifier = Modifier.fillMaxWidth())
                     {
-                    if (showTopMenu)
-                    IconButton(
+                    if (viewModel.showTopMenu.value == true)
+                   /* IconButton(
                         modifier = Modifier.padding(top = 35.dp).background(DarkWhite),
                         onClick = {
                             coroutineScope.launch {
@@ -149,20 +148,23 @@ fun MenuScreen(
                             }
                         }) { Icon(Icons.Default.Menu,
                         contentDescription = "Burger")
-                    }
+                    }*/
 
                     MainTopBar(
                         viewModel.categoryState.intValue,
                         onSearch = { searchText ->
                             viewModel.searchBook(searchText)
-                            showTopMenu = true
+                            viewModel.showTopMenu.value = true
                             books.refresh()
                         },
                         onTab = {
                             viewModel.showTabOneOrTo.value = viewModel.showTabOneOrTo.value != true
                         },
-                        onTopMenu = {
-                            showTopMenu = false
+                      /*  onTopMenu = {
+                            viewModel.showTopMenu.value = false
+                        },*/
+                        onClickTopMenu = {
+                            viewModel.showTopMenu.value = true
                         },
                         onFilter = {
                             // showFilterDialog = true

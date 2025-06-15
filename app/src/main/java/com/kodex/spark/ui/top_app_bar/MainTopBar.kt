@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -51,7 +52,8 @@ fun MainTopBar(
     titleIndex: Int,
     onSearch: (String)-> Unit,
     onTab: () -> Unit,
-    onTopMenu: ()-> Unit,
+    onClickTopMenu: () -> Unit,
+   // onTopMenu: ()-> Unit,
     onFilter: () -> Unit,
 ) {
     var targetState by remember {
@@ -72,13 +74,15 @@ fun MainTopBar(
                 inputField = {
 
                     SearchBarDefaults.InputField(
-                        colors = TextFieldDefaults.colors(
+                       /* colors = TextFieldDefaults.colors(
                             focusedContainerColor = DarkWhite,
-                            unfocusedContainerColor = DarkBlue
-                        ),
+                            unfocusedContainerColor = DarkBlue*/
+                       // )
+                   // ,
                         query = queryText,
                         placeholder = {
-                            Text(text = "Search...")
+                            Text(text = "Search..."
+                            )
                         },
                         onQueryChange = { text ->
                             queryText = text
@@ -103,6 +107,7 @@ fun MainTopBar(
                                 Icon(
                                     Icons.Default.Close,
                                     contentDescription = ""
+
                                 )
                             }
                         }
@@ -125,7 +130,15 @@ fun MainTopBar(
                 }
             )
         } else {
-            TopAppBar(
+            IconButton(
+                modifier = Modifier.padding(top = 35.dp).background(DarkWhite),
+                onClick = {
+                 //  onClickTopMenu()
+
+                }) { Icon(Icons.Default.Menu,
+                contentDescription = "Burger")
+            }
+            TopAppBar(modifier = Modifier.padding(start = 40.dp),
                 title = {
 
                     Text(fontSize = 25.sp,
@@ -141,7 +154,7 @@ fun MainTopBar(
                 actions = {
                     IconButton(onClick = {
                         targetState = true
-                        onTopMenu()
+                        //onTopMenu()
                     }) {
                         Icon(
                             Icons.Default.Search,

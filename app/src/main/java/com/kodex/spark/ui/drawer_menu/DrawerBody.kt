@@ -28,19 +28,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.kodex.spark.R
+import com.kodex.spark.ui.bottom_menu.BottomMenuItem
 import com.kodex.spark.ui.mainScreen.DrawerListItem
+import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.DarkTransparentBlue
 import com.kodex.spark.ui.theme.GrayLite
 import com.kodex.spark.ui.utils.Categories
+import com.yandex.mobile.ads.impl.v
 
 
 @Composable
 fun DrawerBody(
+    viewModel: MainScreenViewModel = hiltViewModel(),
     onAdmin: (Boolean) -> Unit,
     onAdminClick: () -> Unit = {},
     onCategoryClick: (Int) -> Unit = {}
@@ -82,10 +87,12 @@ fun DrawerBody(
              }*/
             DrawerListItem(title = stringResource(id = R.string.all)) {
                 onCategoryClick(Categories.ALL)
+                viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
+
             }
             LazyColumn(Modifier.fillMaxWidth()) {
                 itemsIndexed(categoryList){index, title->
-                    DrawerListItem(
+                    DrawerListItem(viewModel,
                         title) {
                             onCategoryClick(index)
                     }

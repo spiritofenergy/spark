@@ -39,6 +39,7 @@ class MainScreenViewModel @Inject constructor(
     val maxPriceValue = mutableFloatStateOf(5000F)
     val isFilterByTitle = mutableStateOf(true)
     var showTabOneOrTo = mutableStateOf(false)
+    var showTopMenu = mutableStateOf(true)
 
     val selectedBottomItemState = mutableIntStateOf(BottomMenuItem.Home.titleId)
     val categoryState = mutableIntStateOf(Categories.ALL)

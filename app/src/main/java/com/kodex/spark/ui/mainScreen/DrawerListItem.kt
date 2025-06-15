@@ -12,13 +12,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.kodex.spark.R
+import com.kodex.spark.ui.bottom_menu.BottomMenuItem
 import com.kodex.spark.ui.theme.GrayLite
+import com.kodex.spark.ui.utils.Categories
 
 @Composable
 fun DrawerListItem(
+    viewModel: MainScreenViewModel = hiltViewModel(),
     title: String,
     onItemClick: () -> Unit
 ){
