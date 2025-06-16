@@ -1,5 +1,7 @@
 package com.kodex.spark.ui.mainScreen
 
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import kotlinx.coroutines.flow.combine
@@ -8,6 +10,7 @@ import androidx.paging.map
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,6 +43,10 @@ class MainScreenViewModel @Inject constructor(
     val isFilterByTitle = mutableStateOf(true)
     var showTabOneOrTo = mutableStateOf(false)
     var showTopMenu = mutableStateOf(true)
+    val coroutineScope = mutableStateOf(true)
+    val drawerState = mutableStateOf(DrawerValue.Open)
+
+
 
     val selectedBottomItemState = mutableIntStateOf(BottomMenuItem.Home.titleId)
     val categoryState = mutableIntStateOf(Categories.ALL)

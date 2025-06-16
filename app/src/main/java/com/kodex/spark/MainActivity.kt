@@ -80,7 +80,10 @@ class MainActivity : ComponentActivity() {
                         },
                         onAdminClick = {
                             navController.navigate(AdminPanelNavObject)
-                        }
+                        },
+                        onAddBookClick = {
+                            navController.navigate(AddScreenObject())
+                        },
                     )
                 }
                 composable<AddScreenObject>{ navEntry ->
@@ -100,7 +103,7 @@ class MainActivity : ComponentActivity() {
                 composable<AdminPanelNavObject>{
                     AdminPanelScreen(
                         onAddBookClick = {
-                            navController.navigate(AddScreenObject)
+                            navController.navigate(AddScreenObject())
                         },
                         onModerationClick = {
                             navController.navigate(ModerationNavObject)

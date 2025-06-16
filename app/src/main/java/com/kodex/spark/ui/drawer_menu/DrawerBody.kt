@@ -48,6 +48,7 @@ fun DrawerBody(
     viewModel: MainScreenViewModel = hiltViewModel(),
     onAdmin: (Boolean) -> Unit,
     onAdminClick: () -> Unit = {},
+    onAddBookClick: () -> Unit = {},
     onCategoryClick: (Int) -> Unit = {}
 
 ) {
@@ -114,8 +115,9 @@ fun DrawerBody(
             }
             Button(
                 onClick = {
-                isAdmin{ }
+               // isAdmin{ }
                 onAdminClick()
+                    onAddBookClick
             },
                modifier = Modifier
                 .fillMaxWidth()

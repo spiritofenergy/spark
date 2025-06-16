@@ -61,6 +61,7 @@ import com.kodex.spark.ui.theme.PurpleGrey80
 import com.kodex.spark.ui.theme.TopBatColorWiete
 import com.kodex.spark.ui.top_app_bar.MainTopBar
 import com.kodex.spark.ui.utils.Categories
+import kotlinx.coroutines.coroutineScope
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,6 +72,7 @@ fun MenuScreen(
     navData: MainScreenDataObject,
     onBookEditClick: (Book) -> Unit,
     onBookClick: (Book) -> Unit,
+    onAddBookClick: () -> Unit,
     onAdminClick: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -98,9 +100,7 @@ fun MenuScreen(
             val errorMassage = (books.loadState.refresh as LoadState.Error).error.message
             Toast.makeText(context, errorMassage, Toast.LENGTH_SHORT).show()
         }
-
     }
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         modifier = Modifier.fillMaxWidth(),
@@ -118,7 +118,11 @@ fun MenuScreen(
                         onAdminClick()
                         //  viewModel.getBooksFromCategory(Categories.FAVORITES)
                     },
-                    onCategoryClick = { categoryIndex ->
+                    onAddBookClick = {
+                        onAddBookClick()
+                    },
+
+                onCategoryClick = { categoryIndex ->
                         if (categoryIndex == Categories.PARK) {
                             viewModel.selectedBottomItemState.intValue = BottomMenuItem.Faves.titleId
                         } else {
@@ -137,10 +141,10 @@ fun MenuScreen(
     ) {
         Scaffold(
             topBar = {
-                Row (modifier = Modifier.fillMaxWidth())
-                    {
-                    if (viewModel.showTopMenu.value == true)
-                   /* IconButton(
+              //  Row (modifier = Modifier.fillMaxWidth())
+                   // {
+                  /*  if (viewModel.showTopMenu.value == true)
+                    IconButton(
                         modifier = Modifier.padding(top = 35.dp).background(DarkWhite),
                         onClick = {
                             coroutineScope.launch {
@@ -148,8 +152,8 @@ fun MenuScreen(
                             }
                         }) { Icon(Icons.Default.Menu,
                         contentDescription = "Burger")
-                    }*/
-
+                    }
+*/
                     MainTopBar(
                         viewModel.categoryState.intValue,
                         onSearch = { searchText ->
@@ -160,22 +164,13 @@ fun MenuScreen(
                         onTab = {
                             viewModel.showTabOneOrTo.value = viewModel.showTabOneOrTo.value != true
                         },
-                      /*  onTopMenu = {
+                       onTopMenu = {
                             viewModel.showTopMenu.value = false
-                        },*/
+                        },
                         onClickTopMenu = {
                             viewModel.showTopMenu.value = true
                         },
-                        onFilter = {
-                            // showFilterDialog = true
-                        },
-
                         )
-
-                }
-
-
-
 
             },
             modifier = Modifier.fillMaxSize(),

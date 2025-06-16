@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -45,6 +46,7 @@ import com.kodex.spark.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kodex.spark.ui.detailScreen.data.DetailsNavObject
 import com.kodex.spark.ui.detailScreen.data.RatingData
@@ -114,7 +116,8 @@ fun DetailScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth()
+            .padding(top = 25.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
                     model = bitmap,
@@ -123,6 +126,7 @@ fun DetailScreen(
                         .fillMaxWidth(0.7F)
                         .padding(top = 10.dp, bottom = 20.dp)
                         .height(190.dp)
+                        .clip(RoundedCornerShape(10.dp))
                         .background(Color.LightGray),
                     contentScale = ContentScale.FillHeight
                 )
@@ -173,7 +177,7 @@ fun DetailScreen(
 
                     )
                     Text(
-                        text = navObject.timestamp.toFormattedDate(),
+                        text = navObject.timestamp.toFormattedDate().toString(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp
 
@@ -186,7 +190,7 @@ fun DetailScreen(
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        horizontalArrangement =  Arrangement.Center
                     ) {
                         // text = viewModel.ratingState.value,
                         if (viewModel.commentState.value.isNotEmpty()) {

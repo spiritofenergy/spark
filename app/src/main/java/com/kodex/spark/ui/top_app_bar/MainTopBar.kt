@@ -12,6 +12,7 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +48,8 @@ import com.kodex.spark.ui.theme.DarkWhite
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopBar(
@@ -53,8 +57,8 @@ fun MainTopBar(
     onSearch: (String)-> Unit,
     onTab: () -> Unit,
     onClickTopMenu: () -> Unit,
-   // onTopMenu: ()-> Unit,
-    onFilter: () -> Unit,
+    onTopMenu: ()-> Unit,
+
 ) {
     var targetState by remember {
         mutableStateOf(false)
@@ -70,7 +74,8 @@ fun MainTopBar(
         if (target) {
             SearchBar(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(horizontal = 5.dp),
+                    //.padding(horizontal = 5.dp)
+                        ,
                 inputField = {
 
                     SearchBarDefaults.InputField(
@@ -120,24 +125,10 @@ fun MainTopBar(
                 content = {
 
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(5) {
-                            Text(
-                                text = "Item $it",
-                                modifier = Modifier.padding(10.dp)
-                            )
-                        }
                     }
                 }
             )
         } else {
-            IconButton(
-                modifier = Modifier.padding(top = 35.dp).background(DarkWhite),
-                onClick = {
-                 //  onClickTopMenu()
-
-                }) { Icon(Icons.Default.Menu,
-                contentDescription = "Burger")
-            }
             TopAppBar(modifier = Modifier.padding(start = 40.dp),
                 title = {
 
