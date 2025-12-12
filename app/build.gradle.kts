@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.ksp.plugin)
+   // alias(libs.plugins.mobileads)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.plugin.serialization)
 }
@@ -19,7 +20,7 @@ android {
         applicationId = "com.kodex.spark"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -47,6 +48,9 @@ android {
 }
 
 dependencies {
+
+    implementation (libs.mobileads)
+
     implementation(libs.androidx.paging)
     implementation(libs.kotlinx.serialization.json)
 
@@ -83,4 +87,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
 }

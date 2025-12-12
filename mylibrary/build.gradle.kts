@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    //alias(libs.plugins.mobileads.android)
 }
 
 android {
@@ -33,7 +34,9 @@ android {
 }
 
 dependencies {
-
+    //implementation("com.yandex.android:mobileads:7.0.0")
+   // implementation("com.yandex.android:mobileads-mediation:7.0.0.0")
+   // implementation(libs.androidx.mobileads)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.coil.compose)

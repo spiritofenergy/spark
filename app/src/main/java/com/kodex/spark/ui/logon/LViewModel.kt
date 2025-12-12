@@ -1,12 +1,14 @@
 package com.kodex.spark.ui.logon
 
 import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.utils.AuthManager
-import com.kodex.spark.ui.utils.store.StoreManager
+import com.kodex.spark.ui.utils.Categories
+import com.kodex.spark.ui.utils.firebase.StoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,11 +18,12 @@ class LViewModel @Inject constructor(
     private val authManager: AuthManager,
     private val storeManager: StoreManager,
 ) : ViewModel() {
+    val selectedCategory = mutableIntStateOf(Categories.PARK)
     val currentUser = mutableStateOf<FirebaseUser?>(null)
     val showResetPasswordDialog = mutableStateOf(false)
     val successState = mutableStateOf("Welcome")
-    val errorState = mutableStateOf("")
-    val emailState = mutableStateOf("")
+    val errorState = mutableStateOf("Error")
+    val emailState = mutableStateOf("nillsimon24@gmail.com")
     val passwordState = mutableStateOf("test24")
     val resetPasswordState = mutableStateOf(false)
 
@@ -43,7 +46,7 @@ class LViewModel @Inject constructor(
         emailState.value = storeManager.getString(StoreManager.EMAIL_KEY, "")
     }
 
-    fun safeLastEmail(){
+    fun saveLastEmail(){
         storeManager.saveString(StoreManager.EMAIL_KEY, emailState.value)
     }
 

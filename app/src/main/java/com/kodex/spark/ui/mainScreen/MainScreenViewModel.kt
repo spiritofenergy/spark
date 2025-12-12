@@ -1,9 +1,17 @@
 package com.kodex.spark.ui.mainScreen
 
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import kotlinx.coroutines.flow.combine
 
 import androidx.paging.map
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -13,6 +21,8 @@ import com.kodex.spark.ui.addScreen.data.Book
 import com.kodex.spark.ui.bottom_menu.BottomMenuItem
 import com.kodex.spark.ui.utils.Categories
 import com.kodex.spark.ui.utils.FireStoreManagerPaging
+import com.kodex.spark.ui.utils.firebase.FilterData
+import com.kodex.spark.ui.utils.firebase.FirebaseConst
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,6 +38,16 @@ class MainScreenViewModel @Inject constructor(
     //  private val base64: ImageUtils,
     private val pager: Flow<PagingData<Book>>,
 ) : ViewModel() {
+    val minPriceValue = mutableFloatStateOf(0F)
+    val maxPriceValue = mutableFloatStateOf(5000F)
+    val isFilterByTitle = mutableStateOf(true)
+    var showTabOneOrTo = mutableStateOf(false)
+    var showTopMenu = mutableStateOf(true)
+    val coroutineScope = mutableStateOf(true)
+    val drawerState = mutableStateOf(DrawerValue.Open)
+
+
+
     val selectedBottomItemState = mutableIntStateOf(BottomMenuItem.Home.titleId)
     val categoryState = mutableIntStateOf(Categories.ALL)
     var bookToDelete: Book? = null
@@ -57,10 +77,34 @@ class MainScreenViewModel @Inject constructor(
 
     private val _uiState = MutableSharedFlow<MainUiState>()
     val uiState = _uiState.asSharedFlow()
+
     private fun sendUiState(state: MainUiState) = viewModelScope.launch() {
         _uiState.emit(state)
     }
 
+    fun setFilter() {
+        val filterData = FilterData(
+            minPrice = minPriceValue.floatValue.toInt(),
+            maxPrice = maxPriceValue.floatValue.toInt(),
+            filterType = if (isFilterByTitle.value) {
+                FirebaseConst.TITLE
+            } else {
+                FirebaseConst.PRICE
+            }
+        )
+        firebaseManagerPainter.filterData = filterData
+    }
+    /*
+
+
+    fun setPriceFilter(minPrice: Float, maxPrice: Float) {
+        firebaseManagerPainter.minPrice = minPrice.toInt()
+        firebaseManagerPainter.maxPrice = maxPrice.toInt()
+    }
+
+    fun setFilterType(isTitle: Boolean) {
+        firebaseManagerPainter.isTitleFilter = isTitle
+    }*/
 
     fun deleteBook(uiList: List<Book>) {
         if (bookToDelete == null) return
@@ -77,17 +121,20 @@ class MainScreenViewModel @Inject constructor(
             }
         )
     }
-    fun searchBook(searchText: String){
+
+    fun searchBook(searchText: String) {
         firebaseManagerPainter.searchText = searchText
     }
+
     fun getBooksFromCategory(categoryIndex: Int) {
         categoryState.intValue = categoryIndex
         firebaseManagerPainter.categoryIndex = categoryIndex
     }
 
-    fun onFavClick(book: Book, isFavState: Int, bookList: List<Book>) {
+    fun onFavesClick(book: Book, isFavState: Int, bookList: List<Book>) {
         val booksList = firebaseManagerPainter.changeFavState(bookList, book)
         booksListUpdate.value = if (isFavState == BottomMenuItem.Faves.titleId) {
+            deleteBook = true
             booksList.filter { it.isFaves }
         } else {
             booksList
@@ -98,6 +145,6 @@ class MainScreenViewModel @Inject constructor(
     sealed class MainUiState {
         data object Loading : MainUiState()
         data object Success : MainUiState()
-        data class Error(val message: String) : MainUiState()
+        data class Error(val massage: String) : MainUiState()
     }
 }

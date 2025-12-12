@@ -28,21 +28,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.kodex.spark.R
+import com.kodex.spark.ui.bottom_menu.BottomMenuItem
 import com.kodex.spark.ui.mainScreen.DrawerListItem
+import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.DarkTransparentBlue
 import com.kodex.spark.ui.theme.GrayLite
 import com.kodex.spark.ui.utils.Categories
+import com.yandex.mobile.ads.impl.v
 
 
 @Composable
 fun DrawerBody(
+    viewModel: MainScreenViewModel = hiltViewModel(),
     onAdmin: (Boolean) -> Unit,
     onAdminClick: () -> Unit = {},
+    onAddBookClick: () -> Unit = {},
     onCategoryClick: (Int) -> Unit = {}
 
 ) {
@@ -69,7 +75,6 @@ fun DrawerBody(
         Column (modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Spacer(modifier = Modifier.height(16.dp))
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -78,20 +83,23 @@ fun DrawerBody(
                 .height(1.dp)
                 .background(GrayLite)
             )
-            DrawerListItem(title = stringResource(id = R.string.faves)) {
+          /*  DrawerListItem(title = stringResource(id = R.string.faves)) {
                 onCategoryClick(Categories.FAVORITES)
-             }
+             }*/
             DrawerListItem(title = stringResource(id = R.string.all)) {
                 onCategoryClick(Categories.ALL)
+                viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
+
             }
             LazyColumn(Modifier.fillMaxWidth()) {
                 itemsIndexed(categoryList){index, title->
-                    DrawerListItem(
+                    DrawerListItem(viewModel,
                         title) {
                             onCategoryClick(index)
                     }
                 }
             }
+
             if (isAdminState.value) Button(
                 onClick = {
                 isAdmin{ }
@@ -108,8 +116,9 @@ fun DrawerBody(
             }
             Button(
                 onClick = {
-                isAdmin{ }
+               // isAdmin{ }
                 onAdminClick()
+                    onAddBookClick
             },
                modifier = Modifier
                 .fillMaxWidth()
@@ -131,10 +140,5 @@ fun isAdmin(onAdmin: (Boolean)-> Unit){
             onAdmin(it.get("isAdmin") as Boolean)
             Log.d("MyLog", "isAdmin: ${it.get("isAdmin")}")
         }
-}
-@Preview(showBackground = true)
-@Composable
-fun Preview(){
-   // DrawerBody()
 }
 
