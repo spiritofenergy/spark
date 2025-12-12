@@ -23,7 +23,7 @@ class LViewModel @Inject constructor(
     val showResetPasswordDialog = mutableStateOf(false)
     val successState = mutableStateOf("Welcome")
     val errorState = mutableStateOf("")
-    val emailState = mutableStateOf("")
+    val emailState = mutableStateOf("nillsimon24@gmail.com")
     val passwordState = mutableStateOf("test24")
     val resetPasswordState = mutableStateOf(false)
 

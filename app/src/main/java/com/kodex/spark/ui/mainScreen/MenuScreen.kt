@@ -122,9 +122,10 @@ fun MenuScreen(
                         onAddBookClick()
                     },
 
-                onCategoryClick = { categoryIndex ->
+                    onCategoryClick = { categoryIndex ->
                         if (categoryIndex == Categories.PARK) {
-                            viewModel.selectedBottomItemState.intValue = BottomMenuItem.Faves.titleId
+                            viewModel.selectedBottomItemState.intValue =
+                                BottomMenuItem.Faves.titleId
                         } else {
                             viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
                         }
@@ -141,19 +142,24 @@ fun MenuScreen(
     ) {
         Scaffold(
             topBar = {
-              //  Row (modifier = Modifier.fillMaxWidth())
-                   // {
-                  /*  if (viewModel.showTopMenu.value == true)
-                    IconButton(
-                        modifier = Modifier.padding(top = 35.dp).background(DarkWhite),
-                        onClick = {
-                            coroutineScope.launch {
-                                drawerState.open()
-                            }
-                        }) { Icon(Icons.Default.Menu,
-                        contentDescription = "Burger")
-                    }
-*/
+                Row(modifier = Modifier.fillMaxWidth())
+                {
+                    if (viewModel.showTopMenu.value == true)
+                        IconButton(
+                            modifier = Modifier
+                                .padding(top = 35.dp)
+                                .background(DarkWhite),
+                            onClick = {
+                                coroutineScope.launch {
+                                    drawerState.open()
+                                }
+                            }) {
+                            Icon(
+                                Icons.Default.Menu,
+                                contentDescription = "Burger"
+                            )
+                        }
+
                     MainTopBar(
                         viewModel.categoryState.intValue,
                         onSearch = { searchText ->
@@ -164,14 +170,14 @@ fun MenuScreen(
                         onTab = {
                             viewModel.showTabOneOrTo.value = viewModel.showTabOneOrTo.value != true
                         },
-                       onTopMenu = {
+                        onTopMenu = {
                             viewModel.showTopMenu.value = false
                         },
                         onClickTopMenu = {
                             viewModel.showTopMenu.value = true
                         },
-                        )
-
+                    )
+                }
             },
             modifier = Modifier.fillMaxSize(),
             bottomBar = {

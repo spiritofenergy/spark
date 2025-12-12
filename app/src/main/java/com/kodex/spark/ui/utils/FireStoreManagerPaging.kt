@@ -14,11 +14,11 @@ import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.utils.firebase.FilterData
 import com.kodex.spark.ui.utils.firebase.FirebaseConst
 import com.kodex.spark.ui.utils.firebase.FirebaseConst.BOOK_RATING
+import com.kodex.spark.ui.utils.firebase.FirebaseConst.MODERATION_RATING
+import com.kodex.spark.ui.utils.firebase.FirebaseConst.POSTS
 import com.kodex.spark.ui.utils.firebase.FirebaseConst.RATING
-import com.yandex.mobile.ads.impl.av
 import kotlinx.coroutines.tasks.await
 import javax.inject.Singleton
-import kotlin.text.compareTo
 
 const val IS_BASE_64 = true
 
@@ -245,14 +245,52 @@ class FireStoreManagerPaging(
             )
         }
     }
-    fun insertRating(ratingData: RatingData, bookId: String){
+    fun insertUserComment(ratingData: RatingData, bookId: String){
+        if (auth.uid == null) return
+        db.collection(MODERATION_RATING)
+            .document(auth.uid!!)
+            .set(ratingData.copy(
+                name = auth.currentUser?.email ?: "Unknown",
+                uid = auth.uid!!,
+                bookId = bookId))
+    }
+
+   suspend fun insertModerationRating(ratingData: RatingData){
         if (auth.uid == null) return
         db.collection(BOOK_RATING)
-            .document(bookId)
+            .document(ratingData.bookId)
             .collection(RATING)
-            .document(auth.uid!!)
-            .set(ratingData.copy(name = auth.currentUser?.email ?: "Unknown"))
+            .document(ratingData.uid)
+            .set(ratingData)
+
+       val book: Book = db.collection(POSTS)
+           .document(ratingData.bookId)
+           .get().await().toObject(Book::class.java)?: return
+       val ratingsList = book.ratingsList.toMutableList()
+       if (ratingData.lastRating == 0){
+           ratingsList.add(ratingData.lastRating)
+
+       }else {
+           val index = ratingsList.indexOf(ratingData.lastRating)
+           ratingsList[index] = ratingData.rating
+       }
+       db.collection(POSTS)
+           .document(ratingData.bookId)
+           .update("ratingsList", ratingsList)
     }
+
+   suspend fun getCommentsToModerate(): List<RatingData>{
+        val querySnapshot = db.collection(MODERATION_RATING)
+            .get().await()
+       val commentsList = querySnapshot.toObjects(RatingData::class.java)
+      return commentsList
+    }
+
+   suspend fun deleteComment(uid: String){
+       db.collection(MODERATION_RATING)
+           .document(uid)
+           .delete().await()
+   }
 
    suspend fun getRating(bookId: String): Pair<Double, List<RatingData>>{
         val querySnapshot =

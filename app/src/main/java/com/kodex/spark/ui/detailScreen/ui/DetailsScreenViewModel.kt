@@ -3,7 +3,6 @@ package com.kodex.spark.ui.detailScreen.ui
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.compose.AsyncImagePainter
 import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.utils.FireStoreManagerPaging
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +19,7 @@ class DetailsScreenViewModel @Inject constructor(
     val  ratingDataState = mutableStateOf<RatingData?>(RatingData())
 
     fun insertRating(ratingData: RatingData, bookId: String){
-        fireStoreManager.insertRating(ratingData, bookId)
+        fireStoreManager.insertUserComment(ratingData, bookId)
     }
     fun getAverageRating(bookId: String) = viewModelScope.launch{
         val ratingPair = fireStoreManager.getRating(bookId)

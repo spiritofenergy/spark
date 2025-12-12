@@ -13,5 +13,5 @@ data class Book(
     val author: String = "",
     val timestamp: Long = System.currentTimeMillis(),
     val isFaves: Boolean = false,
-    val ratingList: List<Int> = emptyList()
+    val ratingsList: List<Int> = emptyList()
 )

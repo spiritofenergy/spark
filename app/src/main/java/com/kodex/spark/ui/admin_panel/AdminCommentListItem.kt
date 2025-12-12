@@ -42,19 +42,17 @@ import com.kodex.spark.ui.utils.toFormattedDate
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AdminCommentListItem(
-    onClick: (RatingData) -> Unit = {},
     ratingData: RatingData = RatingData(
         name = "Maric",
         rating = 4,
         message = "Very good!"
-    )
-) {
+    ),
+    onClickDecline: (RatingData) -> Unit = {},
+    onClickAccept: (RatingData) -> Unit = {}
+
+    ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick(ratingData)
-            },
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = DarkWhite
         )
@@ -77,9 +75,7 @@ fun AdminCommentListItem(
             Text(
                 text = ratingData.message,
                 fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
+                fontSize = 16.sp
 
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -100,13 +96,13 @@ fun AdminCommentListItem(
                     modifier = Modifier.fillMaxWidth().weight(1F)
                         .padding(5.dp),
                     text = "Decline") {
-
+                        onClickDecline(ratingData)
                 }
                 LoginButton(
                     modifier = Modifier.fillMaxWidth().weight(1F)
                         .padding(5.dp),
                      text = "Accept") {
-
+                        onClickAccept(ratingData)
                 }
             }
         }
