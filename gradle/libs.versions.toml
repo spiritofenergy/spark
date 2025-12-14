@@ -15,6 +15,8 @@ appcompat = "1.7.0"
 material = "1.12.0"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.2.0"
+ksp-version = "2.0.21-1.0.27"
+
 
 
 mobileads = "7.12.3"
@@ -93,3 +95,4 @@ compose-compiler = {id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 ksp-plugin = {id = "com.google.devtools.ksp", version.ref = "kspPlugin"}
 hilt-plugin = {id = "com.google.dagger.hilt.android", version.ref = "hiltPlugin"}
 
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-version" }

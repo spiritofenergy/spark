@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    //alias(libs.plugins.ksp)
+
     //alias(libs.plugins.mobileads.android)
 }
 
@@ -34,6 +37,10 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.8.1")
+    implementation("androidx.room:room-ktx:2.8.1")
+   // ksp("androidx.room:room-compiler:2.8.1")
+
     //implementation("com.yandex.android:mobileads:7.0.0")
    // implementation("com.yandex.android:mobileads-mediation:7.0.0.0")
    // implementation(libs.androidx.mobileads)

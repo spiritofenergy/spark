@@ -78,12 +78,12 @@ fun BookListItemUi(
             modifier = Modifier.padding(start = 10.dp)
 
         )
-            Text(
-                text = book.description,
-                color = Color.Gray,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 10.dp)
-            )
+        Text(
+            text = book.description,
+            color = Color.Gray,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(start = 10.dp)
+        )
 
 
 
@@ -93,7 +93,8 @@ fun BookListItemUi(
         ) {
             Row(modifier = Modifier.weight(1F)) {
                 Text(
-                    modifier = Modifier.padding(start = 5.dp),
+                    modifier = Modifier
+                        .padding(start = 5.dp),
                     text = book.price.toString(),
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
@@ -101,8 +102,9 @@ fun BookListItemUi(
 
                     )
                 Text(
-                   // modifier = Modifier
-                        //.padding(1.dp),
+                    modifier = Modifier
+                        .weight(1F)
+                        .padding(1.dp),
                     text = "p",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
@@ -113,45 +115,47 @@ fun BookListItemUi(
 
 
             if (showEditButton)
-            IconButton(
-                onClick = {
-                    onEditClick(book)
-                }) {
-                Icon(
-                    Icons.Default.Edit,
-                    modifier = Modifier,
-                       // .weight(1F),
-                    //.padding(1.dp),
-                    contentDescription = ""
-                )
-            }
+                IconButton(
+                    onClick = {
+                        onEditClick(book)
+                    }) {
+                    Icon(
+                        Icons.Default.Edit,
+                        modifier = Modifier
+                         .weight(1F)
+                         .padding(1.dp),
+                        contentDescription = ""
+                    )
+                }
 
 
             if (showEditButton)
+                IconButton(onClick = {
+                    onDeleteClick(book)
+                }) {
+                    Icon(
+                        Icons.Default.Delete,
+                        modifier = Modifier
+                         .weight(1F)
+                         .padding(1.dp),
+                        contentDescription = ""
+                    )
+                }
+
+
             IconButton(onClick = {
-                onDeleteClick(book)
-            }) {
-                Icon(
-                    Icons.Default.Delete,
-                    modifier = Modifier,
-                       // .weight(1F),
-                    //.padding(1.dp),
-                    contentDescription = ""
-                )
-            }
-
-
-         /*   IconButton(onClick = {
                 onFavClick()
             }) {
                 Icon(
                     if (book.isFaves) {
                         Icons.Default.Favorite
+
                     } else
                         Icons.Default.FavoriteBorder,
-                    contentDescription = ""
+                    contentDescription = "",
+                    tint = if (book.isFaves) Color.Red else Color.Gray
                 )
-            }*/
+            }
 
 
             //IconButton { }(painter = painterResource(id = R.drawable))

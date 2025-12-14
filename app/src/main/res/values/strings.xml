@@ -7,16 +7,16 @@
     <string name="authorization" translatable="false">Авторизация</string>
     <!-- -->
     <string name="home" translatable="false">Home</string>
-    <string name="faves" translatable="false">Favorite</string>
+    <string name="faves" translatable="false">Избранное</string>
     <string name="settings" translatable="false">Settings</string>
-    <string name="park" translatable="false">ПAPK</string>
-    <string name="food" translatable="false">ЕДА</string>
+    <string name="park" translatable="false">Парк</string>
+    <string name="food" translatable="false">Еда</string>
     <string name="health" translatable="false">Здоровье</string>
     <string name="sunny" translatable="false">Отдых</string>
     <string name="booking" translatable="false">Bookong</string>
     <!-- -->
     <string name= "empty_list" translatable="false">Лист пустой</string>
     <!-- DrawerBody -->
-    <string name= "all" >ВСЕ</string>
+    <string name= "all" >Все</string>
 
 </resources>

@@ -185,7 +185,7 @@ fun MenuScreen(
                     viewModel.selectedBottomItemState.intValue,
                     onFavesClick = {
                         viewModel.selectedBottomItemState.intValue = BottomMenuItem.Faves.titleId
-                        viewModel.getBooksFromCategory(Categories.PARK)
+                        viewModel.getBooksFromCategory(Categories.FAVORITES)
                         books.refresh()
                     },
 

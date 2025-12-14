@@ -48,6 +48,11 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.8.1")
+    implementation("androidx.room:room-ktx:2.8.1")
+    ksp("androidx.room:room-compiler:2.8.1")
+    val koin_version = "4.1.0"
+    implementation("io.insert-koin:koin-androidx-compose:$koin_version")
 
     implementation (libs.mobileads)
 

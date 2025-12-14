@@ -7,6 +7,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -23,7 +33,9 @@ import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.detailScreen.ui.DetailScreen
 import com.kodex.spark.ui.detailScreen.data.DetailsNavObject
 import com.kodex.spark.ui.logon.LoginScreen
+import com.kodex.spark.ui.room.RoomViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import org.koin.compose.viewmodel.koinViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,6 +48,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            Connection()
            val navController = rememberNavController()
             NavHost(
                 navController = navController,
@@ -117,4 +130,48 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+@Composable
+fun Connection(
+    viewModel: RoomViewModel = koinViewModel()
+) {
+    val listState = viewModel.ratingListFlow.collectAsState(emptyList())
 
+    LaunchedEffect(Unit) {
+        viewModel.insertRating()
+        connect()
+        disconnected()
+        sendData("Sergey")
+        receiveData()
+    }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        items(listState.value) { rating ->
+
+            Text(
+                text = "User name ${rating.name}",
+            )
+
+        }
+    }
+
+}
+fun connect(): String{
+    val status = "Connect to server b"
+    println(status)
+    return status
+}
+
+fun disconnected(){
+    println("Disconnected from server b")
+}
+
+fun sendData(data: String){
+    println("Send data to server b: $data")
+}
+
+fun receiveData(): String {
+    return "Receive data from server b"
+}

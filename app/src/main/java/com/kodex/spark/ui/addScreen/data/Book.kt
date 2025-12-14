@@ -1,8 +1,13 @@
 package com.kodex.spark.ui.addScreen.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.kodex.spark.ui.utils.Categories
 
+@Entity(tableName = "books")
 data class Book(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null,
     val key: String = "",
     val title: String = "",
     val searchTitle: String = title.lowercase(),

@@ -83,9 +83,9 @@ fun DrawerBody(
                 .height(1.dp)
                 .background(GrayLite)
             )
-          /*  DrawerListItem(title = stringResource(id = R.string.faves)) {
+           DrawerListItem(title = stringResource(id = R.string.faves)) {
                 onCategoryClick(Categories.FAVORITES)
-             }*/
+             }
             DrawerListItem(title = stringResource(id = R.string.all)) {
                 onCategoryClick(Categories.ALL)
                 viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
