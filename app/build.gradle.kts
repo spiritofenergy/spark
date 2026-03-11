@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.ksp.plugin)
+   // alias(libs.plugins.mobileads)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.plugin.serialization)
 }
@@ -19,7 +20,7 @@ android {
         applicationId = "com.kodex.spark"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -47,12 +48,21 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.8.1")
+    implementation("androidx.room:room-ktx:2.8.1")
+    ksp("androidx.room:room-compiler:2.8.1")
+    val koin_version = "4.1.0"
+    implementation("io.insert-koin:koin-androidx-compose:$koin_version")
+
+    implementation (libs.mobileads)
+
     implementation(libs.androidx.paging)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.navigation.compose.compiler)
+    implementation(libs.androidx.material.icons.extended)
 
     implementation(libs.android.hilt)
     ksp(libs.android.hilt.compiler)
@@ -83,4 +93,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
 }

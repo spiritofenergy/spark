@@ -1,21 +1,22 @@
 package com.kodex.spark.ui.mainScreen
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -26,53 +27,90 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.kodex.spark.R
 import com.kodex.spark.ui.addScreen.data.Book
+import com.kodex.spark.ui.theme.Orange
 import com.kodex.spark.ui.utils.Categories
 import com.kodex.spark.ui.utils.toBitmap
+import kotlin.Int
 
 @Composable
 fun BookListItemUi(
-    titleIndex: Int,
+    heightValue: (Int) = 0,
+    titleIndex: Int = 0,
     showEditButton: Boolean = false,
     book: Book = Book(),
-    onEditClick: (Book) -> Unit ={},
+    onEditClick: (Book) -> Unit = {},
     onFavClick: () -> Unit = {},
     onBookClick: (Book) -> Unit = {},
-    onDeleteClick: ( Book) -> Unit = {}
+    onDeleteClick: (Book) -> Unit = {}
 ) {
-    Column (
+    Column(
         modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp)
-            .clickable{
+            .fillMaxWidth()
+            .padding(10.dp)
+            .clickable {
                 onBookClick(book)
             }
-    ){
-        var bitmap: Bitmap? = null
-        try {
-            val base64Image = Base64.decode(book.imageUrl, Base64.DEFAULT)
-            bitmap = BitmapFactory.decodeByteArray(
-                base64Image, 0,
-                base64Image.size
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomEnd
+        ){
+            AsyncImage(
+                model = book.imageUrl.toBitmap(),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxWidth()
+                    .height(heightValue.dp)
+                    .clip(RoundedCornerShape(10.dp)),
             )
-        }catch (e: IllegalArgumentException){
+            Box(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .clip(RoundedCornerShape(10.dp))
+
+            ){
+                Row(Modifier.clip(RoundedCornerShape(15.dp))
+                    .background(Color.White)
+                    .padding(horizontal = 10.dp,
+                        vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+
+                )
+                {
+                    if (book.ratingsList.isNotEmpty()) {
+                        Text(
+                            text = String.format(
+                                "%.1f",
+                                book.ratingsList.average()
+                            ),
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp
+                        )
+                    } else {
+                        Text(text = "--")
+                    }
+
+
+                    Icon(modifier = Modifier.size(14.dp),
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "Star",
+                        tint = Orange
+                    )
+                }
+            }
 
         }
-        AsyncImage(
-            model = book.imageUrl.toBitmap(),
-            contentDescription = "",
-            modifier = Modifier.fillMaxWidth()
-                .height(250.dp)
-                .clip(RoundedCornerShape(10.dp)),
-            contentScale = ContentScale.Crop
-        )
+
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = book.title,
@@ -82,13 +120,14 @@ fun BookListItemUi(
             modifier = Modifier.padding(start = 10.dp)
         )
 
-      Text(
+      /*  Text(
             text = stringArrayResource(id = R.array.category_arrays)[book.categoryIndex],
             color = Color.Black,
             fontWeight = FontWeight.Medium,
-            fontSize = 15.sp
-        )
+            fontSize = 15.sp,
+            modifier = Modifier.padding(start = 10.dp)
 
+        )*/
         Text(
             text = book.description,
             color = Color.Gray,
@@ -96,52 +135,88 @@ fun BookListItemUi(
             modifier = Modifier.padding(start = 10.dp)
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                modifier = Modifier.fillMaxWidth().weight(1F).padding(start =  10.dp),
-                text = book.prise,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
+            Row(modifier = Modifier.weight(1F)) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 5.dp),
+                    text = book.price.toString(),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
 
-            )
-            if (showEditButton)IconButton(
-                onClick = {
-                    onEditClick(book)
-            }) {
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = ""
-                )
+                    )
+                Text(
+                    modifier = Modifier
+                        .weight(1F)
+                        .padding(1.dp),
+                    text = "p",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+
+                    )
             }
 
 
-             if (showEditButton)IconButton(onClick = {
-              onDeleteClick(book)
-            }) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = ""
-                )
-            }
+            if (showEditButton)
+                IconButton(
+                    onClick = {
+                        onEditClick(book)
+                    }) {
+                    Icon(
+                        Icons.Default.Edit,
+                        modifier = Modifier
+                         .weight(1F)
+                         .padding(1.dp),
+                        contentDescription = ""
+                    )
+                }
+
+
+            if (showEditButton)
+                IconButton(onClick = {
+                    onDeleteClick(book)
+                }) {
+                    Icon(
+                        Icons.Default.Delete,
+                        modifier = Modifier
+                         .weight(1F)
+                         .padding(1.dp),
+                        contentDescription = ""
+                    )
+                }
 
 
             IconButton(onClick = {
                 onFavClick()
             }) {
                 Icon(
-                    if (book.isFaves){
+                    if (book.isFaves) {
                         Icons.Default.Favorite
-                    }else
+
+                    } else
                         Icons.Default.FavoriteBorder,
-                    contentDescription = "")
+                    contentDescription = "",
+                    tint = if (book.isFaves) Color.Red else Color.Gray
+                )
             }
+
+
             //IconButton { }(painter = painterResource(id = R.drawable))
         }
 
     }
+}
+@Preview(showBackground = true)
+@Composable
+fun ItemPreview() {
+    BookListItemUi(
+        book = Book()
+    )
 }

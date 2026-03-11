@@ -20,7 +20,7 @@ object PagingModule {
     @ViewModelScoped
     fun providesPagingFlow(
         firestoreManagerPaging: FireStoreManagerPaging
-    ): Flow<PagingData<Book>>{
+    ): Flow<PagingData<Book>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 15,

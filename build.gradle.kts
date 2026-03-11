@@ -10,4 +10,5 @@ plugins {
 
     alias(libs.plugins.ksp.plugin) apply false
     alias(libs.plugins.hilt.plugin) apply false
-}
+
+ }

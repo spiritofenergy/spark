@@ -1,6 +1,5 @@
 package com.kodex.spark.ui.addScreen
 
-import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +35,7 @@ import com.kodex.spark.ui.logon.LoginButton
 import com.kodex.spark.ui.logon.RoundedCornerTextField
 import coil.compose.rememberAsyncImagePainter
 import com.kodex.spark.ui.addScreen.data.AddScreenObject
+import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.theme.BoxFilter
 import com.kodex.spark.ui.utils.IS_BASE_64
@@ -46,6 +46,7 @@ import com.kodex.spark.ui.utils.toBitmap
 @Composable
 fun AddBookScreen(
     navData: AddScreenObject = AddScreenObject(),
+   // navDataMain: MainScreenDataObject = MainScreenDataObject(),
     onSaved: () -> Unit = {},
     viewModel: AddBookViewModel = hiltViewModel(),
 ) {
@@ -59,17 +60,13 @@ fun AddBookScreen(
         mutableStateOf(navData.imageUrl)
     }
     val imageBase64 =  remember {
-        mutableStateOf("")
+        mutableStateOf(if (IS_BASE_64) navData.imageUrl else "")
     }
 
     val imageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        var navImageUrl = mutableStateOf(navData.imageUrl)
-
-
-
-        if (IS_BASE_64) {
+          if (IS_BASE_64) {
              imageBase64.value = uri?.let {
                 ImageUtils.imageToBase64(uri, context.contentResolver)
             } ?: ""
@@ -93,7 +90,7 @@ fun AddBookScreen(
 
                 is MainScreenViewModel.MainUiState.Error -> {
                    viewModel.showLoadingIndicator.value = false
-                    Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error: ${state.massage}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -116,7 +113,7 @@ fun AddBookScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(46.dp),
+            .padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -127,16 +124,15 @@ fun AddBookScreen(
                     imageBase64.value.toBitmap()
                 } else {
                     navImageUrl.value.ifEmpty {viewModel.selectedImageUri.value }
-                    viewModel.selectedImageUri.value
-                }
+               }
             ),
             contentDescription = "",
             modifier = Modifier
-                .height(200.dp)
-                .padding(bottom = 50.dp)
+                .height(300.dp)
+                .width(500.dp)
+
 
         )
-        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = "ИСКРА",
             color = Color.White,
@@ -144,9 +140,10 @@ fun AddBookScreen(
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Serif
         )
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        RoundedCornerDropDownMenu(viewModel.selectedCategory.value) { selectedItemIndex ->
+        RoundedCornerDropDownMenu(
+            viewModel.selectedCategory.intValue) { selectedItemIndex ->
             imageLauncher
             viewModel.selectedCategory.intValue = selectedItemIndex
         }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,13 +23,16 @@ import androidx.compose.ui.unit.sp
 import com.kodex.spark.ui.theme.DarkBlue
 import com.kodex.spark.R
 import com.kodex.spark.ui.data.MainScreenDataObject
+import com.kodex.spark.ui.theme.ButtonColor
 import com.kodex.spark.ui.theme.ButtonColorDark
+import com.kodex.spark.ui.theme.DrawerColorBlue
 
 
 @Composable
 fun DrawerHeader(email: String) {
     Box (modifier = Modifier.fillMaxWidth()
-        .background(ButtonColorDark)
+        .background(DrawerColorBlue)
+        .padding(top = 30.dp)
         ){
         Column (
             Modifier.height(170.dp)
@@ -41,7 +45,7 @@ fun DrawerHeader(email: String) {
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "ИСКРА"
             )
-            Spacer(modifier = Modifier.height(10.dp))
+                // Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "",
                 color = Color.White,

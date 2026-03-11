@@ -1,8 +1,6 @@
 package com.kodex.spark.ui.utils
 
 import android.util.Log
-import androidx.credentials.PasswordCredential
-import coil.compose.AsyncImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.kodex.spark.ui.data.MainScreenDataObject
@@ -27,7 +25,14 @@ class AuthManager(
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful) onSignUpSuccess
+                if (task.isSuccessful) {
+                    onSignUpSuccess(
+                        MainScreenDataObject(
+                            task.result.user?.uid!!,
+                            task.result.user?.email!!
+                        )
+                    )
+                }
             }
             .addOnFailureListener() {
                 onSignUpFailure(it.message ?: "Sign Up Error")
@@ -72,7 +77,7 @@ class AuthManager(
         auth.sendPasswordResetEmail(email)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    onResetPasswordSuccess
+                    onResetPasswordSuccess()
                  }
             }.addOnFailureListener{result->
                 onResetPasswordFailure(result.message ?: "Ошибка восставноления пароля")

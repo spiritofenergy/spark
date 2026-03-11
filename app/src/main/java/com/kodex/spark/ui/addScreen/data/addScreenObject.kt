@@ -7,10 +7,13 @@ import kotlinx.serialization.Serializable
 data class AddScreenObject (
     val key: String = "",
     val title: String = "",
+    val searchTitle: String = title.lowercase(),
     val description: String = "",
-    val prise: String = "",
-    val categoryIndex: Int = Categories.FANTASY,
+    val price: Int = 0,
+    val categoryIndex: Int = Categories.PARK,
     val imageUrl: String = "",
+    val author: String = "",
+    val timestamp: Long = System.currentTimeMillis(),
     val isFaves: Boolean = false
 
 )

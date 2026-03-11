@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.util.Base64
+import android.util.Log
 import java.io.ByteArrayOutputStream
 
 object ImageUtils {
@@ -17,28 +18,29 @@ object ImageUtils {
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 30, stream)
         }else
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP, 30, stream)*/
-       // Log.d("MyLog", "base64Image size: , ${base64Image.toByteArray(Charsets.UTF_8).size}")
+        Log.d("MyLog1", "base64Image size: , ${base64Image.toByteArray(Charsets.UTF_8).size}")
         return base64Image
     }
     fun uriToBiteArray(uri: Uri, contentResolver: ContentResolver): ByteArray{
         val inputStream = contentResolver.openInputStream(uri)
         val bm = BitmapFactory.decodeStream(inputStream)
-        val resizedBitMap = resizeBitMapImage(bm, 300)
+        val resizedBitMap = resizeBitMapImage(bm, 200)
         val stream = ByteArrayOutputStream()
-        if (Build.VERSION.SDK_INT >= 30){
-            resizedBitMap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 30, stream)
+    /*    if (Build.VERSION.SDK_INT >= 30){
+            resizedBitMap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 70, stream)
         }else {
-            resizedBitMap.compress(Bitmap.CompressFormat.WEBP, 30, stream)
-        }
-       // resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+            resizedBitMap.compress(Bitmap.CompressFormat.WEBP, 70, stream)
+        }*/
+       resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 70, stream)
         return stream.toByteArray()
     }
+    //изменяем размер картинки
   private  fun resizeBitMapImage(bitmap: Bitmap, maxSize: Int): Bitmap{
         var width = bitmap.width
         var height = bitmap.height
         if (width <= maxSize && height <= maxSize) return bitmap
-        val imageRatio = width.toFloat() / height.toFloat()
 
+        val imageRatio = width.toFloat() / height.toFloat()
         if (imageRatio > 1){
             width = maxSize
             height = (width / imageRatio).toInt()
@@ -60,4 +62,6 @@ fun String.toBitmap(): Bitmap?{
     }catch (e: IllegalArgumentException){
         null
     }
+    Log.d("MyLog2", "toBitmap size: , ${this.toByteArray(Charsets.UTF_8).size}")
+
 }
