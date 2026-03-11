@@ -25,12 +25,14 @@ class AuthManager(
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful) onSignUpSuccess(
-                    MainScreenDataObject(
-                    task.result.user?.uid!!,
-                    task.result.user?.email!!
-                )
-                )
+                if (task.isSuccessful) {
+                    onSignUpSuccess(
+                        MainScreenDataObject(
+                            task.result.user?.uid!!,
+                            task.result.user?.email!!
+                        )
+                    )
+                }
             }
             .addOnFailureListener() {
                 onSignUpFailure(it.message ?: "Sign Up Error")
@@ -75,7 +77,7 @@ class AuthManager(
         auth.sendPasswordResetEmail(email)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    onResetPasswordSuccess
+                    onResetPasswordSuccess()
                  }
             }.addOnFailureListener{result->
                 onResetPasswordFailure(result.message ?: "Ошибка восставноления пароля")

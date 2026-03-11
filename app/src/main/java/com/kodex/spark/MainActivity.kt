@@ -74,7 +74,8 @@ class MainActivity : ComponentActivity() {
                                     imageUrl = bk.imageUrl,
                                     author = bk.author,
                                     timestamp = bk.timestamp
-                                ))
+                                )
+                                )
                       //      }
 
 
@@ -97,6 +98,9 @@ class MainActivity : ComponentActivity() {
                         onAddBookClick = {
                             navController.navigate(AddScreenObject())
                         },
+                        onLoginClick = {
+                            navController.navigate(LoginScreenObject)
+                        }
                     )
                 }
                 composable<AddScreenObject>{ navEntry ->
@@ -150,9 +154,9 @@ fun Connection(
     ) {
         items(listState.value) { rating ->
 
-            Text(
+           /* Text(
                 text = "User name ${rating.name}",
-            )
+            )*/
 
         }
     }

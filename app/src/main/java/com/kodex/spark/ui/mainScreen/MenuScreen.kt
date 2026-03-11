@@ -74,21 +74,20 @@ fun MenuScreen(
     onBookClick: (Book) -> Unit,
     onAddBookClick: () -> Unit,
     onAdminClick: () -> Unit,
+    onLoginClick: () -> Unit,
 ) {
     val context = LocalContext.current
 
-    val drawerState = rememberDrawerState(DrawerValue.Open)
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     val showDeleteDialog = remember { mutableStateOf(false) }
     val isAuthorState = remember { mutableStateOf(false) }
     var showFilterDialog by remember { mutableStateOf(false) }
-
     val books = viewModel.books.collectAsLazyPagingItems()
+    val isAdminState = remember { mutableStateOf(false) }
 
-    val isAdminState = remember {
-        mutableStateOf(false)
-    }
     LaunchedEffect(Unit) {
+
         viewModel.uiState.collect { uiState ->
             if (uiState is MainScreenViewModel.MainUiState.Error) {
                 Toast.makeText(context, uiState.massage, Toast.LENGTH_SHORT).show()
@@ -135,30 +134,20 @@ fun MenuScreen(
                         coroutineScope.launch {
                             drawerState.close()
                         }
-                    }
+                    },
+                     onLoginClick = {
+                        onLoginClick()
+                        coroutineScope.launch { drawerState.close() }
+                    },
                 )
             }
         }
     ) {
         Scaffold(
             topBar = {
-                Row(modifier = Modifier.fillMaxWidth())
+                Row(modifier = Modifier.fillMaxWidth()
+                    .background(PurpleGrey80))
                 {
-                    if (viewModel.showTopMenu.value == true)
-                        IconButton(
-                            modifier = Modifier
-                                .padding(top = 35.dp)
-                                .background(DarkWhite),
-                            onClick = {
-                                coroutineScope.launch {
-                                    drawerState.open()
-                                }
-                            }) {
-                            Icon(
-                                Icons.Default.Menu,
-                                contentDescription = "Burger"
-                            )
-                        }
 
                     MainTopBar(
                         viewModel.categoryState.intValue,
@@ -166,6 +155,9 @@ fun MenuScreen(
                             viewModel.searchBook(searchText)
                             viewModel.showTopMenu.value = true
                             books.refresh()
+                        },
+                        onMenu = {
+                            coroutineScope.launch { drawerState.open() }
                         },
                         onTab = {
                             viewModel.showTabOneOrTo.value = viewModel.showTabOneOrTo.value != true

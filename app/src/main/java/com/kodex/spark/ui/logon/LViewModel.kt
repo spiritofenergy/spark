@@ -22,7 +22,7 @@ class LViewModel @Inject constructor(
     val currentUser = mutableStateOf<FirebaseUser?>(null)
     val showResetPasswordDialog = mutableStateOf(false)
     val successState = mutableStateOf("Welcome")
-    val errorState = mutableStateOf("Error")
+    val errorState = mutableStateOf("")
     val emailState = mutableStateOf("nillsimon24@gmail.com")
     val passwordState = mutableStateOf("test24")
     val resetPasswordState = mutableStateOf(false)
@@ -43,7 +43,7 @@ class LViewModel @Inject constructor(
         )
     }
     fun getEmail(){
-        emailState.value = storeManager.getString(StoreManager.EMAIL_KEY, "")
+        emailState.value = storeManager.getString(StoreManager.EMAIL_KEY, "nillsimon24@gmail.com")
     }
 
     fun saveLastEmail(){
@@ -60,7 +60,7 @@ class LViewModel @Inject constructor(
                 onResetPasswordSuccess = {
                     resetPasswordState.value = false
                     showResetPasswordDialog.value = true
-                    Log.d("MyLog", "SendPass_1")
+                    Log.d("MyLog1", "SendPass_1")
                 },
                 onResetPasswordFailure = { errorMessage ->
                     errorState.value = errorMessage
@@ -81,7 +81,7 @@ class LViewModel @Inject constructor(
         )
     }
 
-    // fun getAccountClosed(){
+
     fun getAccountState() {
         currentUser.value = authManager.getCurrentUser()
     }

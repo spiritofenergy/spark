@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">spark</string>
+    <string name="app_name" translatable="false">Spark</string>
 
     <string name="reset_password_massage" translatable="false">Зайдите в свой почтовый ящик и пройдите по ссылке для ввода пароля.</string>
     <string name="remind_password" translatable="false">Напомнить пароль</string>
@@ -14,6 +14,17 @@
     <string name="health" translatable="false">Здоровье</string>
     <string name="sunny" translatable="false">Отдых</string>
     <string name="booking" translatable="false">Bookong</string>
+
+    <string name="login">Login:</string>
+    <string name="password">Password:</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="enter">Enter</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="registrations">Registrations</string>
+    <string name="password_recovery">Password Recovery</string>
+    <string name="welcome">We invite you to the sunny city</string>
+    <string name="ok">Error</string>
     <!-- -->
     <string name= "empty_list" translatable="false">Лист пустой</string>
     <!-- DrawerBody -->

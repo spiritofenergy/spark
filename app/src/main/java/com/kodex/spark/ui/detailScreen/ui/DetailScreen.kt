@@ -47,6 +47,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kodex.spark.ui.detailScreen.data.DetailsNavObject
 import com.kodex.spark.ui.detailScreen.data.RatingData
@@ -56,10 +57,12 @@ import com.kodex.spark.ui.utils.toFormattedDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DefaultLocale")
-//@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun DetailScreen(
     ///ratingData: RatingData = RatingData(),
+   // navObject: NavRoutes.DetailsNavObject = NavRoutes.DetailsNavObject(),
+
     navObject: DetailsNavObject = DetailsNavObject(),
     viewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
@@ -87,7 +90,7 @@ fun DetailScreen(
         viewModel.getAverageRating(navObject.bookId)
     }
     RateDialog(
-        ratingData = viewModel.ratingDataState.value?: RatingData(),
+        ratingData = viewModel.ratingDataState.value ?: RatingData(),
         onDismiss = {
             showReteDialog = false
         },
@@ -215,7 +218,6 @@ fun DetailScreen(
 
                         )
                     }
-
                 }
             }
             Spacer(modifier = Modifier.width(26.dp))

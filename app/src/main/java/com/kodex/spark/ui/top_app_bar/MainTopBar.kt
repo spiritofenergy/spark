@@ -2,6 +2,7 @@ package com.kodex.spark.ui.top_app_bar
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.AspectRatio
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
@@ -29,12 +31,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -58,32 +63,21 @@ fun MainTopBar(
     onTab: () -> Unit,
     onClickTopMenu: () -> Unit,
     onTopMenu: ()-> Unit,
-
+    onMenu: () -> Unit
 ) {
-    var targetState by remember {
-        mutableStateOf(false)
+    var targetState by remember { mutableStateOf(false) }
+    var expandedState by remember { mutableStateOf(false) }
+    var queryText by remember { mutableStateOf("")
     }
-    var expandedState by remember {
-        mutableStateOf(false)
-    }
-    var queryText by remember {
-        mutableStateOf("")
-    }
-
     Crossfade(targetState = targetState) { target ->
         if (target) {
             SearchBar(
-                modifier = Modifier.fillMaxWidth()
-                    //.padding(horizontal = 5.dp)
-                        ,
+                modifier = Modifier.fillMaxWidth(),
                 inputField = {
-
                     SearchBarDefaults.InputField(
-                       /* colors = TextFieldDefaults.colors(
+                        colors = TextFieldDefaults.colors(
                             focusedContainerColor = DarkWhite,
-                            unfocusedContainerColor = DarkBlue*/
-                       // )
-                   // ,
+                            unfocusedContainerColor = DarkBlue),
                         query = queryText,
                         placeholder = {
                             Text(text = "Search..."
@@ -125,12 +119,30 @@ fun MainTopBar(
                 content = {
 
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(25) {
+                            Text(
+                                text = "Сообщение № $it",
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
                     }
                 }
             )
         } else {
-            TopAppBar(modifier = Modifier.padding(start = 40.dp),
+            TopAppBar(
                 title = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        IconButton(onClick = {
+                            onMenu()
+                        }) {
+                            Icon(
+                                Icons.Default.Menu,
+                                contentDescription = "Burger"
+                            )
+                        }
 
                     Text(fontSize = 25.sp,
                         fontStyle = FontStyle.Italic,
@@ -139,10 +151,15 @@ fun MainTopBar(
                             Categories.FAVORITES -> stringResource(id = R.string.faves)
                             Categories.ALL -> stringResource(id = R.string.all)
                             else -> stringArrayResource(id = R.array.category_arrays)[titleIndex]
-                        }
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+
                     )
-                },
-                actions = {
+
                     IconButton(onClick = {
                         targetState = true
                         //onTopMenu()
@@ -154,21 +171,22 @@ fun MainTopBar(
                     }
 
                     IconButton(onClick = {
-                      onTab()
+                        onTab()
                     }) {
                         Icon(
-                            Icons.AutoMirrored.Default.List,
+                            Icons.Default.AspectRatio,
                             contentDescription = "Filter"
                         )
                     }
-                  /*  IconButton(onClick = {
-                            onFilter()
+                   /* IconButton(onClick = {
+                        //onFilter()
                     }) {
                         Icon(
                             Icons.AutoMirrored.Default.List,
                             contentDescription = "Filter"
                         )
                     }*/
+                }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = TopBatColorWiete,
@@ -178,4 +196,21 @@ fun MainTopBar(
             )
         }
     }
+}
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun ShowMainTopBar(){
+    MainTopBar(
+        titleIndex = Categories.PARK,
+        onSearch = {},
+        onTab = {},
+        onClickTopMenu = {},
+        onMenu = {},
+           onTopMenu = {}
+
+
+    )
 }

@@ -142,7 +142,8 @@ fun AddBookScreen(
         )
         Spacer(modifier = Modifier.height(20.dp))
 
-        RoundedCornerDropDownMenu(viewModel.selectedCategory.intValue) { selectedItemIndex ->
+        RoundedCornerDropDownMenu(
+            viewModel.selectedCategory.intValue) { selectedItemIndex ->
             imageLauncher
             viewModel.selectedCategory.intValue = selectedItemIndex
         }

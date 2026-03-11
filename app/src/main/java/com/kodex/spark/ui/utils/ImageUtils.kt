@@ -18,7 +18,7 @@ object ImageUtils {
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 30, stream)
         }else
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP, 30, stream)*/
-        Log.d("MyLog", "base64Image size: , ${base64Image.toByteArray(Charsets.UTF_8).size}")
+        Log.d("MyLog1", "base64Image size: , ${base64Image.toByteArray(Charsets.UTF_8).size}")
         return base64Image
     }
     fun uriToBiteArray(uri: Uri, contentResolver: ContentResolver): ByteArray{
@@ -62,4 +62,6 @@ fun String.toBitmap(): Bitmap?{
     }catch (e: IllegalArgumentException){
         null
     }
+    Log.d("MyLog2", "toBitmap size: , ${this.toByteArray(Charsets.UTF_8).size}")
+
 }

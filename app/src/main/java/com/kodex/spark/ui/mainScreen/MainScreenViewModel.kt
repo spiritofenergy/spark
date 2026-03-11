@@ -1,5 +1,6 @@
 package com.kodex.spark.ui.mainScreen
 
+import android.util.Log
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.getValue
@@ -17,6 +18,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import com.kodex.spark.ui.addScreen.data.Book
 import com.kodex.spark.ui.bottom_menu.BottomMenuItem
 import com.kodex.spark.ui.utils.Categories
@@ -45,6 +49,7 @@ class MainScreenViewModel @Inject constructor(
     var showTopMenu = mutableStateOf(true)
     val coroutineScope = mutableStateOf(true)
     val drawerState = mutableStateOf(DrawerValue.Open)
+    val isAdminState = mutableStateOf(false)
 
 
 
@@ -139,12 +144,19 @@ class MainScreenViewModel @Inject constructor(
         } else {
             booksList
         }
-
     }
 
     sealed class MainUiState {
         data object Loading : MainUiState()
         data object Success : MainUiState()
         data class Error(val massage: String) : MainUiState()
+    }
+    fun isAdmin(onAdmin: (Boolean)-> Unit){
+        val uid = Firebase.auth.currentUser!!.uid
+        Firebase.firestore.collection("admin")
+            .document(uid).get().addOnSuccessListener{
+                onAdmin(it.get("isAdmin") as Boolean)
+                Log.d("MyLog", "isAdmin: ${it.get("isAdmin")}")
+            }
     }
 }

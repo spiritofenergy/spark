@@ -1,18 +1,22 @@
 package com.kodex.spark.ui.mainScreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,18 +28,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.kodex.spark.R
 import com.kodex.spark.ui.addScreen.data.Book
+import com.kodex.spark.ui.theme.Orange
+import com.kodex.spark.ui.utils.Categories
 import com.kodex.spark.ui.utils.toBitmap
+import kotlin.Int
 
 @Composable
 fun BookListItemUi(
     heightValue: (Int) = 0,
-    titleIndex: Int,
+    titleIndex: Int = 0,
     showEditButton: Boolean = false,
     book: Book = Book(),
     onEditClick: (Book) -> Unit = {},
@@ -51,16 +59,58 @@ fun BookListItemUi(
                 onBookClick(book)
             }
     ) {
-        AsyncImage(
-            model = book.imageUrl.toBitmap(),
-            contentDescription = "",
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                //.height(100.dp)
-                .height(heightValue.dp)
-                .clip(RoundedCornerShape(10.dp)),
-            contentScale = ContentScale.Crop
-        )
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomEnd
+        ){
+            AsyncImage(
+                model = book.imageUrl.toBitmap(),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxWidth()
+                    .height(heightValue.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+            )
+            Box(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .clip(RoundedCornerShape(10.dp))
+
+            ){
+                Row(Modifier.clip(RoundedCornerShape(15.dp))
+                    .background(Color.White)
+                    .padding(horizontal = 10.dp,
+                        vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+
+                )
+                {
+                    if (book.ratingsList.isNotEmpty()) {
+                        Text(
+                            text = String.format(
+                                "%.1f",
+                                book.ratingsList.average()
+                            ),
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp
+                        )
+                    } else {
+                        Text(text = "--")
+                    }
+
+
+                    Icon(modifier = Modifier.size(14.dp),
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "Star",
+                        tint = Orange
+                    )
+                }
+            }
+
+        }
+
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = book.title,
@@ -70,14 +120,14 @@ fun BookListItemUi(
             modifier = Modifier.padding(start = 10.dp)
         )
 
-        Text(
+      /*  Text(
             text = stringArrayResource(id = R.array.category_arrays)[book.categoryIndex],
             color = Color.Black,
             fontWeight = FontWeight.Medium,
             fontSize = 15.sp,
             modifier = Modifier.padding(start = 10.dp)
 
-        )
+        )*/
         Text(
             text = book.description,
             color = Color.Gray,
@@ -162,4 +212,11 @@ fun BookListItemUi(
         }
 
     }
+}
+@Preview(showBackground = true)
+@Composable
+fun ItemPreview() {
+    BookListItemUi(
+        book = Book()
+    )
 }

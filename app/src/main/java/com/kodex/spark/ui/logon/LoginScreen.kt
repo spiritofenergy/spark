@@ -21,17 +21,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kodex.spark.R
 import com.kodex.spark.ui.custom.MyDialog
 import com.kodex.spark.ui.data.MainScreenDataObject
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     viewModel: LViewModel = hiltViewModel(),
-    onNavigationToMainScreen: (MainScreenDataObject) ->Unit
+    onNavigationToMainScreen: (MainScreenDataObject) ->Unit = {}
 ) {
 
     LaunchedEffect(key1 = Unit) {
@@ -117,16 +119,17 @@ fun LoginScreen(
                     viewModel.signIn(
                         onSignInSuccess = { navData ->
                             onNavigationToMainScreen(navData)
+
                         }
                     )
                 }
             }
-            LoginButton(text = if(viewModel.resetPasswordState.value) {
+            LoginButton(
+                text = if(viewModel.resetPasswordState.value) {
                 "Восстановить пароль "
             }else {
                 "Авторизация"
-            }
-            ) {
+            },) {
                 viewModel.signUp(
                     onSignUpSuccess = { navData ->
                         onNavigationToMainScreen(navData)
@@ -134,19 +137,20 @@ fun LoginScreen(
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            if(!viewModel.resetPasswordState.value){
-                Text(
-                    modifier = Modifier.clickable{
-                    viewModel.errorState.value = ""
-                    viewModel.resetPasswordState.value = true
-                },
-                    text = "Напомнить пароль",
-                    color = Color.White
-                )
-            }
+                if(!viewModel.resetPasswordState.value) {
+                    Text(
+                        modifier = Modifier.clickable {
+                            viewModel.errorState.value = ""
+                            viewModel.resetPasswordState.value = true
+                        },
+                        text = "Напомнить пароль",
+                        color = Color.White
+                    )
+                }
         } else {
             Spacer(modifier = Modifier.height(10.dp))
-                LoginButton(text = "Вход") {
+                LoginButton(
+                    text = "Вход") {
                     onNavigationToMainScreen(
                         MainScreenDataObject(
                             viewModel.currentUser.value!!.uid,
@@ -171,7 +175,13 @@ fun LoginScreen(
     }
 }
 
+@Composable
+@Preview
+fun ShowLoginScreen(){
+    LoginScreen(
 
+    )
+}
 
 
 
