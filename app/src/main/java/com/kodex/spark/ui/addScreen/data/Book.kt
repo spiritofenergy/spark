@@ -17,6 +17,6 @@ data class Book(
     val imageUrl: String = "",
     val author: String = "",
     val timestamp: Long = System.currentTimeMillis(),
-    val isFaves: Boolean = false,
+    val isFavorite: Boolean = false,
     val ratingsList: List<Int> = emptyList()
 )

@@ -13,8 +13,7 @@
         <item>Admin panel</item>
         <item>Add</item>
         <item>Enter</item>
-        <item>Map</item>
-        <item>Settings</item>
+        <item>FAVORITE</item>
     </string-array>
 
     <string-array name="order_by">

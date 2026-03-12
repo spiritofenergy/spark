@@ -2,17 +2,12 @@ package com.kodex.spark.ui.mainScreen
 
 import android.util.Log
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import kotlinx.coroutines.flow.combine
 
 import androidx.paging.map
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -140,7 +135,7 @@ class MainScreenViewModel @Inject constructor(
         val booksList = firebaseManagerPainter.changeFavState(bookList, book)
         booksListUpdate.value = if (isFavState == BottomMenuItem.Faves.titleId) {
             deleteBook = true
-            booksList.filter { it.isFaves }
+            booksList.filter { it.isFavorite }
         } else {
             booksList
         }

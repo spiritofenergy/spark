@@ -13,6 +13,7 @@ data class DetailsNavObject(
     val imageUrl: String = "",
     val author: String = "",
     val timestamp: Long = System.currentTimeMillis(),
-    val isFaves: Boolean = false
+    val isFaves: Boolean = false,
+    val ratingsList: List<Int> = emptyList()
 
 )

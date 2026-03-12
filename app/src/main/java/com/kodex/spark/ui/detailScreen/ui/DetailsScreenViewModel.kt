@@ -14,18 +14,19 @@ class DetailsScreenViewModel @Inject constructor(
     private val fireStoreManager: FireStoreManagerPaging
 ) : ViewModel(){
 
-    val  ratingState  = mutableStateOf("0")
+   // val  ratingState  = mutableStateOf("0")
     val  commentState  = mutableStateOf(emptyList<RatingData>())
     val  ratingDataState = mutableStateOf<RatingData?>(RatingData())
 
     fun insertRating(ratingData: RatingData, bookId: String){
         fireStoreManager.insertUserComment(ratingData, bookId)
     }
-    fun getAverageRating(bookId: String) = viewModelScope.launch{
-        val ratingPair = fireStoreManager.getRating(bookId)
-        ratingState.value = ratingPair.first.toString()
-        commentState.value = ratingPair.second
-    }
+
+    fun getBookComments(bookId: String) = viewModelScope.launch{
+        commentState.value = fireStoreManager.getBookComments(bookId)
+
+     }
+
     fun getUserRating(bookId: String) = viewModelScope.launch{
         ratingDataState.value = fireStoreManager.getUserRating(bookId)
 
