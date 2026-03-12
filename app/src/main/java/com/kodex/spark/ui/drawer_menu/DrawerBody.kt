@@ -19,6 +19,8 @@ import androidx.compose.material.icons.filled.Bed
 import androidx.compose.material.icons.filled.Celebration
 import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.EmojiFoodBeverage
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.HeartBroken
 import androidx.compose.material.icons.filled.Input
 import androidx.compose.material.icons.filled.LocalFireDepartment
@@ -152,6 +154,15 @@ fun DrawerBody(
                 }
             )
 
+            DrawerMenuItem(
+                iconDrawableId = Icons.Default.Favorite,
+                text = categoryAdmin[3],
+                onItemClick = {
+                    onCategoryClick(Categories.FAVORITES)
+                    coroutineScope.launch { drawerState.close() }
+                }
+            )
+
             Spacer(modifier = Modifier.height(15.dp))
             Box(modifier = Modifier
                 .fillMaxWidth()
@@ -188,54 +199,6 @@ fun DrawerBody(
                     coroutineScope.launch { drawerState.close() }
                 }
             )
-
-
-            /*  DrawerListItem(title = stringResource(id = R.string.faves)) {
-                   onCategoryClick(Categories.FAVORITES)
-                }
-               DrawerListItem(title = stringResource(id = R.string.all)) {
-                   onCategoryClick(Categories.ALL)
-                   viewModel.selectedBottomItemState.intValue = BottomMenuItem.Home.titleId
-
-               }*/
-          /*  LazyColumn(Modifier.fillMaxWidth()) {
-                itemsIndexed(categoryList){index, title->
-                    DrawerListItem(viewModel,
-                        title) {
-                            onCategoryClick(index)
-                    }
-                }
-            }*/
-
-            if (isAdminState.value) Button(
-                onClick = {
-                viewModel.isAdmin{ }
-                onAdminClick()
-            },
-               modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = DarkTransparentBlue
-                    )
-                ) {
-                Text(text = "Admin panel")
-            }
-            Button(
-                onClick = {
-               // isAdmin{ }
-                onAdminClick()
-                    onAddBookClick
-            },
-               modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = DarkTransparentBlue
-                    )
-                ) {
-                Text(text = "Добавить")
-            }
         }
     }
 }

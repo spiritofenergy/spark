@@ -24,14 +24,14 @@ object ImageUtils {
     fun uriToBiteArray(uri: Uri, contentResolver: ContentResolver): ByteArray{
         val inputStream = contentResolver.openInputStream(uri)
         val bm = BitmapFactory.decodeStream(inputStream)
-        val resizedBitMap = resizeBitMapImage(bm, 200)
+        val resizedBitMap = resizeBitMapImage(bm, 300)
         val stream = ByteArrayOutputStream()
     /*    if (Build.VERSION.SDK_INT >= 30){
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 70, stream)
         }else {
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP, 70, stream)
         }*/
-       resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 70, stream)
+       resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
         return stream.toByteArray()
     }
     //изменяем размер картинки

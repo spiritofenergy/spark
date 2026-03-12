@@ -13,9 +13,9 @@ import com.kodex.spark.ui.addScreen.data.Favorite
 import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.utils.firebase.FilterData
 import com.kodex.spark.ui.utils.firebase.FirebaseConst
-import com.kodex.spark.ui.utils.firebase.FirebaseConst.BOOK_RATING
+import com.kodex.spark.ui.utils.firebase.FirebaseConst.SPARK_RATING
 import com.kodex.spark.ui.utils.firebase.FirebaseConst.MODERATION_RATING
-import com.kodex.spark.ui.utils.firebase.FirebaseConst.POSTS
+import com.kodex.spark.ui.utils.firebase.FirebaseConst.SPARK_POSTS
 import com.kodex.spark.ui.utils.firebase.FirebaseConst.RATING
 import kotlinx.coroutines.tasks.await
 import javax.inject.Singleton
@@ -44,7 +44,7 @@ class FireStoreManagerPaging(
         pageSize: Long,
         currentKey: DocumentSnapshot?,
     ): Pair<QuerySnapshot, List<Book>> {
-        var query: Query = db.collection(FirebaseConst.POSTS)
+        var query: Query = db.collection(FirebaseConst.SPARK_POSTS)
             .limit(pageSize)
             .orderBy(filterData.filterType)
 
@@ -81,7 +81,7 @@ class FireStoreManagerPaging(
         val books = querySnapshot.toObjects(Book::class.java)
         val updatedBooks = books.map {
             if (keysFavesList.contains(it.key)) {
-                it.copy(isFaves = true)
+                it.copy(isFavorite = true)
             } else {
                 it
             }
@@ -102,9 +102,9 @@ class FireStoreManagerPaging(
     }
 
     fun getFavesCategoryReference(): CollectionReference {
-        return db.collection(FirebaseConst.USERS)
+        return db.collection(FirebaseConst.SPARK_USERS)
             .document(auth.uid ?: "")
-            .collection(FirebaseConst.FAVES)
+            .collection(FirebaseConst.SPARK_FAVES)
     }
 
     fun onFaves(
@@ -125,9 +125,9 @@ class FireStoreManagerPaging(
             if (bk.key == book.key) {
                 onFaves(
                     Favorite(bk.key),
-                    !bk.isFaves
+                    !bk.isFavorite
                 )
-                bk.copy(isFaves = !bk.isFaves)
+                bk.copy(isFavorite = !bk.isFavorite)
             } else {
                 bk
             }
@@ -139,7 +139,7 @@ class FireStoreManagerPaging(
         onDeleted: () -> Unit,
         onFailure: (String) -> Unit,
     ) {
-        db.collection(FirebaseConst.POSTS)
+        db.collection(FirebaseConst.SPARK_POSTS)
             .document(book.key)
             .delete()
             .addOnSuccessListener {
@@ -156,7 +156,7 @@ class FireStoreManagerPaging(
         onSaved: () -> Unit,
         onError: (String) -> Unit,
     ) {
-        val db = db.collection(FirebaseConst.POSTS)
+        val db = db.collection(FirebaseConst.SPARK_POSTS)
         val key = if (book.key.isEmpty()) db.document().id else book.key
         db.document(key)
             .set(
@@ -257,24 +257,24 @@ class FireStoreManagerPaging(
 
    suspend fun insertModerationRating(ratingData: RatingData){
         if (auth.uid == null) return
-        db.collection(BOOK_RATING)
+        db.collection(SPARK_RATING)
             .document(ratingData.bookId)
             .collection(RATING)
             .document(ratingData.uid)
             .set(ratingData)
 
-       val book: Book = db.collection(POSTS)
+       val book: Book = db.collection(SPARK_POSTS)
            .document(ratingData.bookId)
-           .get().await().toObject(Book::class.java)?: return
+           .get().await().toObject(Book::class.java) ?: return
        val ratingsList = book.ratingsList.toMutableList()
        if (ratingData.lastRating == 0){
-           ratingsList.add(ratingData.lastRating)
+           ratingsList.add(ratingData.rating)
 
        }else {
            val index = ratingsList.indexOf(ratingData.lastRating)
            ratingsList[index] = ratingData.rating
        }
-       db.collection(POSTS)
+       db.collection(SPARK_POSTS)
            .document(ratingData.bookId)
            .update("ratingsList", ratingsList)
     }
@@ -292,20 +292,17 @@ class FireStoreManagerPaging(
            .delete().await()
    }
 
-   suspend fun getRating(bookId: String): Pair<Double, List<RatingData>>{
-        val querySnapshot =
-        db.collection(BOOK_RATING)
+   suspend fun getBookComments(bookId: String): List<RatingData> {
+        val querySnapshot = db.collection(SPARK_RATING)
             .document(bookId)
             .collection(RATING)
             .get().await()
-       val ratingsList = querySnapshot.toObjects(RatingData::class.java)
-       val averageRating = ratingsList.map { it.rating }.average()
-      return Pair(averageRating, ratingsList)
+      return querySnapshot.toObjects(RatingData::class.java)
     }
 
    suspend fun getUserRating(bookId: String): RatingData?{
        if(auth.uid == null) return null
-        val querySnapshot = db.collection(BOOK_RATING)
+        val querySnapshot = db.collection(SPARK_RATING)
             .document(bookId)
             .collection(RATING)
             .document(auth.uid!!)

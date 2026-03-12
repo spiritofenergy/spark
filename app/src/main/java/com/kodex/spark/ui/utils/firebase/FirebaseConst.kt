@@ -2,10 +2,10 @@ package com.kodex.spark.ui.utils.firebase
 
 object FirebaseConst {
 
-    const val POSTS = "spark_posts"
-    const val USERS = "spark_users"
-    const val FAVES = "spark_faves"
-    const val BOOK_RATING = "spark_rating"
+    const val SPARK_POSTS = "spark_posts"
+    const val SPARK_USERS = "spark_users"
+    const val SPARK_FAVES = "spark_faves"
+    const val SPARK_RATING = "spark_rating"
     const val RATING = "rating"
     const val MODERATION_RATING = "moderation_rating"
 

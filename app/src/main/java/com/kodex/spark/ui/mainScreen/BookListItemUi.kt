@@ -12,10 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,17 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.kodex.spark.R
 import com.kodex.spark.ui.addScreen.data.Book
 import com.kodex.spark.ui.theme.Orange
-import com.kodex.spark.ui.utils.Categories
 import com.kodex.spark.ui.utils.toBitmap
 import kotlin.Int
 
@@ -47,7 +49,7 @@ fun BookListItemUi(
     showEditButton: Boolean = false,
     book: Book = Book(),
     onEditClick: (Book) -> Unit = {},
-    onFavClick: () -> Unit = {},
+    onFavesClick: () -> Unit = {},
     onBookClick: (Book) -> Unit = {},
     onDeleteClick: (Book) -> Unit = {}
 ) {
@@ -61,54 +63,92 @@ fun BookListItemUi(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.BottomEnd
-        ){
+                .fillMaxWidth()
+                .height(250.dp)
+        ) {
+            // 1. Фоновое изображение
             AsyncImage(
                 model = book.imageUrl.toBitmap(),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxWidth()
-                    .height(heightValue.dp)
-                    .clip(RoundedCornerShape(10.dp)),
-            )
-            Box(
                 modifier = Modifier
-                    .padding(5.dp)
+                    .matchParentSize()
                     .clip(RoundedCornerShape(10.dp))
+            )
 
-            ){
-                Row(Modifier.clip(RoundedCornerShape(15.dp))
-                    .background(Color.White)
-                    .padding(horizontal = 10.dp,
-                        vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            // 2. Категория в левом верхнем углу
+            Text(
+                " " + stringArrayResource(R.array.category_arrays)[book.categoryIndex] + " ",
+                fontSize = 18.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(start = 10.dp, top = 10.dp)
+                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(10.dp))
+            )
 
+            // 3. MoreVert в правом верхнем углу
+            IconButton(
+                onClick = { },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(10.dp)
+            ) {
+                Icon(
+                    Icons.Default.MoreVert,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .background(Color.Gray.copy(alpha = 0.5f), RoundedCornerShape(15.dp))
+                        .padding(8.dp),
+                    tint = Color.White
                 )
-                {
-                    if (book.ratingsList.isNotEmpty()) {
-                        Text(
-                            text = String.format(
-                                "%.1f",
-                                book.ratingsList.average()
-                            ),
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp
-                        )
-                    } else {
-                        Text(text = "--")
-                    }
-
-
-                    Icon(modifier = Modifier.size(14.dp),
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "Star",
-                        tint = Orange
-                    )
-                }
             }
 
+            // 4. Bookmark в правом нижнем углу
+            IconButton(
+                onClick = { onFavesClick() },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(10.dp)
+            ) {
+                Icon(
+                    if (book.isFavorite) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .background(Color.Gray.copy(alpha = 0.5f), RoundedCornerShape(15.dp))
+                        .padding(8.dp),
+                    tint = if (book.isFavorite) colorResource(R.color.orang) else Color.White
+                )
+            }
+
+            // 5. Рейтинг в левом нижнем углу
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(10.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(Color.Gray.copy(alpha = 0.5f))
+                    .padding(horizontal = 10.dp, vertical = 15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (book.ratingsList.isNotEmpty()) {
+                    Text(
+                        text = String.format("%.1f", book.ratingsList.average()),
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                } else {
+                    Text(text = "0.0")
+                }
+                Icon(
+                    modifier = Modifier.size(22.dp),
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Star",
+                    tint = Orange
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -134,9 +174,6 @@ fun BookListItemUi(
             fontSize = 16.sp,
             modifier = Modifier.padding(start = 10.dp)
         )
-
-
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -193,19 +230,19 @@ fun BookListItemUi(
                 }
 
 
-            IconButton(onClick = {
-                onFavClick()
+           /* IconButton(onClick = {
+                onFavesClick()
             }) {
                 Icon(
-                    if (book.isFaves) {
+                    if (book.isFavorite) {
                         Icons.Default.Favorite
 
                     } else
                         Icons.Default.FavoriteBorder,
                     contentDescription = "",
-                    tint = if (book.isFaves) Color.Red else Color.Gray
+                    tint = if (book.isFavorite) Color.Red else Color.Gray
                 )
-            }
+            }*/
 
 
             //IconButton { }(painter = painterResource(id = R.drawable))
@@ -217,6 +254,8 @@ fun BookListItemUi(
 @Composable
 fun ItemPreview() {
     BookListItemUi(
-        book = Book()
+        book = Book(
+
+        )
     )
 }

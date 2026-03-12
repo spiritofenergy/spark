@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Base64
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -87,7 +88,7 @@ fun DetailScreen(
 
     }
     LaunchedEffect(key1 = Unit) {
-        viewModel.getAverageRating(navObject.bookId)
+        viewModel.getBookComments(navObject.bookId)
     }
     RateDialog(
         ratingData = viewModel.ratingDataState.value ?: RatingData(),
@@ -197,10 +198,11 @@ fun DetailScreen(
                     ) {
                         // text = viewModel.ratingState.value,
                         if (viewModel.commentState.value.isNotEmpty()) {
+                       // if (navObject.ratingsList.isNotEmpty()) {
+                            Log.d("MyLog", "DetailScreen ratingsList: ${navObject.ratingsList}")
                             Text(
-                                text = String.format(
-                                    "%.1f",
-                                    viewModel.ratingState.value.toDouble()
+                               // text = String.format("%.1f",viewModel.commentState.value
+                                text = String.format("%.1f", navObject.ratingsList.average(),                                       // "(${navObject.ratingsList.size})"
                                 ),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp

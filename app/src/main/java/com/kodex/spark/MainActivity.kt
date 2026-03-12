@@ -73,7 +73,8 @@ class MainActivity : ComponentActivity() {
                                     categoryIndex = bk.categoryIndex,
                                     imageUrl = bk.imageUrl,
                                     author = bk.author,
-                                    timestamp = bk.timestamp
+                                    timestamp = bk.timestamp,
+                                    ratingsList = bk.ratingsList
                                 )
                                 )
                       //      }
