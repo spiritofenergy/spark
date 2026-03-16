@@ -31,7 +31,7 @@ object ImageUtils {
         }else {
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP, 70, stream)
         }*/
-       resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+       resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         return stream.toByteArray()
     }
     //изменяем размер картинки

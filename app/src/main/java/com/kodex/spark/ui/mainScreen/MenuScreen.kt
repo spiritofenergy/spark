@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -36,6 +37,7 @@ import com.kodex.spark.ui.mainScreen.BookListItemUi
 import com.kodex.spark.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalConfiguration
 import kotlinx.coroutines.launch
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -71,6 +73,8 @@ fun MenuScreen(
     var showFilterDialog by remember { mutableStateOf(false) }
     val books = viewModel.books.collectAsLazyPagingItems()
    // val isAdminState = remember { mutableStateOf(false) }
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     LaunchedEffect(Unit) {
 
@@ -91,6 +95,7 @@ fun MenuScreen(
         modifier = Modifier.fillMaxWidth(),
         drawerContent = {
             Column(modifier = Modifier.fillMaxWidth(0.7f)) {
+                if (!isLandscape)
                 DrawerHeader(navData.email)
                 DrawerBody(
                     onAdmin = { isAdmin ->
@@ -134,7 +139,7 @@ fun MenuScreen(
                 Row(modifier = Modifier.fillMaxWidth()
                     .background(PurpleGrey80))
                 {
-
+                    if (!isLandscape)
                     MainTopBar(
                         viewModel.categoryState.intValue,
                         onSearch = { searchText ->
@@ -159,6 +164,7 @@ fun MenuScreen(
             },
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
+                if (!isLandscape)
                 BottomMenu(
                     viewModel.selectedBottomItemState.intValue,
                     onFavesClick = {

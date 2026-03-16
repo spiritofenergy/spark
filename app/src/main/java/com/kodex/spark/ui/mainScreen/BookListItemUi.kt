@@ -157,6 +157,7 @@ fun BookListItemUi(
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
+            maxLines = 1,
             modifier = Modifier.padding(start = 10.dp)
         )
 
@@ -172,6 +173,7 @@ fun BookListItemUi(
             text = book.description,
             color = Color.Gray,
             fontSize = 16.sp,
+            maxLines = 3,
             modifier = Modifier.padding(start = 10.dp)
         )
         Row(
@@ -192,7 +194,7 @@ fun BookListItemUi(
                     modifier = Modifier
                         .weight(1F)
                         .padding(1.dp),
-                    text = "p",
+                    text = " p",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
