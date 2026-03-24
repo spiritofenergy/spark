@@ -34,8 +34,7 @@ import com.kodex.spark.R
 import com.kodex.spark.ui.logon.LoginButton
 import com.kodex.spark.ui.logon.RoundedCornerTextField
 import coil.compose.rememberAsyncImagePainter
-import com.kodex.spark.ui.addScreen.data.AddScreenObject
-import com.kodex.spark.ui.data.MainScreenDataObject
+import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.theme.BoxFilter
 import com.kodex.spark.ui.utils.IS_BASE_64
@@ -45,7 +44,7 @@ import com.kodex.spark.ui.utils.toBitmap
 
 @Composable
 fun AddBookScreen(
-    navData: AddScreenObject = AddScreenObject(),
+    navData: NavRoutes.AddScreenObject = NavRoutes.AddScreenObject(),
    // navDataMain: MainScreenDataObject = MainScreenDataObject(),
     onSaved: () -> Unit = {},
     viewModel: AddBookViewModel = hiltViewModel(),

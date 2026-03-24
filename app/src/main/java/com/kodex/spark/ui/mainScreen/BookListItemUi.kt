@@ -16,8 +16,6 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -56,7 +54,7 @@ fun BookListItemUi(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(horizontal = 4.dp, vertical = 8.dp)
             .clickable {
                 onBookClick(book)
             }
@@ -78,7 +76,7 @@ fun BookListItemUi(
 
             // 2. Категория в левом верхнем углу
             Text(
-                " " + stringArrayResource(R.array.category_arrays)[book.categoryIndex] + " ",
+                " " + stringArrayResource(R.array.category_array)[book.categoryIndex] + " ",
                 fontSize = 18.sp,
                 color = Color.White,
                 fontWeight = FontWeight.Medium,
@@ -151,27 +149,23 @@ fun BookListItemUi(
             }
         }
 
+
+
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = book.title,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
+            maxLines = 1,
             modifier = Modifier.padding(start = 10.dp)
         )
 
-      /*  Text(
-            text = stringArrayResource(id = R.array.category_arrays)[book.categoryIndex],
-            color = Color.Black,
-            fontWeight = FontWeight.Medium,
-            fontSize = 15.sp,
-            modifier = Modifier.padding(start = 10.dp)
-
-        )*/
         Text(
             text = book.description,
             color = Color.Gray,
             fontSize = 16.sp,
+            maxLines = 3,
             modifier = Modifier.padding(start = 10.dp)
         )
         Row(
@@ -192,7 +186,7 @@ fun BookListItemUi(
                     modifier = Modifier
                         .weight(1F)
                         .padding(1.dp),
-                    text = "p",
+                    text = " p",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
@@ -209,8 +203,8 @@ fun BookListItemUi(
                     Icon(
                         Icons.Default.Edit,
                         modifier = Modifier
-                         .weight(1F)
-                         .padding(1.dp),
+                            .weight(1F)
+                            .padding(1.dp),
                         contentDescription = ""
                     )
                 }
@@ -223,39 +217,20 @@ fun BookListItemUi(
                     Icon(
                         Icons.Default.Delete,
                         modifier = Modifier
-                         .weight(1F)
-                         .padding(1.dp),
+                            .weight(1F)
+                            .padding(1.dp),
                         contentDescription = ""
                     )
                 }
-
-
-           /* IconButton(onClick = {
-                onFavesClick()
-            }) {
-                Icon(
-                    if (book.isFavorite) {
-                        Icons.Default.Favorite
-
-                    } else
-                        Icons.Default.FavoriteBorder,
-                    contentDescription = "",
-                    tint = if (book.isFavorite) Color.Red else Color.Gray
-                )
-            }*/
-
-
-            //IconButton { }(painter = painterResource(id = R.drawable))
         }
-
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun ItemPreview() {
     BookListItemUi(
         book = Book(
-
         )
     )
 }

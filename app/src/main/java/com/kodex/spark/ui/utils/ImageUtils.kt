@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.util.Base64
 import android.util.Log
 import java.io.ByteArrayOutputStream
@@ -31,7 +30,7 @@ object ImageUtils {
         }else {
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP, 70, stream)
         }*/
-       resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+       resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         return stream.toByteArray()
     }
     //изменяем размер картинки

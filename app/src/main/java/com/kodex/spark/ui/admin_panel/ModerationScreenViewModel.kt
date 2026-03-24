@@ -3,7 +3,6 @@ package com.kodex.spark.ui.admin_panel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.compose.AsyncImagePainter
 import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.utils.FireStoreManagerPaging
 import dagger.hilt.android.lifecycle.HiltViewModel

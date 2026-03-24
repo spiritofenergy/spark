@@ -24,7 +24,6 @@ class DetailsScreenViewModel @Inject constructor(
 
     fun getBookComments(bookId: String) = viewModelScope.launch{
         commentState.value = fireStoreManager.getBookComments(bookId)
-
      }
 
     fun getUserRating(bookId: String) = viewModelScope.launch{

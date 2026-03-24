@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.google.firebase.firestore.auth.User
-import com.kodex.spark.ui.addScreen.data.Book
 import com.kodex.spark.ui.detailScreen.data.RatingData
 
 @Database(

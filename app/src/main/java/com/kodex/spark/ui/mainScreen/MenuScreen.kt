@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,13 +30,14 @@ import androidx.compose.ui.res.stringResource
 import com.kodex.spark.ui.addScreen.data.Book
 import com.kodex.spark.ui.bottom_menu.BottomMenu
 import com.kodex.spark.ui.bottom_menu.BottomMenuItem
-import com.kodex.spark.ui.data.MainScreenDataObject
 import com.kodex.spark.ui.drawer_menu.DrawerBody
 import com.kodex.spark.ui.drawer_menu.DrawerHeader
 import com.kodex.spark.ui.mainScreen.BookListItemUi
 import com.kodex.spark.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -43,6 +45,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.kodex.spark.ui.admin_panel.ModerationScreenViewModel
 import com.kodex.spark.ui.custom.FilterDialog
 import com.kodex.spark.ui.custom.MyDialog
+import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.theme.PurpleGrey80
 import com.kodex.spark.ui.top_app_bar.MainTopBar
@@ -53,9 +56,8 @@ import com.kodex.spark.ui.utils.Categories
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun MenuScreen(
-    viewModelM: ModerationScreenViewModel = hiltViewModel(),
     viewModel: MainScreenViewModel = hiltViewModel(),
-    navData: MainScreenDataObject,
+    navData: NavRoutes.MainScreenDataObject,
     onBookEditClick: (Book) -> Unit,
     onBookClick: (Book) -> Unit,
     onAddBookClick: () -> Unit,
@@ -71,6 +73,8 @@ fun MenuScreen(
     var showFilterDialog by remember { mutableStateOf(false) }
     val books = viewModel.books.collectAsLazyPagingItems()
    // val isAdminState = remember { mutableStateOf(false) }
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     LaunchedEffect(Unit) {
 
@@ -90,7 +94,8 @@ fun MenuScreen(
         drawerState = drawerState,
         modifier = Modifier.fillMaxWidth(),
         drawerContent = {
-            Column(modifier = Modifier.fillMaxWidth(0.7f)) {
+            Column(modifier = Modifier.fillMaxWidth(if (!isLandscape) 0.7f else 0.3f)) {
+                if (!isLandscape)
                 DrawerHeader(navData.email)
                 DrawerBody(
                     onAdmin = { isAdmin ->
@@ -134,7 +139,7 @@ fun MenuScreen(
                 Row(modifier = Modifier.fillMaxWidth()
                     .background(PurpleGrey80))
                 {
-
+                    if (!isLandscape)
                     MainTopBar(
                         viewModel.categoryState.intValue,
                         onSearch = { searchText ->
@@ -159,6 +164,7 @@ fun MenuScreen(
             },
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
+                if (!isLandscape)
                 BottomMenu(
                     viewModel.selectedBottomItemState.intValue,
                     onFavesClick = {
@@ -250,6 +256,7 @@ fun MenuScreen(
                         }
                     ),
                     modifier = Modifier.fillMaxSize()
+                        .padding(2.dp)
                 ) {
                     items(count = books.itemCount) { index ->
                         val book = books[index]

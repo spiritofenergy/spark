@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="category_arrays">
+    <string-array name="category_array">
         <item>ПАРК</item>
         <item>ОТДЫХ</item>
         <item>ПИТАНИЕ</item>

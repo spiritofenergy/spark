@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kodex.spark.ui.theme.Orange
 
@@ -19,7 +18,7 @@ import com.kodex.spark.ui.theme.Orange
 fun StarsIndicator(
     rating: Int
 ) {
-    Row (modifier = Modifier.fillMaxWidth().padding(5.dp)){
+    Row (modifier = Modifier.fillMaxWidth()){
         for (i in 1..rating) {
             Icon(
                 modifier = Modifier.size(18.dp),
