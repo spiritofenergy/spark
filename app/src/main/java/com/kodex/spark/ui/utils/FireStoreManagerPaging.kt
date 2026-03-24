@@ -269,7 +269,6 @@ class FireStoreManagerPaging(
        val ratingsList = book.ratingsList.toMutableList()
        if (ratingData.lastRating == 0){
            ratingsList.add(ratingData.rating)
-
        }else {
            val index = ratingsList.indexOf(ratingData.lastRating)
            ratingsList[index] = ratingData.rating

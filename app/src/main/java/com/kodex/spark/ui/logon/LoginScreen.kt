@@ -27,13 +27,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kodex.spark.R
 import com.kodex.spark.ui.custom.MyDialog
-import com.kodex.spark.ui.data.MainScreenDataObject
-import kotlinx.coroutines.launch
+import com.kodex.spark.ui.data.NavRoutes
 
 @Composable
 fun LoginScreen(
     viewModel: LViewModel = hiltViewModel(),
-    onNavigationToMainScreen: (MainScreenDataObject) ->Unit = {}
+    onNavigationToMainScreen: (NavRoutes.MainScreenDataObject) ->Unit = {}
 ) {
 
     LaunchedEffect(key1 = Unit) {
@@ -152,7 +151,7 @@ fun LoginScreen(
                 LoginButton(
                     text = "Вход") {
                     onNavigationToMainScreen(
-                        MainScreenDataObject(
+                        NavRoutes.MainScreenDataObject(
                             viewModel.currentUser.value!!.uid,
                             viewModel.currentUser.value!!.email!!
                         )

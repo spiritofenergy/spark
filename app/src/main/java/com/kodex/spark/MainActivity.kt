@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,16 +21,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.kodex.spark.ui.addScreen.AddBookScreen
-import com.kodex.spark.ui.addScreen.data.AddScreenObject
-import com.kodex.spark.ui.admin_panel.AdminPanelNavObject
 import com.kodex.spark.ui.admin_panel.AdminPanelScreen
-import com.kodex.spark.ui.admin_panel.ModerationNavObject
 import com.kodex.spark.ui.admin_panel.ModerationScreen
 import com.kodex.spark.ui.ads.YandexAdsManager
-import com.kodex.spark.ui.data.LoginScreenObject
-import com.kodex.spark.ui.data.MainScreenDataObject
+import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.detailScreen.ui.DetailScreen
-import com.kodex.spark.ui.detailScreen.data.DetailsNavObject
 import com.kodex.spark.ui.logon.LoginScreen
 import com.kodex.spark.ui.room.RoomViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,20 +46,20 @@ class MainActivity : ComponentActivity() {
            val navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = LoginScreenObject
+                startDestination = NavRoutes.LoginScreenObject
             ) {
-                composable<LoginScreenObject> {
+                composable<NavRoutes.LoginScreenObject> {
                     LoginScreen() { navData ->
                         navController.navigate(navData)
                     }
                 }
-                composable<MainScreenDataObject> { navEntry ->
-                    val navData = navEntry.toRoute<MainScreenDataObject>()
+                composable<NavRoutes.MainScreenDataObject> { navEntry ->
+                    val navData = navEntry.toRoute<NavRoutes.MainScreenDataObject>()
                     MenuScreen(
                         navData = navData,
                         onBookClick = {bk ->
                           //  yandexAdsManager.showAd(this@MainActivity){
-                                navController.navigate(DetailsNavObject(
+                                navController.navigate(NavRoutes.DetailNavObject(
                                     bookId = bk.key,
                                     title = bk.title,
                                     description = bk.description,
@@ -82,30 +76,29 @@ class MainActivity : ComponentActivity() {
 
                         },
                         onBookEditClick = { book->
-                            navController.navigate(AddScreenObject(
+                            navController.navigate(NavRoutes.AddScreenObject(
                                 key = book.key,
                                 title = book.title,
                                 description = book.description,
                                 price = book.price,
                                 categoryIndex = book.categoryIndex,
                                 imageUrl = book.imageUrl,
-                                author = book.author,
-                                timestamp = book.timestamp
+                                timeStamp = book.timestamp
                             ))
                         },
                         onAdminClick = {
-                            navController.navigate(AdminPanelNavObject)
+                            navController.navigate(NavRoutes.AdminPanelNavObject)
                         },
                         onAddBookClick = {
-                            navController.navigate(AddScreenObject())
+                            navController.navigate(NavRoutes.AddScreenObject())
                         },
                         onLoginClick = {
-                            navController.navigate(LoginScreenObject)
+                            navController.navigate(NavRoutes.LoginScreenObject)
                         }
                     )
                 }
-                composable<AddScreenObject>{ navEntry ->
-                    val navData = navEntry.toRoute<AddScreenObject>()
+                composable<NavRoutes.AddScreenObject>{ navEntry ->
+                    val navData = navEntry.toRoute<NavRoutes.AddScreenObject>()
                     AddBookScreen(
                         navData,
                         onSaved = {
@@ -113,24 +106,24 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 }
-                composable<DetailsNavObject>{ navEntry ->
-                    val navData = navEntry.toRoute<DetailsNavObject>()
+                composable<NavRoutes.DetailNavObject>{ navEntry ->
+                    val navData = navEntry.toRoute<NavRoutes.DetailNavObject>()
                     DetailScreen(navData)
                 }
 
-                composable<AdminPanelNavObject>{
+                composable<NavRoutes.AdminPanelNavObject>{
                     AdminPanelScreen(
                         onAddBookClick = {
-                            navController.navigate(AddScreenObject())
+                            navController.navigate(NavRoutes.AddScreenObject())
                         },
                         onModerationClick = {
-                            navController.navigate(ModerationNavObject)
+                            navController.navigate(NavRoutes.ModerationNavObject)
                         }
                     )
                 }
-                composable<ModerationNavObject>{
-                    ModerationScreen()
-                }
+                    composable<NavRoutes.ModerationNavObject>{
+                        ModerationScreen()
+                    }
             }
         }
     }

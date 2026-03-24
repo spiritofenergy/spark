@@ -1,14 +1,12 @@
 package com.kodex.spark.ui.addScreen
 
-import android.R.attr.author
 import android.net.Uri
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kodex.spark.ui.addScreen.data.AddScreenObject
 import com.kodex.spark.ui.addScreen.data.Book
-import com.kodex.spark.ui.data.MainScreenDataObject
+import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.mainScreen.MainScreenViewModel.MainUiState
 import com.kodex.spark.ui.utils.Categories
 import com.kodex.spark.ui.utils.FireStoreManagerPaging
@@ -41,21 +39,21 @@ class AddBookViewModel @Inject constructor(
         _uiState.emit(state)
     }
 
-    fun setDefaultData(navData: AddScreenObject
+    fun setDefaultData(navData: NavRoutes.AddScreenObject
                      // , navDataMain: MainScreenDataObject
     ) {
         title.value = navData.title
         description.value = navData.description
         prise.value = navData.price.toString()
        // author.value = navDataMain.email
-        timestamp.value = navData.timestamp.toString()
+        timestamp.value = navData.timeStamp.toString()
         selectedCategory.intValue = navData.categoryIndex
 
 
     }
 
     fun uploadBook(
-        navData: AddScreenObject,
+        navData: NavRoutes.AddScreenObject,
     ) {
         sendUiState(MainUiState.Loading)
         val book = Book(

@@ -25,13 +25,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.Orange
-import com.yandex.mobile.ads.nativeads.template.appearance.RatingAppearance
 
 @Preview(showBackground = true)
 @Composable

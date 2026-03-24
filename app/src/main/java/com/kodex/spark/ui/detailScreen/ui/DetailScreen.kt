@@ -50,7 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kodex.spark.ui.detailScreen.data.DetailsNavObject
+import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.Orange
@@ -61,10 +61,7 @@ import com.kodex.spark.ui.utils.toFormattedDate
 @Preview(showBackground = true)
 @Composable
 fun DetailScreen(
-    ///ratingData: RatingData = RatingData(),
-   // navObject: NavRoutes.DetailsNavObject = NavRoutes.DetailsNavObject(),
-
-    navObject: DetailsNavObject = DetailsNavObject(),
+    navObject: NavRoutes.DetailNavObject = NavRoutes.DetailNavObject(),
     viewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
     val context: Context
@@ -87,9 +84,11 @@ fun DetailScreen(
     } catch (e: IllegalArgumentException) {
 
     }
+
     LaunchedEffect(key1 = Unit) {
         viewModel.getBookComments(navObject.bookId)
     }
+
     RateDialog(
         ratingData = viewModel.ratingDataState.value ?: RatingData(),
         onDismiss = {
@@ -107,6 +106,7 @@ fun DetailScreen(
         },
         show = showReteDialog,
         )
+
     CommentDialog(
         showDialog = showCommentDialog,
         onDismiss = {
@@ -114,14 +114,15 @@ fun DetailScreen(
         },
         ratingData = ratingDataToShow
     )
+    // Information
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(8.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(modifier = Modifier.fillMaxWidth()
-            .padding(top = 25.dp)) {
+        Column(modifier = Modifier.fillMaxWidth().padding(top = 25.dp))
+        {
             Row(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
                     model = bitmap,
@@ -148,7 +149,7 @@ fun DetailScreen(
                         fontSize = 16.sp
                     )
                     Text(
-                        text = stringArrayResource(id = R.array.category_arrays)[navObject.categoryIndex],
+                        text = stringArrayResource(id = R.array.category_array)[navObject.categoryIndex],
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -222,6 +223,7 @@ fun DetailScreen(
                     }
                 }
             }
+            //Button
             Spacer(modifier = Modifier.width(26.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
 
@@ -261,7 +263,7 @@ fun DetailScreen(
                 }
             }
 
-
+            //Title
             Spacer(modifier = Modifier.width(50.dp))
             Text(
                 text = navObject.title,
@@ -269,14 +271,16 @@ fun DetailScreen(
                 fontSize = 25.sp
             )
             Text(
-                text = stringArrayResource(id = R.array.category_arrays)[navObject.categoryIndex],
+                text = stringArrayResource(id = R.array.category_array)[navObject.categoryIndex],
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp))
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())) {
                 Text(
                     text = navObject.description, fontSize = 16.sp
                 )
@@ -284,6 +288,7 @@ fun DetailScreen(
 
             Spacer(Modifier.height(10.dp))
 
+            //Comments
             if (viewModel.commentState.value.isNotEmpty()) {
                 Text(
                     text = "Коментарии",
@@ -305,16 +310,16 @@ fun DetailScreen(
                         )
                         Spacer(modifier = Modifier
                             .fillMaxWidth()
-                            .padding(5.dp))
+                            .padding(2.dp)
+                        )
                     }
-
                 }
             }
-
         }
         Spacer(modifier = Modifier.width(5.dp))
     }
 }
+
 
 
 

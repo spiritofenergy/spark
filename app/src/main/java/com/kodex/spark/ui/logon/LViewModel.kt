@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
-import com.kodex.spark.ui.data.MainScreenDataObject
+import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.utils.AuthManager
 import com.kodex.spark.ui.utils.Categories
 import com.kodex.spark.ui.utils.firebase.StoreManager
@@ -28,7 +28,7 @@ class LViewModel @Inject constructor(
     val resetPasswordState = mutableStateOf(false)
 
     fun signIn(
-        onSignInSuccess: (MainScreenDataObject) -> Unit,
+        onSignInSuccess: (NavRoutes.MainScreenDataObject) -> Unit,
     ) {
         errorState.value = ""
         authManager.signIn(
@@ -51,7 +51,7 @@ class LViewModel @Inject constructor(
     }
 
     fun signUp(
-        onSignUpSuccess: (MainScreenDataObject) -> Unit,
+        onSignUpSuccess: (NavRoutes.MainScreenDataObject) -> Unit,
     ) {
         errorState.value = ""
         if (resetPasswordState.value) {

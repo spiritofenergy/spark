@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,11 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kodex.spark.ui.theme.DarkBlue
 import com.kodex.spark.R
-import com.kodex.spark.ui.data.MainScreenDataObject
-import com.kodex.spark.ui.theme.ButtonColor
-import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.DrawerColorBlue
 
 
