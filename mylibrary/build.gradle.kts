@@ -52,4 +52,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
+
+    implementation("com.google.accompanist:accompanist-pager:0.32.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.32.0")
+// Для загрузки изображений
+    implementation("io.coil-kt:coil-compose:2.5.0")
+// Для навигации
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+// Для Material Design 3
+    implementation("androidx.compose.material3:material3:1.2.0")
 }

@@ -11,6 +11,28 @@ class NavRoutes {
         val email: String = ""
     )
     @Serializable
+    object PlaceScreenObject
+    @Serializable
+    data class ParallaxScreenObject(
+        val bookId: String = "",
+        val title: String = "",
+        val description: String = "",
+        val price: Int = 0,
+        val isOpenNow: Boolean = true,
+        val openingHours: String = "",
+        val address: String = "Москва, ул. Тверская, 15",
+        val telephone: String = "+7(495)123-45-67",
+        val website: String = "coffeehouse.ru",
+        val latitude: String = "9",
+        val longitude:String = "22",
+        val categoryIndex: Int = Categories.ALL,
+        val imageUrl: String = "",
+        val author: String = "",
+        val timestamp: Long = System.currentTimeMillis(),
+        val isFaves: Boolean = false,
+        val ratingsList: List<Int> = emptyList()
+    )
+    @Serializable
     object ModerationScreenObject
     @Serializable
     object AdminPanelNavObject

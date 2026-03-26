@@ -28,10 +28,13 @@ import com.kodex.spark.ui.commentsScreen.CommentsScreen
 import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.detailScreen.ui.DetailScreen
 import com.kodex.spark.ui.logon.LoginScreen
+import com.kodex.spark.ui.parallaxScreen.ParallaxScreen
 import com.kodex.spark.ui.room.RoomViewModel
+import com.kodex.spark.ui.utils.Categories
 import dagger.hilt.android.AndroidEntryPoint
 import org.koin.compose.viewmodel.koinViewModel
 import javax.inject.Inject
+import kotlin.String
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -56,9 +59,32 @@ class MainActivity : ComponentActivity() {
                 }
                 composable<NavRoutes.MainScreenDataObject> { navEntry ->
                     val navData = navEntry.toRoute<NavRoutes.MainScreenDataObject>()
+
                     MenuScreen(
                         navData = navData,
-                        onBookClick = {bk ->
+
+                        onBookClick = { bk ->
+                            //  yandexAdsManager.showAd(this@MainActivity){
+                            navController.navigate(NavRoutes.ParallaxScreenObject(
+                                bookId = bk.key,
+                                title = bk.title,
+                                description = bk.description,
+                                price = bk.price,
+                                categoryIndex = bk.categoryIndex,
+                                imageUrl = bk.imageUrl,
+                                author = bk.author,
+                                timestamp = bk.timestamp,
+                                ratingsList = bk.ratingsList,
+
+
+
+
+                                 )
+                            )
+                            //      }
+                        },
+
+                       /* onBookClick = { bk ->
                           //  yandexAdsManager.showAd(this@MainActivity){
                                 navController.navigate(NavRoutes.DetailNavObject(
                                     bookId = bk.key,
@@ -73,9 +99,7 @@ class MainActivity : ComponentActivity() {
                                 )
                                 )
                       //      }
-
-
-                        },
+                        },*/
                         onBookEditClick = { book->
                             navController.navigate(NavRoutes.AddScreenObject(
                                 key = book.key,
@@ -132,6 +156,16 @@ class MainActivity : ComponentActivity() {
                     composable<NavRoutes.ModerationNavObject>{
                         ModerationScreen()
                     }
+
+                composable<NavRoutes.ParallaxScreenObject>{navEntry ->
+                    val navData = navEntry.toRoute<NavRoutes.ParallaxScreenObject>()
+                    ParallaxScreen(
+                        navObject = navData,
+                        onBackPressed = { navController.popBackStack() },
+                        onCallTaxi = { _, _ -> /* Позвонить */ },
+                        onNavigateToReviews = {}
+                    )
+                }
 
                 composable<NavRoutes.CommentsNavData> {navEntry ->
                     val navData = navEntry.toRoute<NavRoutes.CommentsNavData>()
