@@ -16,6 +16,8 @@ import androidx.compose.material.icons.filled.EmojiFoodBeverage
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.HeartBroken
 import androidx.compose.material.icons.filled.Input
+import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Park
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.WbSunny
@@ -46,6 +48,7 @@ fun DrawerBody(
     viewModel: MainScreenViewModel = hiltViewModel(),
     onAdmin: (Boolean) -> Unit,
     onAdminClick: () -> Unit = {},
+    onModerationClick: ()-> Unit = {},
     onAddBookClick: () -> Unit = {},
     onCategoryClick: (Int) -> Unit = {},
     onLoginClick: () -> Unit = {}
@@ -155,7 +158,7 @@ fun DrawerBody(
                     text = categoryAdmin[0],
                     onItemClick = {
                         viewModel.isAdmin{ }
-                        onAdminClick()
+                        onModerationClick()
                         coroutineScope.launch { drawerState.close() }
                     }
                 )
@@ -163,13 +166,12 @@ fun DrawerBody(
                 iconDrawableId = Icons.Default.Add,
                 text = categoryAdmin[1],
                 onItemClick = {
-                    onAdminClick()
-                    onAddBookClick
+                    onAddBookClick()
                     coroutineScope.launch { drawerState.close() }
                 }
             )
             DrawerMenuItem(
-                iconDrawableId = Icons.Default.Input,
+                iconDrawableId = if (viewModel.isAdminState.value)Icons.Default.Logout else Icons.Default.Login,
                 text = categoryAdmin[2],
                 onItemClick = {
                     onLoginClick()

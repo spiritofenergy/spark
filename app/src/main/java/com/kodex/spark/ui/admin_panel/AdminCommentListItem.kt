@@ -23,15 +23,10 @@ import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.logon.LoginButton
 import com.kodex.spark.ui.theme.DarkWhite
 import com.kodex.spark.ui.utils.toFormattedDate
-@Preview(showBackground = true)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AdminCommentListItem(
-    ratingData: RatingData = RatingData(
-        name = "Maric",
-        rating = 4,
-        message = "Very good!"
-    ),
+    ratingData: RatingData = RatingData(),
     onClickDecline: (RatingData) -> Unit = {},
     onClickAccept: (RatingData) -> Unit = {}
 
@@ -92,4 +87,20 @@ fun AdminCommentListItem(
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+@Preview(showBackground = true)
+fun ShowAdminCommentListItem() {
+    AdminCommentListItem(
+        ratingData = RatingData(
+            name = "Maric",
+            rating = 4,
+            message = "Very good!"
+        ),
+        onClickDecline = {},
+        onClickAccept = {},
+
+        )
 }

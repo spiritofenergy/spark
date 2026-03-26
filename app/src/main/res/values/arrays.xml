@@ -7,6 +7,7 @@
         <item>ЗДОРОВЬЕ</item>
         <item>СОТРУДНИКИ</item>
         <item>БРОНИРОВАНИЕ</item>
+        <item>РАЗНОЕ</item>
     </string-array>
 
     <string-array name="category_admin">

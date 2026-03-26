@@ -3,7 +3,7 @@ package com.kodex.spark.ui.utils
 object Categories {
 
     const val FAVORITES = -2
-    const val ALL = -1
+    const val ALL = 6
     const val PARK = 0
     const val SUNNY = 1
     const val FOOD = 2

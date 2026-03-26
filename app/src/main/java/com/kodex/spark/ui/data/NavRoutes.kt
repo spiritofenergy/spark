@@ -11,6 +11,8 @@ class NavRoutes {
         val email: String = ""
     )
     @Serializable
+    object ModerationScreenObject
+    @Serializable
     object AdminPanelNavObject
     @Serializable
     object ModerationNavObject
@@ -21,7 +23,7 @@ class NavRoutes {
         val bookId: String = "",
         val title: String = "",
         val description: String = "",
-        val price: String = "",
+        val price: Int = 0,
         val telephone: String = "",
         val categoryIndex: Int = Categories.ALL,
         val imageUrl: String = "",

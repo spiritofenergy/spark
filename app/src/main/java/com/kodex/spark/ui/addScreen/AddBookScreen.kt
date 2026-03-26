@@ -171,9 +171,18 @@ fun AddBookScreen(
         RoundedCornerTextField(
             text = viewModel.prise.value,
             label = "Цена:"
+        ) { userInput ->
+            // Преобразуем всё, что ввел пользователь, в String и оставляем только цифры
+            val stringValue = userInput.toString()
+            val onlyDigits = stringValue.filter { it.isDigit() }
+            viewModel.prise.value = onlyDigits
+        }
+       /* RoundedCornerTextField(
+            text = viewModel.prise.value,
+            label = "Цена:"
         ) {
             viewModel.prise.value = it
-        }
+        }*/
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -181,8 +190,9 @@ fun AddBookScreen(
             imageLauncher.launch("image/*")
         }
         LoginButton(text = "Сохранить ") {
+            for(n in 1..12){
             viewModel.uploadBook(navData.copy(imageUrl = imageBase64.value))
-
+            }
         }
     }
 }

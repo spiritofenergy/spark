@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,13 +35,13 @@ fun ModerationScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .background(PurpleGrey80),
+             .background(PurpleGrey80),
         contentAlignment = Alignment.Center
     ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(top = 40.dp)
         ) {
             items(viewModel.commentState.value) { comment ->
                 AdminCommentListItem(
@@ -63,4 +64,10 @@ fun ModerationScreen(
             )
         }
     }
+}
+@Composable
+@Preview(showBackground = true)
+fun ShowModerationCommentListItem(){
+    ModerationScreen()
+
 }
