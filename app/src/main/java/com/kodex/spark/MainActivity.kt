@@ -24,6 +24,7 @@ import com.kodex.spark.ui.addScreen.AddBookScreen
 import com.kodex.spark.ui.admin_panel.AdminPanelScreen
 import com.kodex.spark.ui.admin_panel.ModerationScreen
 import com.kodex.spark.ui.ads.YandexAdsManager
+import com.kodex.spark.ui.commentsScreen.CommentsScreen
 import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.detailScreen.ui.DetailScreen
 import com.kodex.spark.ui.logon.LoginScreen
@@ -63,7 +64,7 @@ class MainActivity : ComponentActivity() {
                                     bookId = bk.key,
                                     title = bk.title,
                                     description = bk.description,
-                                    price = bk.price.toString(),
+                                    price = bk.price,
                                     categoryIndex = bk.categoryIndex,
                                     imageUrl = bk.imageUrl,
                                     author = bk.author,
@@ -86,8 +87,8 @@ class MainActivity : ComponentActivity() {
                                 timeStamp = book.timestamp
                             ))
                         },
-                        onAdminClick = {
-                            navController.navigate(NavRoutes.AdminPanelNavObject)
+                        onModerationClick = {
+                            navController.navigate(NavRoutes.ModerationScreenObject)
                         },
                         onAddBookClick = {
                             navController.navigate(NavRoutes.AddScreenObject())
@@ -108,7 +109,14 @@ class MainActivity : ComponentActivity() {
                 }
                 composable<NavRoutes.DetailNavObject>{ navEntry ->
                     val navData = navEntry.toRoute<NavRoutes.DetailNavObject>()
-                    DetailScreen(navData)
+                    DetailScreen(
+                        onCommentClick = {commentNavData ->
+                        navController.navigate(commentNavData)
+                    },
+                        navObject = navData)
+                }
+                composable<NavRoutes.ModerationScreenObject> {
+                    ModerationScreen()
                 }
 
                 composable<NavRoutes.AdminPanelNavObject>{
@@ -124,6 +132,12 @@ class MainActivity : ComponentActivity() {
                     composable<NavRoutes.ModerationNavObject>{
                         ModerationScreen()
                     }
+
+                composable<NavRoutes.CommentsNavData> {navEntry ->
+                    val navData = navEntry.toRoute<NavRoutes.CommentsNavData>()
+                    CommentsScreen(
+                        navObject = navData)
+                }
             }
         }
     }

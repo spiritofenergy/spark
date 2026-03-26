@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,6 +62,7 @@ import com.kodex.spark.ui.utils.toFormattedDate
 @Preview(showBackground = true)
 @Composable
 fun DetailScreen(
+    onCommentClick: (NavRoutes.CommentsNavData) -> Unit = {},
     navObject: NavRoutes.DetailNavObject = NavRoutes.DetailNavObject(),
     viewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
@@ -194,7 +196,15 @@ fun DetailScreen(
 
                     )
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().clickable{
+                                onCommentClick(
+                                    NavRoutes.CommentsNavData(
+                                        bookId = navObject.bookId,
+                                        title = navObject.title,
+                                        ratingsList = navObject.ratingsList
+                                    )
+                                )
+                        },
                         horizontalArrangement =  Arrangement.Center
                     ) {
                         // text = viewModel.ratingState.value,

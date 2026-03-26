@@ -61,7 +61,7 @@ fun MenuScreen(
     onBookEditClick: (Book) -> Unit,
     onBookClick: (Book) -> Unit,
     onAddBookClick: () -> Unit,
-    onAdminClick: () -> Unit,
+    onModerationClick: () -> Unit,
     onLoginClick: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -98,16 +98,11 @@ fun MenuScreen(
                 if (!isLandscape)
                 DrawerHeader(navData.email)
                 DrawerBody(
+                    onModerationClick = onModerationClick,
                     onAdmin = { isAdmin ->
                         viewModel.isAdminState.value = isAdmin
                     },
-                    onAdminClick = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                        onAdminClick()
-                        //  viewModel.getBooksFromCategory(Categories.FAVORITES)
-                    },
+
                     onAddBookClick = {
                         onAddBookClick()
                     },
