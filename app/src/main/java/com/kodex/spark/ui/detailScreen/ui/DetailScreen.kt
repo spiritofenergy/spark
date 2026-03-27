@@ -66,9 +66,6 @@ fun DetailScreen(
     navObject: NavRoutes.DetailNavObject = NavRoutes.DetailNavObject(),
     viewModel: DetailsScreenViewModel = hiltViewModel()
 ) {
-    val context: Context
-    val text = "Опция в разработке!"
-    val duration = Toast.LENGTH_SHORT
 
 
     //val context = application.
@@ -207,13 +204,10 @@ fun DetailScreen(
                         },
                         horizontalArrangement =  Arrangement.Center
                     ) {
-                        // text = viewModel.ratingState.value,
+
                         if (viewModel.commentState.value.isNotEmpty()) {
-                       // if (navObject.ratingsList.isNotEmpty()) {
                             Log.d("MyLog", "DetailScreen ratingsList: ${navObject.ratingsList}")
-                            Text(
-                               // text = String.format("%.1f",viewModel.commentState.value
-                                text = String.format("%.1f", navObject.ratingsList.average(),                                       // "(${navObject.ratingsList.size})"
+                            Text(text = String.format("%.1f", navObject.ratingsList.average(),                                     // "(${navObject.ratingsList.size})"
                                 ),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp

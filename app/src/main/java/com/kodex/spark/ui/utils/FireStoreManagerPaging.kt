@@ -44,10 +44,8 @@ class FireStoreManagerPaging(
         pageSize: Long,
         currentKey: DocumentSnapshot?,
     ): Pair<QuerySnapshot, List<Book>> {
-        var query: Query = db.collection(FirebaseConst.POSTS)
-            .limit(pageSize)
-            .orderBy(filterData.filterType)
-
+        var query: Query = db.collection(FirebaseConst.POSTS).limit(pageSize)
+           // .orderBy(filterData.filterType)
         val keysFavesList = getIdsFavesList()
 
         query = when (categoryIndex) {
