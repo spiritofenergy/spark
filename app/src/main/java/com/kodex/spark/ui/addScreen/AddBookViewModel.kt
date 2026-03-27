@@ -25,7 +25,7 @@ class AddBookViewModel @Inject constructor(
 ) : ViewModel() {
     val title = mutableStateOf("")
     val description = mutableStateOf("")
-    val prise = mutableStateOf("")
+    val price = mutableStateOf("")
    // val author = mutableStateOf(navDataMain.email)
     val timestamp = mutableStateOf("")
     val selectedCategory = mutableIntStateOf(Categories.PARK)
@@ -44,7 +44,7 @@ class AddBookViewModel @Inject constructor(
     ) {
         title.value = navData.title
         description.value = navData.description
-        prise.value = navData.price.toString()
+        price.value = navData.price.toString()
        // author.value = navDataMain.email
         timestamp.value = navData.timeStamp.toString()
         selectedCategory.intValue = navData.categoryIndex
@@ -60,7 +60,7 @@ class AddBookViewModel @Inject constructor(
             key = navData.key,
             title = title.value,
             description = description.value,
-            price = prise.value.toInt(),
+            price = price.value.toInt(),
             author = navData.key,
             timestamp = currentTimeMillis(),
             categoryIndex = selectedCategory.intValue,

@@ -169,13 +169,13 @@ fun AddBookScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         RoundedCornerTextField(
-            text = viewModel.prise.value,
+            text = viewModel.price.value,
             label = "Цена:"
         ) { userInput ->
             // Преобразуем всё, что ввел пользователь, в String и оставляем только цифры
             val stringValue = userInput.toString()
             val onlyDigits = stringValue.filter { it.isDigit() }
-            viewModel.prise.value = onlyDigits
+            viewModel.price.value = onlyDigits
         }
        /* RoundedCornerTextField(
             text = viewModel.prise.value,

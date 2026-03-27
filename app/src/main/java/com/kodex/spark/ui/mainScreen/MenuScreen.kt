@@ -251,7 +251,6 @@ fun MenuScreen(
                         }
                     ),
                     modifier = Modifier.fillMaxSize()
-                        .padding(2.dp)
                 ) {
                     items(count = books.itemCount) { index ->
                         val book = books[index]
