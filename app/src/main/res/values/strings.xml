@@ -30,4 +30,11 @@
     <!-- DrawerBody -->
     <string name= "all" >Все</string>
 
+    <!-- DetailScreen -->
+
+    <string name="comments">Comments</string>
+    <string name="yes">Yes</string>
+    <string name="close">Close</string>
+    <string name="cansel">Cansel</string>
+
 </resources>
