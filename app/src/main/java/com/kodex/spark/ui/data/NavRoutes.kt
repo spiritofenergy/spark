@@ -19,7 +19,7 @@ class NavRoutes {
         val description: String = "",
         val price: Int = 0,
         val isOpenNow: Boolean = true,
-        val openingHours: String = "",
+        val openingHours: String = "09:00 - 20:00",
         val address: String = "Москва, ул. Тверская, 15",
         val telephone: String = "+7(495)123-45-67",
         val website: String = "coffeehouse.ru",

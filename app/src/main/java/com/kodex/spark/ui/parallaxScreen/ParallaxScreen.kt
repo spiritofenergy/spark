@@ -1,11 +1,13 @@
 package com.kodex.spark.ui.parallaxScreen
 import android.R.attr.bitmap
+import android.R.attr.onClick
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,6 +16,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -23,12 +26,18 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.kodex.spark.R
+import com.kodex.spark.ui.admin_panel.ModerationScreen
 import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.detailScreen.ui.DetailsScreenViewModel
@@ -40,11 +49,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ParallaxScreen(
-   // onCommentClick: (NavRoutes.CommentsNavData) -> Unit = {},
-   // navObject: NavRoutes.ParallaxScreenObject = NavRoutes.ParallaxScreenObject(),
     viewModel: DetailsScreenViewModel = hiltViewModel(),
-
-
     navObject: NavRoutes.ParallaxScreenObject = NavRoutes.ParallaxScreenObject(),
     onBackPressed: () -> Unit,
     onCallTaxi: (String, String) -> Unit,
@@ -54,7 +59,9 @@ fun ParallaxScreen(
     val screenHeight = configuration.screenHeightDp.dp
     val collapsedHeight = 280.dp
     val expandedHeight = screenHeight * 0.5f
+    var showFullScreenImage by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val coroutineScope = rememberCoroutineScope()
     val imageHeight = remember { Animatable(expandedHeight.value) }
@@ -98,10 +105,11 @@ fun ParallaxScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = navObject.title,
+                        text = stringArrayResource(id = R.array.category_array)[navObject.categoryIndex],
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 },
                 navigationIcon = {
@@ -110,12 +118,21 @@ fun ParallaxScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Поделиться */ }) {
+                    IconButton(onClick = {
+                    /* Поделиться */
+                        coroutineScope.launch {
+                            viewModel.sharePlace(
+                                context = context,
+                                place = navObject,
+                                coroutineScope = this
+                            )
+                        }
+                    }) {
                         Icon(Icons.Default.Share, contentDescription = "Поделиться")
                     }
-                    IconButton(onClick = { /* Избранное */ }) {
+                    /*IconButton(onClick = { *//* Избранное *//* }) {
                         Icon(Icons.Default.FavoriteBorder, contentDescription = "Избранное")
-                    }
+                    }*/
                 },
                 scrollBehavior = scrollBehavior,
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -144,7 +161,8 @@ fun ParallaxScreen(
                             .padding(top = 10.dp, bottom = 20.dp)
                             .height(250.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(Color.LightGray),
+                            .background(Color.LightGray)
+                            .clickable { showFullScreenImage = true },
                         contentScale = ContentScale.FillHeight
                     )
                 }
@@ -157,10 +175,57 @@ fun ParallaxScreen(
                         onNavigateToReviews = onNavigateToReviews
                     )
                 }
+
+            }
+        }
+    }
+    // Диалог с увеличенным изображением
+    if (showFullScreenImage) {
+
+        Dialog(
+            onDismissRequest = { showFullScreenImage = false },
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                decorFitsSystemWindows = false
+            )
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+                    .clickable { showFullScreenImage = false },
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = bitmap,
+                    contentDescription = "Увеличенное фото",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    contentScale = ContentScale.Fit
+                )
+
+                // Кнопка закрытия
+                IconButton(
+                    onClick = { showFullScreenImage = false },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(40.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "Закрыть",
+                        tint = Color.White
+                    )
+                }
             }
         }
     }
 }
+
+
+
+
 
 
 // Для демонстрации добавьте в Preview:
