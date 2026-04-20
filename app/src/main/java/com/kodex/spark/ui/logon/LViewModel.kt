@@ -22,7 +22,7 @@ class LViewModel @Inject constructor(
     val currentUser = mutableStateOf<FirebaseUser?>(null)
     val showResetPasswordDialog = mutableStateOf(false)
     val successState = mutableStateOf("Welcome")
-    val errorState = mutableStateOf("")
+    val errorState = mutableStateOf("Error")
     val emailState = mutableStateOf("nillsimon24@gmail.com")
     val passwordState = mutableStateOf("test24")
     val resetPasswordState = mutableStateOf(false)
