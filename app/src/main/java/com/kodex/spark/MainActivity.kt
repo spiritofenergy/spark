@@ -30,7 +30,6 @@ import com.kodex.spark.ui.detailScreen.ui.DetailScreen
 import com.kodex.spark.ui.logon.LoginScreen
 import com.kodex.spark.ui.parallaxScreen.ParallaxScreen
 import com.kodex.spark.ui.room.RoomViewModel
-import com.kodex.spark.ui.utils.Categories
 import dagger.hilt.android.AndroidEntryPoint
 import org.koin.compose.viewmodel.koinViewModel
 import javax.inject.Inject
@@ -50,7 +49,10 @@ class MainActivity : ComponentActivity() {
            val navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = NavRoutes.LoginScreenObject
+                startDestination = NavRoutes.MainScreenDataObject(
+                    uid = "",
+                    email = "example@gmail.com"
+                )
             ) {
                 composable<NavRoutes.LoginScreenObject> {
                     LoginScreen() { navData ->
@@ -65,7 +67,7 @@ class MainActivity : ComponentActivity() {
 
                         onBookClick = { bk ->
                             //  yandexAdsManager.showAd(this@MainActivity){
-                            navController.navigate(NavRoutes.ParallaxScreenObject(
+                            navController.navigate(NavRoutes.ParallaxNavObject(
                                 bookId = bk.key,
                                 title = bk.title,
                                 description = bk.description,
@@ -158,8 +160,8 @@ class MainActivity : ComponentActivity() {
                         ModerationScreen()
                     }
 
-                composable<NavRoutes.ParallaxScreenObject>{navEntry ->
-                    val navData = navEntry.toRoute<NavRoutes.ParallaxScreenObject>()
+                composable<NavRoutes.ParallaxNavObject>{ navEntry ->
+                    val navData = navEntry.toRoute<NavRoutes.ParallaxNavObject>()
                     ParallaxScreen(
                         navObject = navData,
                         onBackPressed = { navController.popBackStack() },

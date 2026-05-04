@@ -13,18 +13,18 @@ class NavRoutes {
     @Serializable
     object PlaceScreenObject
     @Serializable
-    data class ParallaxScreenObject(
+    data class ParallaxNavObject(
         val bookId: String = "",
         val title: String = "",
         val description: String = "",
         val price: Int = 0,
         val isOpenNow: Boolean = true,
-        val openingHours: String = "09:00 - 20:00",
-        val address: String = "Москва, ул. Тверская, 15",
-        val telephone: String = "+7(495)123-45-67",
-        val website: String = "coffeehouse.ru",
+        val openingHours: String = "09:00 - 15:00",
+        val address: String = "Кучугуры, ул. Мира, 29",
+        val telephone: String = "+7 (918) 460-96-04 ",
+        val website: String = "https://iskra-sea.ru/",
         val latitude: String = "9",
-        val longitude:String = "22",
+        val longitude:String = "21",
         val categoryIndex: Int = Categories.ALL,
         val imageUrl: String = "",
         val author: String = "",

@@ -1,5 +1,6 @@
 package com.kodex.spark.ui.parallaxScreen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,9 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun StatusChip(isOpen: Boolean) {
+fun StatusChip(
+    isOpen: Boolean
+) {
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = if (isOpen) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
@@ -46,6 +49,8 @@ fun StatusChip(isOpen: Boolean) {
                 fontWeight = FontWeight.Medium,
                 color = if (isOpen) Color(0xFF2E7D32) else Color(0xFFC62828)
             )
+            Log.d("IsOpenLog3"," ${isOpen}")
+
         }
     }
 }

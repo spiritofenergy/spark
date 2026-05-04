@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="category_array">
-        <item>ПАРК</item>
-        <item>ОТДЫХ</item>
-        <item>ПИТАНИЕ</item>
-        <item>ЗДОРОВЬЕ</item>
-        <item>СОТРУДНИКИ</item>
-        <item>БРОНИРОВАНИЕ</item>
-        <item>РАЗНОЕ</item>
+        <item>Парк</item>
+        <item>Отдых</item>
+        <item>Питание</item>
+        <item>Здоровье</item>
+        <item>Сотрудники</item>
+        <item>Бронирование</item>
+        <item>Разное</item>
     </string-array>
 
     <string-array name="category_admin">

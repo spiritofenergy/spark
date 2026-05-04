@@ -1,12 +1,17 @@
 package com.kodex.spark.ui.bottom_menu
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.kodex.spark.ui.theme.ButtonColor
+import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.PurpleGrey80
 
 @Composable
@@ -29,7 +34,7 @@ fun BottomMenu(
         BottomMenuItem.Health,
     )
     NavigationBar (
-        containerColor = PurpleGrey80
+        containerColor = ButtonColorDark
     ){
         items.forEach{ item->
            NavigationBarItem(
@@ -56,15 +61,21 @@ fun BottomMenu(
                label = {
                    Text(text = stringResource(item.titleId))
                },
-/*
-               colors = NavigationDrawerItemDefaults.colors(
-                   selectedIconColor = DarkBlue,
-                   selectedTextColor = DarkBlue,
-                   unselectedIconColor = Color.Gray,
-                   unselectedTextColor = Color.Gray
 
-               )*/
+               colors = NavigationBarItemDefaults.colors( MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+
+                   /*// Цвета для выделенного элемента
+                   selectedIconColor = Color.White,
+                   selectedTextColor = Color.White,
+                   // Цвета для невыделенного элемента
+                   unselectedIconColor = Color.Gray,
+                   unselectedTextColor = Color.Gray,
+                   // Цвет индикатора (если есть)
+                   selectedIndicatorColor = ButtonColor*/
+
+               )
            )
+
         }
     }
 }

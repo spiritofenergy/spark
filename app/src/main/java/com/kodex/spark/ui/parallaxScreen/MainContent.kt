@@ -2,7 +2,9 @@ package com.kodex.spark.ui.parallaxScreen
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,9 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.LocationOn
@@ -38,11 +38,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,9 +55,10 @@ import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.Orange
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainContent(
-    navObject: NavRoutes.ParallaxScreenObject,
+    navObject: NavRoutes.ParallaxNavObject,
     onNavigateToReviews: () -> Unit,
     viewModel: DetailsScreenViewModel = viewModel()
 ) {
@@ -67,7 +66,7 @@ fun MainContent(
     var showCommentDialog by remember { mutableStateOf(false) }
     var ratingDataToShow by remember { mutableStateOf(RatingData()) }
     val context = LocalContext.current
-    val telephone = "+79197716667"
+    val telephone = "+7 (999) 637-33-41"
 
     DialogRating(
         ratingData = viewModel.ratingDataState.value ?: RatingData(),
@@ -162,7 +161,9 @@ fun MainContent(
             }
 
             // Статус работы
-            StatusChip(isOpen = navObject.isOpenNow)
+                //StatusChip(isOpen = navObject.isOpenNow)
+            StatusChip(isOpen = viewModel.isOpen.value)
+           // Log.d("IsOpenLog"," ${isOpen.value}")
         }
 
         Spacer(modifier = Modifier.height(16.dp))

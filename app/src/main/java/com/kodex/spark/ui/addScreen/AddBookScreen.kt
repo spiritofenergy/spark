@@ -190,9 +190,9 @@ fun AddBookScreen(
             imageLauncher.launch("image/*")
         }
         LoginButton(text = "Сохранить ") {
-            for(n in 1..12){
+           // for(n in 1..12){
             viewModel.uploadBook(navData.copy(imageUrl = imageBase64.value))
-            }
+           // }
         }
     }
 }
