@@ -47,6 +47,7 @@ import com.kodex.spark.ui.custom.FilterDialog
 import com.kodex.spark.ui.custom.MyDialog
 import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.mainScreen.MainScreenViewModel
+import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.theme.PurpleGrey80
 import com.kodex.spark.ui.top_app_bar.MainTopBar
 import com.kodex.spark.ui.utils.Categories
@@ -132,7 +133,7 @@ fun MenuScreen(
         Scaffold(
             topBar = {
                 Row(modifier = Modifier.fillMaxWidth()
-                    .background(PurpleGrey80))
+                    .background(ButtonColorDark))
                 {
                     if (!isLandscape)
                     MainTopBar(

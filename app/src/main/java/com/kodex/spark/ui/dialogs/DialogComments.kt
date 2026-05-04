@@ -1,5 +1,7 @@
 package com.kodex.spark.ui.dialogs
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +26,7 @@ import com.kodex.spark.ui.theme.ButtonColorDark
 import com.kodex.spark.ui.utils.toFormattedDate
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
     fun DialogComments(
     showDialog: Boolean,
@@ -82,6 +85,7 @@ import com.kodex.spark.ui.utils.toFormattedDate
             )
         }
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun PrevDialogComments() {

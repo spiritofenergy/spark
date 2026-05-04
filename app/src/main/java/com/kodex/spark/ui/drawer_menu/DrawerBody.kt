@@ -62,10 +62,10 @@ fun DrawerBody(
 
     val isAdminState = remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
-        viewModel.isAdmin { isAdmin ->
+      /*  viewModel.isAdmin { isAdmin ->
             isAdminState.value = isAdmin
             onAdmin(isAdmin)
-        }
+        }*/
     }
 
     Box(modifier = Modifier.fillMaxSize()
@@ -77,12 +77,12 @@ fun DrawerBody(
         ){
 
             Spacer(modifier = Modifier.height(6.dp))
-
+/*
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .height(1.dp)
                 .background(GrayLite)
-            )
+            )*/
             Spacer(modifier = Modifier.height(16.dp))
 
             DrawerMenuItem(
@@ -157,7 +157,7 @@ fun DrawerBody(
                     iconDrawableId = Icons.Default.Security,
                     text = categoryAdmin[0],
                     onItemClick = {
-                        viewModel.isAdmin{ }
+                       // viewModel.isAdmin{ }
                         onModerationClick()
                         coroutineScope.launch { drawerState.close() }
                     }

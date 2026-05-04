@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import java.io.ByteArrayOutputStream
@@ -25,11 +26,11 @@ object ImageUtils {
         val bm = BitmapFactory.decodeStream(inputStream)
         val resizedBitMap = resizeBitMapImage(bm, 300)
         val stream = ByteArrayOutputStream()
-    /*    if (Build.VERSION.SDK_INT >= 30){
+        if (Build.VERSION.SDK_INT >= 30){
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 70, stream)
         }else {
             resizedBitMap.compress(Bitmap.CompressFormat.WEBP, 70, stream)
-        }*/
+        }
        resizedBitMap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         return stream.toByteArray()
     }

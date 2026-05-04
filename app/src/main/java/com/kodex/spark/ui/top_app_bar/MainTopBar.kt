@@ -132,7 +132,6 @@ fun MainTopBar(
                         }
 
                     Text(fontSize = 25.sp,
-                        fontStyle = FontStyle.Italic,
                         fontWeight = FontWeight.Medium,
                         text = when (titleIndex) {
                             Categories.FAVORITES -> stringResource(id = R.string.faves)

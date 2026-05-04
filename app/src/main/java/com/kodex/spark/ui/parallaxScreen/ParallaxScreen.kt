@@ -1,9 +1,9 @@
 package com.kodex.spark.ui.parallaxScreen
-import android.R.attr.bitmap
-import android.R.attr.onClick
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.util.Base64
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -37,20 +37,19 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.kodex.spark.R
-import com.kodex.spark.ui.admin_panel.ModerationScreen
 import com.kodex.spark.ui.data.NavRoutes
-import com.kodex.spark.ui.detailScreen.data.RatingData
 import com.kodex.spark.ui.detailScreen.ui.DetailsScreenViewModel
 import kotlinx.coroutines.launch
 
 // Модель данных места
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ParallaxScreen(
     viewModel: DetailsScreenViewModel = hiltViewModel(),
-    navObject: NavRoutes.ParallaxScreenObject = NavRoutes.ParallaxScreenObject(),
+    navObject: NavRoutes.ParallaxNavObject = NavRoutes.ParallaxNavObject(),
     onBackPressed: () -> Unit,
     onCallTaxi: (String, String) -> Unit,
     onNavigateToReviews: () -> Unit
@@ -78,6 +77,9 @@ fun ParallaxScreen(
     }
     LaunchedEffect(key1 = Unit) {
         viewModel.getBookComments(navObject.bookId)
+    }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.updateOpenStatus(navObject.openingHours)
     }
 
     // NestedScroll для Parallax эффекта
@@ -234,18 +236,18 @@ fun ParallaxScreen(
 fun PreviewDetailScreen() {
     MaterialTheme {
         ParallaxScreen(
-            navObject = NavRoutes.ParallaxScreenObject(
+            navObject = NavRoutes.ParallaxNavObject(
                 bookId = "1",
                 title = "Coffee House & Bakery",
-                address = "ул. Тверская, 15, Москва",
+                address = "Кучугуры, ул. Мира, 29, ",
 
 
                 price = 25,
                 imageUrl = "" ,
                 isOpenNow = true,
-                openingHours = "09:00 - 23:00",
-                telephone = "+7 (495) 123-45-67",
-                website = "coffeehouse.ru",
+                openingHours = "09:00 - 16:00",
+                telephone = "+7 (918) 460-96-04 ",
+                website = "https://iskra-sea.ru/",
                 latitude = "55",
                 longitude = "37"
             ),
