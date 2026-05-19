@@ -1,6 +1,6 @@
 package com.kodex.spark
 
-import MenuScreen
+import HomeScreen
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -49,10 +49,11 @@ class MainActivity : ComponentActivity() {
            val navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = NavRoutes.MainScreenDataObject(
+                startDestination = NavRoutes.LoginScreenObject
+              /*  startDestination = NavRoutes.MainScreenDataObject(
                     uid = "",
                     email = "example@gmail.com"
-                )
+                )*/
             ) {
                 composable<NavRoutes.LoginScreenObject> {
                     LoginScreen() { navData ->
@@ -62,7 +63,7 @@ class MainActivity : ComponentActivity() {
                 composable<NavRoutes.MainScreenDataObject> { navEntry ->
                     val navData = navEntry.toRoute<NavRoutes.MainScreenDataObject>()
 
-                    MenuScreen(
+                    HomeScreen(
                         navData = navData,
 
                         onBookClick = { bk ->

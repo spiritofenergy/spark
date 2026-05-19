@@ -1,5 +1,3 @@
-package com.kodex.spark.ui.bottom_menu
-
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -10,9 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.kodex.spark.ui.bottom_menu.BottomMenuItem
 import com.kodex.spark.ui.theme.ButtonColor
 import com.kodex.spark.ui.theme.ButtonColorDark
-import com.kodex.spark.ui.theme.PurpleGrey80
+import com.kodex.spark.ui.theme.ButtonDarkBlue
+import com.kodex.spark.ui.theme.DarkBlue
+import com.kodex.spark.ui.theme.DrawerColorBlue
+import com.kodex.spark.ui.theme.Orange
+import com.kodex.spark.ui.theme.TopBatColor
 
 @Composable
 fun BottomMenu(
@@ -27,55 +30,46 @@ fun BottomMenu(
 ) {
     val items = listOf(
         BottomMenuItem.Home,
-       // BottomMenuItem.Faves,
         BottomMenuItem.Park,
         BottomMenuItem.Sunny,
         BottomMenuItem.Food,
         BottomMenuItem.Health,
     )
-    NavigationBar (
-        containerColor = ButtonColorDark
-    ){
-        items.forEach{ item->
-           NavigationBarItem(
-               selected = selectedItem == item.titleId,
-               onClick = {
-                   // сравниваем значение нажатого элемента и запускаем нужную функцию
-                   when(item.titleId){
-                       BottomMenuItem.Home.titleId -> onHomeClick()
-                       BottomMenuItem.Faves.titleId -> onFavesClick()
-                       BottomMenuItem.Park.titleId -> onParkClick()
-                       BottomMenuItem.Sunny.titleId -> onSunnyClick()
-                       BottomMenuItem.Food.titleId -> onFoodClick()
-                       BottomMenuItem.Health.titleId -> onHealthClick()
-                       BottomMenuItem.Booking.titleId -> onBookingClick()
-                   }
-               },
-               icon = {
-                   Icon(
-                       painter = painterResource(id = item.iconId),
-                       contentDescription = null)
-                      },
 
-
-               label = {
-                   Text(text = stringResource(item.titleId))
-               },
-
-               colors = NavigationBarItemDefaults.colors( MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-
-                   /*// Цвета для выделенного элемента
-                   selectedIconColor = Color.White,
-                   selectedTextColor = Color.White,
-                   // Цвета для невыделенного элемента
-                   unselectedIconColor = Color.Gray,
-                   unselectedTextColor = Color.Gray,
-                   // Цвет индикатора (если есть)
-                   selectedIndicatorColor = ButtonColor*/
-
-               )
-           )
-
+    NavigationBar(containerColor = ButtonColorDark) {
+        items.forEach { item ->
+            NavigationBarItem(
+                selected = selectedItem == item.titleId,
+                onClick = {
+                    when(item.titleId) {
+                        BottomMenuItem.Home.titleId -> onHomeClick()
+                        BottomMenuItem.Faves.titleId -> onFavesClick()
+                        BottomMenuItem.Park.titleId -> onParkClick()
+                        BottomMenuItem.Sunny.titleId -> onSunnyClick()
+                        BottomMenuItem.Food.titleId -> onFoodClick()
+                        BottomMenuItem.Health.titleId -> onHealthClick()
+                        BottomMenuItem.Booking.titleId -> onBookingClick()
+                    }
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = item.iconId),
+                        contentDescription = null
+                    )
+                },
+                label = {
+                    Text(text = stringResource(item.titleId))
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    selectedTextColor = Color.White,
+                    unselectedIconColor = ButtonDarkBlue,
+                    unselectedTextColor = ButtonDarkBlue,
+                    indicatorColor = ButtonColor,  // ← вместо selectedIndicatorColor
+                    disabledIconColor = TopBatColor.copy(alpha = 0.8f),
+                    disabledTextColor = TopBatColor.copy(alpha = 0.8f)
+                )
+            )
         }
     }
 }
