@@ -16,6 +16,7 @@ val DrawerColorBlue = Color(0xFF0D6EBD)
 
 val ButtonColorDark = Color(0xFF008BF5)
 val DarkBlue = Color(0x9c1c384c)
+val ButtonDarkBlue = Color(0x9C1B1D1E)
 val DarkTransparentBlue = Color(0x661C384C)
 val GrayLite = Color(0x2260676E)
 val TopBatColor = Color(0x31008BF5)

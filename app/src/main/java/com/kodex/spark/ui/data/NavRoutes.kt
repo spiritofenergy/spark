@@ -19,7 +19,7 @@ class NavRoutes {
         val description: String = "",
         val price: Int = 0,
         val isOpenNow: Boolean = true,
-        val openingHours: String = "09:00 - 15:00",
+        val openingHours: String = "09:00 - 21:00",
         val address: String = "Кучугуры, ул. Мира, 29",
         val telephone: String = "+7 (918) 460-96-04 ",
         val website: String = "https://iskra-sea.ru/",

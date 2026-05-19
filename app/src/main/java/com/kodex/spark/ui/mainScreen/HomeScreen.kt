@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
@@ -28,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.kodex.spark.ui.addScreen.data.Book
-import com.kodex.spark.ui.bottom_menu.BottomMenu
 import com.kodex.spark.ui.bottom_menu.BottomMenuItem
 import com.kodex.spark.ui.drawer_menu.DrawerBody
 import com.kodex.spark.ui.drawer_menu.DrawerHeader
@@ -37,18 +38,15 @@ import com.kodex.spark.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.kodex.spark.ui.admin_panel.ModerationScreenViewModel
 import com.kodex.spark.ui.custom.FilterDialog
 import com.kodex.spark.ui.custom.MyDialog
 import com.kodex.spark.ui.data.NavRoutes
 import com.kodex.spark.ui.mainScreen.MainScreenViewModel
 import com.kodex.spark.ui.theme.ButtonColorDark
-import com.kodex.spark.ui.theme.PurpleGrey80
 import com.kodex.spark.ui.top_app_bar.MainTopBar
 import com.kodex.spark.ui.utils.Categories
 
@@ -56,7 +54,7 @@ import com.kodex.spark.ui.utils.Categories
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun MenuScreen(
+fun HomeScreen(
     viewModel: MainScreenViewModel = hiltViewModel(),
     navData: NavRoutes.MainScreenDataObject,
     onBookEditClick: (Book) -> Unit,
@@ -78,7 +76,12 @@ fun MenuScreen(
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     LaunchedEffect(Unit) {
-
+        viewModel.isAdmin { isAdmin ->
+            viewModel.isAdminState.value = isAdmin
+           // onAdmin(isAdmin)
+        }
+    }
+    LaunchedEffect(Unit) {
         viewModel.uiState.collect { uiState ->
             if (uiState is MainScreenViewModel.MainUiState.Error) {
                 Toast.makeText(context, uiState.massage, Toast.LENGTH_SHORT).show()
@@ -243,8 +246,8 @@ fun MenuScreen(
                 },
                 modifier = Modifier.padding(paddingValues)
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(
                         if (viewModel.showTabOneOrTo.value == true) {
                             2
                         } else {

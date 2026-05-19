@@ -60,13 +60,13 @@ fun DrawerBody(
     val categoryList = stringArrayResource(id = R.array.category_array)
     val categoryAdmin = stringArrayResource(id = R.array.category_admin)
 
-    val isAdminState = remember { mutableStateOf(false) }
+  /*  val isAdminState = remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
-      /*  viewModel.isAdmin { isAdmin ->
+        viewModel.isAdmin { isAdmin ->
             isAdminState.value = isAdmin
             onAdmin(isAdmin)
-        }*/
-    }
+        }
+    }*/
 
     Box(modifier = Modifier.fillMaxSize()
         .background(ButtonColorDark)
@@ -157,7 +157,7 @@ fun DrawerBody(
                     iconDrawableId = Icons.Default.Security,
                     text = categoryAdmin[0],
                     onItemClick = {
-                       // viewModel.isAdmin{ }
+                        viewModel.isAdmin{ }
                         onModerationClick()
                         coroutineScope.launch { drawerState.close() }
                     }
